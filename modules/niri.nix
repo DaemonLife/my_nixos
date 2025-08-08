@@ -149,10 +149,12 @@
       }
 
       spawn-at-startup "bluetooth" "off"
-      spawn-at-startup "mako"
+      spawn-at-startup "udiskie" "-a"
       spawn-at-startup "waybar"
+      spawn-at-startup "mako"
       spawn-at-startup "xwayland-satellite"
       spawn-at-startup "swayidle" "-w" "timeout" "501" "niri msg action power-off-monitors" "timeout" "500" "swaylock -f" "before-sleep" "swaylock -f"
+      spawn-at-startup "AmneziaVPN"
 
       hotkey-overlay {
           skip-at-startup
@@ -202,7 +204,11 @@
           Mod+Shift+Slash { show-hotkey-overlay; }
 
           Mod+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-          Mod+A hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+          Mod+A hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel" "-l" "10"; }
+          Mod+T hotkey-overlay-title="Run an Application: Telegram" { spawn "telegram-desktop"; }
+          Mod+B hotkey-overlay-title="Run an Application: qutebrowser" { spawn "qutebrowser"; }
+          Mod+N hotkey-overlay-title="Run an Application: Thunar" { spawn "thunar"; }
+          Mod+Y hotkey-overlay-title="Run an Application: Yazi" { spawn "sh" "-c" "kitty --hold $HOME/nix/scripts/y.fish"; }
           Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
 
           // You can also use a shell. Do this if you need pipes, multiple commands, etc.
