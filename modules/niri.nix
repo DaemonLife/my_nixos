@@ -23,37 +23,17 @@
   home.file.".config/niri/config.kdl".text = with config.lib.stylix.colors;
   # kdl
     ''
-      // This config is in the KDL format: https://kdl.dev
-      // "/-" comments out the following node.
-      // Check the wiki for a full description of the configuration:
-      // https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
-
-      // Input device configuration.
-      // Find the full list of options on the wiki:
-      // https://github.com/YaLTeR/niri/wiki/Configuration:-Input
       input {
           keyboard {
               xkb {
-                  // You can set rules, model, layout, variant and options.
-                  // For more information, see xkeyboard-config(7).
-
-                  // For example:
                   layout "us,ru"
                   options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
-
-                  // If this section is empty, niri will fetch xkb settings
-                  // from org.freedesktop.locale1. You can control these using
-                  // localectl set-x11-keymap.
               }
               repeat-delay 200
               repeat-rate 60
-              // Enable numlock on startup, omitting this setting disables it.
               numlock
           }
 
-          // Next sections include libinput settings.
-          // Omitting settings disables them, or leaves them at their default values.
-          // All commented-out settings here are examples, not defaults.
           touchpad {
               // off
               tap
@@ -92,7 +72,7 @@
 
           // Focus windows and outputs automatically when moving the mouse into them.
           // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-          focus-follows-mouse max-scroll-amount="95%"
+          focus-follows-mouse max-scroll-amount="90%"
       }
 
       output "Shenzhen KTC Technology Group H27S17 0x00000001" {
@@ -108,7 +88,7 @@
 
       // gpd
       output "DSI-1" {
-      transform "270"
+          transform "270"
       }
 
       layout {
