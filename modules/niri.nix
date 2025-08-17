@@ -17,17 +17,20 @@
   home.packages = with pkgs; [
     brightnessctl
     swayidle
+    swaybg
     xwayland-satellite # x11 support
   ];
 
   home.file.".config/niri/config.kdl".text = with config.lib.stylix.colors;
   # kdl
     ''
+      prefer-no-csd
       input {
           keyboard {
               xkb {
                   layout "us,ru"
                   options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
+
               }
               repeat-delay 200
               repeat-rate 60
@@ -35,82 +38,48 @@
           }
 
           touchpad {
-              // off
               tap
-              // dwt
-              // dwtp
               drag false
-              // drag-lock
               natural-scroll
-              // accel-speed 0.2
-              // accel-profile "flat"
-              // scroll-method "two-finger"
-              // disabled-on-external-mouse
-          }
-
-          mouse {
-              // off
-              // natural-scroll
-              // accel-speed 0.2
-              // accel-profile "flat"
-              // scroll-method "no-scroll"
-          }
-
-          trackpoint {
-              // off
-              // natural-scroll
-              // accel-speed 0.2
-              // accel-profile "flat"
-              // scroll-method "on-button-down"
-              // scroll-button 273
-              // scroll-button-lock
-              // middle-emulation
           }
 
           // Uncomment this to make the mouse warp to the center of newly focused windows.
           warp-mouse-to-focus
-
-          // Focus windows and outputs automatically when moving the mouse into them.
-          // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
           focus-follows-mouse max-scroll-amount="90%"
       }
 
+      // Run `niri msg outputs`
       output "Shenzhen KTC Technology Group H27S17 0x00000001" {
         scale 1.25
         position x=0 y=0
       }
 
       output "BOE 0x0931 Unknown" {
-          // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
           scale 2
           position x=2048 y=400
       }
 
       // gpd
       output "DSI-1" {
-          transform "270"
+        transform "270"
       }
 
       layout {
           gaps 18
           center-focused-column "never"
+          background-color "#${base03}"
 
-          // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
+          default-column-width { proportion 0.5; }
           preset-column-widths {
               proportion 0.33333
               proportion 0.5
               proportion 0.66667
-
-              // Fixed sets the width in logical pixels exactly.
-              // fixed 1920
           }
-
-          // You can also customize the heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
-          // preset-window-heights { }
-
-          // You can change the default width of the new windows.
-          // If you leave the brackets empty, the windows themselves will decide their initial width.
-          default-column-width { proportion 0.5; }
+          preset-window-heights {
+            proportion 0.33333
+            proportion 0.5
+            proportion 0.66667
+          }
 
           focus-ring {
               // off
@@ -132,19 +101,8 @@
               softness 0
               spread 1
               offset x=8 y=8
+              draw-behind-window true
               color "#000f"
-          }
-
-          // Struts shrink the area occupied by windows, similarly to layer-shell panels.
-          // You can think of them as a kind of outer gaps. They are set in logical pixels.
-          // Left and right struts will cause the next window to the side to always be visible.
-          // Top and bottom struts will simply add outer gaps in addition to the area occupied by
-          // layer-shell panels and regular gaps.
-          struts {
-              // left 64
-              // right 64
-              // top 64
-              // bottom 64
           }
       }
 
@@ -154,45 +112,24 @@
       spawn-at-startup "mako"
       spawn-at-startup "xwayland-satellite"
       spawn-at-startup "swayidle" "-w" "timeout" "501" "niri msg action power-off-monitors" "timeout" "500" "swaylock -f" "before-sleep" "swaylock -f"
-      spawn-at-startup "AmneziaVPN"
 
       hotkey-overlay {
-          skip-at-startup
+        skip-at-startup
       }
-
-      // Uncomment this line to ask the clients to omit their client-side decorations if possible.
-      // If the client will specifically ask for CSD, the request will be honored.
-      // Additionally, clients will be informed that they are tiled, removing some client-side rounded corners.
-      // This option will also fix border/focus ring drawing behind some semitransparent windows.
-      // After enabling or disabling this, you need to restart the apps for this to take effect.
-      prefer-no-csd
 
       screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-      // https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
       animations {
           // off
           // slowdown 3.0
       }
 
-      // Window rules let you adjust behavior for individual windows.
-      // https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-
-      // Work around WezTerm's initial configure bug
-      // by setting an empty default-column-width.
       window-rule {
-          // This regular expression is intentionally made as specific as possible,
-          // since this is the default config, and we want no false positives.
-          // You can get away with just app-id="wezterm" if you want.
-          match app-id=r#"^org\.wezfurlong\.wezterm$"#
-          default-column-width {}
+        match title=""
+        geometry-corner-radius 0
       }
 
-      // Open the Firefox picture-in-picture player as floating by default.
       window-rule {
-          // This app-id regular expression will work for both:
-          // - host Firefox (app-id is "firefox")
-          // - Flatpak Firefox (app-id is "org.mozilla.firefox")
           match app-id=r#"firefox$"# title="^Picture-in-Picture$"
           open-floating true
       }
