@@ -35,8 +35,8 @@ Reboot. Done.
 ## Using
 
 For rebuild use: `os [switch|test|boot]`\
-For update and rebuild: `os [switch|test|boot] update` Force offline rebuild:
-`os [switch|test|boot] offline`
+For update and rebuild: `os [switch|test|boot] update`\
+Force offline rebuild: `os [switch|test|boot] offline`
 
 ## Tips
 
