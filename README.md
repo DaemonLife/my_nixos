@@ -1,5 +1,5 @@
-# nixos_hyprland
-Hyprland setup on NixOS
+# Description
+My Niri (and Sway, Hyprland) setup on NixOS.
 
 ## Preparing
 1. Change username "user" in configs if you use other name. Also change hostname if you need. I use "nixos". 
