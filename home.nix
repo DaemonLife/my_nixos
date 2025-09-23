@@ -21,21 +21,20 @@ in {
       wl-clipboard
       unzip
       python3
-      nodejs
+      nodejs # for run javascript
       pipx
       exiftool
       imagemagick
       zip
       fzy
       dua # disk usage TUI tool. Run: dua i
-      unstable.nchat
-      tg
 
       # Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
       telegram-desktop
-      # nchat
+      tg
+      unstable.nchat
       bitwarden-cli
 
       # Media
@@ -69,6 +68,7 @@ in {
       veracrypt
       cmatrix # matrix in terminal
       wev # key events in wayland
+      ansible
 
       # Media
       darktable

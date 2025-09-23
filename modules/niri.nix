@@ -110,7 +110,6 @@
       spawn-at-startup "udiskie" "-a"
       spawn-at-startup "waybar"
       spawn-at-startup "mako"
-      spawn-at-startup "xwayland-satellite"
       spawn-at-startup "swayidle" "-w" "timeout" "501" "niri msg action power-off-monitors" "timeout" "500" "swaylock -f" "before-sleep" "swaylock -f"
 
       hotkey-overlay {
@@ -389,7 +388,6 @@
       }
 
         environment {
-          DISPLAY ":0"
         }
 
     '';
