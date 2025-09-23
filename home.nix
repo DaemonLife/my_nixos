@@ -48,7 +48,7 @@ in {
 
       # Theming
       vimix-icon-theme # for icons
-      # gnome-tweaks
+      gnome-tweaks
       gowall # Tool to convert a Wallpaper's color scheme
       dconf-editor
       grc
