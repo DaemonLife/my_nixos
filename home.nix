@@ -76,6 +76,7 @@ in {
       helvum # A GTK patchbay for pipewire
       digikam
       kdePackages.kdenlive
+      vlc
 
       # Internet
       qbittorrent # torrent client
