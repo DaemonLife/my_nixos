@@ -25,7 +25,6 @@
   # kdl
     ''
       prefer-no-csd
-
       input {
           keyboard {
               xkb {
@@ -46,7 +45,7 @@
 
           // Uncomment this to make the mouse warp to the center of newly focused windows.
           warp-mouse-to-focus
-          focus-follows-mouse max-scroll-amount="95%"
+          focus-follows-mouse max-scroll-amount="90%"
       }
 
       // Run `niri msg outputs`
