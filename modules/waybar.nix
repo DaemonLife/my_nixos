@@ -1,12 +1,10 @@
-{ config
-, lib
-, MY_DE
-, ...
-}:
 {
-
-  programs.waybar =
-    with config.lib.stylix.colors;
+  config,
+  lib,
+  MY_DE,
+  ...
+}: {
+  programs.waybar = with config.lib.stylix.colors;
     lib.mkForce {
       enable = true;
 
@@ -19,7 +17,7 @@
             "${MY_DE}/workspaces"
             "${MY_DE}/window"
           ];
-          modules-center = [ ];
+          modules-center = [];
           modules-right = [
             "tray"
             "${MY_DE}/language"
@@ -40,7 +38,7 @@
           ];
 
           "${MY_DE}/workspaces" = {
-            window-rewrite = { };
+            window-rewrite = {};
             on-click = "activate";
             disable-scroll = true;
             format = "{icon}";
@@ -79,14 +77,13 @@
               "9" = 9;
               "10" = 10;
             };
-
           };
 
           "${MY_DE}/window" = {
             max-length = 60;
             separate-outputs = true;
-            format = { };
-            rewrite = { };
+            format = {};
+            rewrite = {};
           };
 
           tray.spacing = 10;
@@ -153,7 +150,6 @@
               "on-scroll-up" = "shift_down";
               "on-scroll-down" = "shift_up";
             };
-
           };
 
           battery = {
@@ -207,15 +203,15 @@
             on-click-middle = "helvum";
             scroll-step = 5;
           };
-
         };
-
       };
 
-      style =
-        let
-          focus = if "${MY_DE}" == "sway" then "focused" else "active";
-        in
+      style = let
+        focus =
+          if "${MY_DE}" == "sway"
+          then "focused"
+          else "active";
+      in
         #css
         ''
           	@define-color dark #${base00};
@@ -227,15 +223,15 @@
           	@define-color red #${base08};
           	@define-color magenta #${base09};
           	@define-color yellow #${base0A};
-          	
+
           	/* Default setting for all modules */
           	* {
           	  border: none;
               border-radius: 0;
               margin: 0px;
               text-decoration: none;
-          	  font-family: "Mononoki Nerd Font Regular"; 
-              font-size: 14px;
+          	  font-family: "Mononoki Nerd Font Regular";
+              font-size: 16px;
               min-height: 0;
               box-shadow: none;
           	}
@@ -275,17 +271,17 @@
               background-color: #${base00};
             }
 
-            #workspaces button { 
-              font-weight: normal; 
+            #workspaces button {
+              font-weight: normal;
               padding: 0px 2px 0px 2px;
             }
-            #workspaces button.empty { 
-              font-weight: normal; 
+            #workspaces button.empty {
+              font-weight: normal;
               padding: 0px 2px 0px 2px;
               color: @gray;
             }
-            #workspaces button.${focus} { 
-              font-weight: normal; 
+            #workspaces button.${focus} {
+              font-weight: normal;
               color: @dark;
               background-color: @accent;
               padding: 0px 6px 0px 6px;
@@ -295,7 +291,7 @@
               background-color: @dark;
             }
             #window { padding: 0px 10px 0px 10px; }
-           
+
             /* calendar look */
             tooltip {
               background-color: @dark;
@@ -324,10 +320,10 @@
               animation-timing-function: linear;
               animation-iteration-count: infinite;
               animation-direction: alternate;
-          	} 
+          	}
           	#battery.warning:not(.charging) { color: @yellow; }
           	#battery.critical:not(.charging) { color: @red; }
           	@keyframes blink { to { color: @white; } }
-          	'';
+        '';
     };
 }

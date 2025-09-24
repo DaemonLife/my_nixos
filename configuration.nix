@@ -195,18 +195,18 @@
   # virtualisation.waydroid.enable = true;
 
   programs = {
-    sway = {
-      enable = true;
-      wrapperFeatures.gtk = true; # gtk fix
-      extraPackages = with pkgs; [
-        swaylock
-        swayidle
-        grim # screenshot functionality
-        slurp # screenshot functionality
-        wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-        mako # notification system developed by swaywm maintainer
-      ];
-    };
+    # sway = {
+    #   enable = true;
+    #   wrapperFeatures.gtk = true; # gtk fix
+    #   extraPackages = with pkgs; [
+    #     swaylock
+    #     swayidle
+    #     grim # screenshot functionality
+    #     slurp # screenshot functionality
+    #     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    #     mako # notification system developed by swaywm maintainer
+    #   ];
+    # };
 
     # --- hyprland ---
     # hyprland = {
@@ -287,7 +287,7 @@
       settingsFile = "/etc/xray/config.json";
     };
 
-    colord.enable = true; # color profiles
+    # colord.enable = true; # color profiles
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
@@ -295,10 +295,9 @@
     gnome.gnome-keyring.enable = true; # for sway
     power-profiles-daemon.enable = false; # disable for tlp
     thermald.enable = true; # Thermald prevents overheating
-
-    xserver.displayManager.gdm.enable = true;
+    # xserver.displayManager.gdm.enable = true;
     # xserver.displayManager.startx.enable = true;
-    xserver.desktopManager.gnome.enable = false;
+    # xserver.desktopManager.gnome.enable = true;
   }; # close services
 
   systemd = {
