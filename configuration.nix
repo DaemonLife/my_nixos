@@ -167,11 +167,8 @@
     kitty
     udiskie # auto disks mount
     nufraw-thumbnailer # RAW preview for thunar
-    colord-gtk4 # color profiles support
     xdg-desktop-portal-termfilechooser # make yazi default file chooser
     # ueberzugpp # ???
-
-    # GNOME programs
     adwaita-icon-theme
 
     protonup-qt
@@ -184,30 +181,18 @@
 
   qt.enable = true;
 
-  # # for flatpak
-  # xdg.portal = {
-  #   enable = true;
-  #   wlr.enable = true;
-  #   extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  # };
+  # for flatpak
+  xdg.portal = {
+    enable = true;
+    config.common.default = "gtk";
+    wlr.enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  };
 
   # Android emulator. Read https://nixos.wiki/wiki/WayDroid
   # virtualisation.waydroid.enable = true;
 
   programs = {
-    # sway = {
-    #   enable = true;
-    #   wrapperFeatures.gtk = true; # gtk fix
-    #   extraPackages = with pkgs; [
-    #     swaylock
-    #     swayidle
-    #     grim # screenshot functionality
-    #     slurp # screenshot functionality
-    #     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    #     mako # notification system developed by swaywm maintainer
-    #   ];
-    # };
-
     # --- hyprland ---
     # hyprland = {
     #   enable = true;
@@ -215,7 +200,7 @@
     # };
     # --- hyprland ---
 
-    niri.enable = true;
+    # niri.enable = true;
 
     nh = {
       enable = true;
@@ -287,7 +272,6 @@
       settingsFile = "/etc/xray/config.json";
     };
 
-    # colord.enable = true; # color profiles
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
