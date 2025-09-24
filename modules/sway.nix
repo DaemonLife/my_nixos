@@ -1,10 +1,9 @@
-{ pkgs
-, config
-, lib
-, ...
-}:
 {
-
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   imports = [
     (import ./waybar.nix {
       inherit config lib;
@@ -26,17 +25,15 @@
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
     enable = true;
-    checkConfig = true;
+    checkConfig = false;
     xwayland = true;
 
     extraConfig = ''
       focus_on_window_activation focus
       titlebar_border_thickness 4
-      # hide_edge_borders smart_no_gaps
     '';
 
     config = rec {
-
       focus = {
         followMouse = "yes";
         mouseWarping = true;
@@ -45,16 +42,15 @@
 
       modifier = "Mod4";
       terminal = "${pkgs.kitty}/bin/kitty --single-instance";
-      # terminal = "foot";
       menu = "${pkgs.fuzzel}/bin/fuzzel -l 10";
-      bars = [{ command = "waybar"; }];
+      bars = [{command = "waybar";}];
 
       startup = [
-        { command = "bluetooth off"; }
-        { command = "autotiling-rs"; }
-        { command = "${pkgs.mako}/bin/mako"; }
-        { command = "${pkgs.udiskie}/bin/udiskie -a"; }
-        { command = "wl-paste -t text --watch clipman store --no-persist"; }
+        {command = "bluetooth off";}
+        {command = "autotiling-rs";}
+        {command = "${pkgs.mako}/bin/mako";}
+        {command = "${pkgs.udiskie}/bin/udiskie -a";}
+        {command = "wl-paste -t text --watch clipman store --no-persist";}
         {
           command = "bash $HOME/nix/scripts/maze/run.sh '000000' ${base08} ${base09} ${base0A} ${base0B} ${base0C} ${base0D} ${base0E} ${base0F}";
         }
@@ -146,7 +142,6 @@
 
       bindkeysToCode = true;
       keybindings = {
-
         ##################
         # RUN PROGRAMS
         ##################
@@ -165,8 +160,7 @@
 
         # run broswer
         "${modifier}+b" = "exec $BROWSER";
-        "${modifier}+Shift+B" =
-          "exec proxychains4 $BROWSER --set window.title_format \"[VPN] {perc}{current_title}{title_sep}qutebrowser\"";
+        "${modifier}+Shift+B" = "exec proxychains4 $BROWSER --set window.title_format \"[VPN] {perc}{current_title}{title_sep}qutebrowser\"";
 
         # telegram
         # "${modifier}+t" = "exec telegram-desktop";
@@ -264,7 +258,6 @@
         "${modifier}+Ctrl+8" = "move container to workspace number 8";
         "${modifier}+Ctrl+9" = "move container to workspace number 9";
         "${modifier}+Ctrl+0" = "move container to workspace number 10";
-
       };
 
       modes = {
@@ -284,7 +277,6 @@
           "Return" = "mode default";
         };
       };
-
     };
 
     extraSessionCommands = ''
@@ -294,11 +286,8 @@
       export QT_QPA_PLATFORM=wayland
       export XDG_CURRENT_DESKTOP=sway
       export MOZ_ENABLE_WAYLAND=1
-
-      export TERMINAL=foot
-      export WLR_RENDERER vulkan
+      export TERMINAL=kitty
+      export WLR_RENDERER=vulkan
     '';
-
   };
-
 }

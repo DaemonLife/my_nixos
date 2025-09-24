@@ -1,5 +1,5 @@
 {
-  description = "DaemonLife flake";
+  description = "DaemonLife's flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
@@ -11,81 +11,70 @@
     };
     stylix = {
       url = "github:nix-community/stylix/release-25.05";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        # home-manager.follows = "home-manager";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nixvim = {
-    #   url = "github:nix-community/nixvim/nixos-25.05";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
   };
 
-  outputs =
-    { self
-    , nixpkgs
-    , home-manager
-    , stylix
-      # , nixvim
-    , nixpkgs-unstable
-    , nixos-hardware
-    , nvf
-    , ...
-    }@inputs:
-    let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs { inherit system; };
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    stylix,
+    nixpkgs-unstable,
+    nixos-hardware,
+    nvf,
+    ...
+  } @ inputs: let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs {inherit system;};
 
-      # Creating configuration function
-      mkNixosConfig = device: {
-        inherit system;
-        modules = builtins.concatLists [
-          [
-            ./configuration.nix # main config
-            ./devices/${device}/configuration.nix # device config
-            stylix.nixosModules.stylix
-            home-manager.nixosModules.home-manager
-            {
-              # home-manager.sharedModules = [ nixvim.homeManagerModules.nixvim ];
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.user.imports = [
-                nvf.homeManagerModules.default
-                ./home.nix # main home config
-                ./devices/${device}/home.nix # device home config
-              ];
-              home-manager.backupFileExtension = "bkp";
-            }
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  unstable = import nixpkgs-unstable {
-                    inherit system;
-                    config.allowUnfree = true;
-                  };
-                })
-              ];
-            }
-          ]
-          # Добавляем модуль только если device равно "gpd-pocket-3"
-          (if device == "gpd-pocket-3" then [ nixos-hardware.nixosModules.${device} ] else [ ])
-        ];
-      };
-
-    in
-    {
-      nixosConfigurations = {
-        # create configurations for my devices
-        gpd-pocket-3 = nixpkgs.lib.nixosSystem (mkNixosConfig "gpd-pocket-3");
-        lenovo = nixpkgs.lib.nixosSystem (mkNixosConfig "lenovo");
-      }; # end of nixosConfigurations
-    }; # end of outputs
-
+    # Creating configuration function
+    mkNixosConfig = device: {
+      inherit system;
+      modules = builtins.concatLists [
+        [
+          ./configuration.nix # main config
+          ./devices/${device}/configuration.nix # device config
+          stylix.nixosModules.stylix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.user.imports = [
+              nvf.homeManagerModules.default
+              ./home.nix # main home config
+              ./devices/${device}/home.nix # device home config
+            ];
+            home-manager.backupFileExtension = "bkp";
+          }
+          {
+            nixpkgs.overlays = [
+              (final: prev: {
+                unstable = import nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
+              })
+            ];
+          }
+        ]
+        # Add device module from flake hardware
+        (
+          if device == "gpd-pocket-3"
+          then [nixos-hardware.nixosModules.${device}]
+          else [] # If there is no hardware module
+        )
+      ];
+    };
+  in {
+    nixosConfigurations = {
+      # create configurations for my devices
+      gpd-pocket-3 = nixpkgs.lib.nixosSystem (mkNixosConfig "gpd-pocket-3");
+      lenovo = nixpkgs.lib.nixosSystem (mkNixosConfig "lenovo");
+    }; # end of nixosConfigurations
+  }; # end of outputs
 }

@@ -1,10 +1,13 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   # lenovo output
 
   wayland.windowManager.sway = {
-
     config = rec {
-
       output = {
         # lenovo laptop
         "BOE 0x0931 Unknown" = {
@@ -13,6 +16,7 @@
           adaptive_sync = "enable";
           render_bit_depth = "10"; # 6, 8, 10
           position = "2560 0"; # laptop position for msk
+          color_profile = "icc /home/user/nix/devices/screens/LEN140WUXGA+_2023-03-29.icm";
         };
         # monitor gg
         "Acer Technologies Acer A231H LQT0W0084320" = {
@@ -28,8 +32,8 @@
           scale = "1";
           adaptive_sync = "false";
           render_bit_depth = "10"; # 6, 8, 10
-          position = "0 0"; # left position 
-          # color_profile = "icc /home/user/nix/h27s17.icm";
+          position = "0 0"; # left position
+          color_profile = "icc /home/user/nix/devices/screens/H27S17_2024-06-16.icm";
         };
       };
 
@@ -40,24 +44,21 @@
         }
         {
           workspace = "2";
-          output = [ "DP-1" "HDMI-A-1" ];
+          output = ["DP-1" "HDMI-A-1"];
         }
         {
           workspace = "3";
-          output = [ "DP-1" "HDMI-A-1" ];
+          output = ["DP-1" "HDMI-A-1"];
         }
         {
           workspace = "4";
-          output = [ "DP-1" "HDMI-A-1" ];
+          output = ["DP-1" "HDMI-A-1"];
         }
         {
           workspace = "5";
-          output = [ "DP-1" "HDMI-A-1" ];
+          output = ["DP-1" "HDMI-A-1"];
         }
       ];
-
-
     }; # config
-
   };
 }

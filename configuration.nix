@@ -45,16 +45,15 @@
       VISUAL = "${EDITOR}";
       BROWSER = "qutebrowser";
     };
-    # Run Electron apps without XWayland
-    sessionVariables.NIXOS_OZONE_WL = "1";
+    sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
   # --------------------------------
-  # HARDWARE, NETWORK, BlUETOOTH, SOUND, PRINT, TIMEZONE
+  # HARDWARE SETTINGS
   # --------------------------------
 
-  # gparhic drivers
-  hardware.graphics.enable = true;
+  hardware.graphics.enable = true; # gparhic drivers
+  powerManagement.enable = true; # NixOS power management tool
 
   # Network
   networking.hostName = "nixos"; # Define your hostname.
@@ -65,10 +64,7 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = false;
 
-  # NixOS power management tool is compatible with similar tools, but the other tools may overwrite this setting.
-  powerManagement.enable = true;
-
-  # Enable CUPS to print documents.
+  # Print and scan
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [
     gutenprint # Drivers for many different printers from many different vendors.
@@ -83,30 +79,25 @@
     # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
     # foomatic-db-ppds-withNonfreeDb
   ];
-
-  # Enable scanner
   hardware.sane.enable = true; # enables support for scanners
   hardware.sane.extraBackends = [pkgs.sane-airscan];
-  # udev, a device manager for the Linux kernel.
-  services.udev.packages = [pkgs.sane-airscan];
+  services.udev.packages = [pkgs.sane-airscan]; # device manager for the Linux kernel
 
-  # Enable sound with pipewire.
-  # rtkit is optional but recommended for pipewire
-  security.rtkit.enable = true;
+  # Sound
+  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true; # important for waybar
-    # If you want to use JACK applications, uncomment this
-    jack.enable = true;
+    jack.enable = true; # If you want to use JACK applications
   };
 
-  # Set your time zone and andd compatible with Windows
+  # Time
   time.timeZone = "Europe/Moscow";
   time.hardwareClockInLocalTime = true;
 
-  # Select internationalisation properties.
+  # Lang
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
@@ -121,7 +112,7 @@
   };
 
   # --------------------------------
-  # DE, USER
+  # USER SETTINGS
   # --------------------------------
 
   users.users.user = {
@@ -142,9 +133,6 @@
     packages = with pkgs; [flatpak];
   };
 
-  # virtualbox
-  # users.extraGroups.vboxusers.members = [ "user-with-access-to-virtualbox" ];
-
   # --------------------------------
   # NIX SETTING
   # --------------------------------
@@ -153,12 +141,10 @@
     allowUnfree = true;
   };
   nix = {
-    # Allow unfree and experimental packages
     settings.experimental-features = [
       "nix-command"
       "flakes"
     ];
-
     optimise.automatic = true;
     settings.auto-optimise-store = true;
   };
@@ -177,25 +163,23 @@
     jdk # java
     impala # wifi tui
     iwd # wifi cli, don't delete!
-    # helix
     bluez
     kitty
-    # bottles # run windows programs
     udiskie # auto disks mount
     nufraw-thumbnailer # RAW preview for thunar
-    colord
+    colord-gtk4 # color profiles support
     xdg-desktop-portal-termfilechooser # make yazi default file chooser
-    ueberzugpp
+    # ueberzugpp # ???
 
     # GNOME programs
     adwaita-icon-theme
 
-    # protonup-qt
+    protonup-qt
     # vulkan-validation-layers
   ];
 
   # --------------------------------
-  # OTHER PROGRAMS
+  # SYSTEM PROGRAMS
   # --------------------------------
 
   qt.enable = true;
@@ -210,22 +194,28 @@
   # Android emulator. Read https://nixos.wiki/wiki/WayDroid
   # virtualisation.waydroid.enable = true;
 
-  # virtualisation.virtualbox.host.enable = true;
-  # virtualisation.virtualbox.guest.enable = true;
-
   programs = {
-    # sway = {
+    sway = {
+      enable = true;
+      wrapperFeatures.gtk = true; # gtk fix
+      extraPackages = with pkgs; [
+        swaylock
+        swayidle
+        grim # screenshot functionality
+        slurp # screenshot functionality
+        wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+        mako # notification system developed by swaywm maintainer
+      ];
+    };
+
+    # --- hyprland ---
+    # hyprland = {
     #   enable = true;
-    #   wrapperFeatures.gtk = true; # gtk fix
-    #   extraPackages = with pkgs; [
-    #     swaylock
-    #     swayidle
-    #     grim # screenshot functionality
-    #     slurp # screenshot functionality
-    #     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    #     mako # notification system developed by swaywm maintainer
-    #   ];
+    #   withUWSM = true;
     # };
+    # --- hyprland ---
+
+    niri.enable = true;
 
     nh = {
       enable = true;
@@ -264,13 +254,11 @@
       };
     };
 
-    amnezia-vpn.enable = true;
-
     # ------ Steam ------
     steam = {
       enable = true;
       gamescopeSession.enable = true;
-      # protontricks.enable = true;
+      protontricks.enable = true;
       extraCompatPackages = with pkgs; [
         proton-ge-bin
       ];
@@ -286,21 +274,11 @@
     htop.enable = true;
     git.enable = true;
     fish.enable = true;
-
-    # --- hyprland ---
-    # hyprland = {
-    #   enable = true;
-    #   withUWSM = true;
-    # };
-    # --- hyprland ---
-
-    # --- niri ---
-    niri.enable = true;
-    # --- niri ---
+    amnezia-vpn.enable = true;
   };
 
   # --------------------------------
-  # OTHER SERVICES
+  # SYSTEM SERVICES
   # --------------------------------
 
   services = {
@@ -309,6 +287,7 @@
       settingsFile = "/etc/xray/config.json";
     };
 
+    colord.enable = true; # color profiles
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
