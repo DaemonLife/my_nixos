@@ -169,7 +169,7 @@
     nufraw-thumbnailer # RAW preview for thunar
     xdg-desktop-portal-termfilechooser # make yazi default file chooser
     adwaita-icon-theme
-    darktable
+    # darktable
     rocmPackages.clr.icd
 
     protonup-qt

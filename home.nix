@@ -44,6 +44,7 @@ in {
       helvum # A GTK patchbay for pipewire
       digikam
       blender
+      unstable.darktable
       imagemagick
       ffmpegthumbnailer
       ffmpeg_6-full
