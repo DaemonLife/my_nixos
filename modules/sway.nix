@@ -26,6 +26,7 @@
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
     enable = true;
+    # package = pkgs.unstable.sway;
     checkConfig = false; # false because bug with icc profile
     xwayland = true;
     wrapperFeatures.gtk = true; # gtk apps support

@@ -1,42 +1,42 @@
 # Configuration for Lenovo
-{ pkgs, ... }: {
-
+{pkgs, ...}: {
   # Imports
-  imports = [ ./hardware-configuration.nix ];
+  imports = [./hardware-configuration.nix];
 
-  # Enable AMD video driver 
+  # Enable AMD video driver
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
-    extraPackages = with pkgs; [ rocmPackages.clr.icd amdvlk ];
+    extraPackages = with pkgs; [rocmPackages.clr.icd amdvlk];
   };
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  services.xserver.videoDrivers = [ "amdgpu" ];
+  hardware.amdgpu.opencl.enable = true;
+  boot.initrd.kernelModules = ["amdgpu"];
+  services.xserver.videoDrivers = ["amdgpu"];
 
   # enable HIP
-  systemd.tmpfiles.rules =
-    [ "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}" ];
+  systemd.tmpfiles.rules = ["L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"];
 
   # --------------------------------
-  # HIBERNATION 
+  # HIBERNATION
   # --------------------------------
 
   # swap file
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16 * 1024; # 16GB
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024; # 16GB
+    }
+  ];
   # hibernation (swap file is necessary)
   boot.initrd.systemd.enable = true;
   # Specifies what to do when the laptop lid is closed
   # services.logind.lidSwitch = "suspend-then-hibernate";
 
   # --------------------------------
-  # OTHER SERVICES 
+  # OTHER SERVICES
   # --------------------------------
 
   services = {
-
     # Battery life / TLP
     tlp = {
       enable = true;
@@ -64,10 +64,9 @@
         TLP_DEFAULT_MODE = "conservation";
 
         # improve disk IO
-        # DISK_IOSCHED = ""; 
+        # DISK_IOSCHED = "";
       };
     }; # tlp
-
   }; # services
 
   system.stateVersion = "24.11";

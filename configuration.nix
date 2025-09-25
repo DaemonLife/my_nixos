@@ -168,8 +168,9 @@
     udiskie # auto disks mount
     nufraw-thumbnailer # RAW preview for thunar
     xdg-desktop-portal-termfilechooser # make yazi default file chooser
-    # ueberzugpp # ???
     adwaita-icon-theme
+    darktable
+    rocmPackages.clr.icd
 
     protonup-qt
     # vulkan-validation-layers

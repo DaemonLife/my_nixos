@@ -40,14 +40,14 @@ in {
       tor-browser
 
       # Media
-      darktable
       gimp3-with-plugins
       helvum # A GTK patchbay for pipewire
       digikam
-      kdePackages.kdenlive
+      blender
       imagemagick
-      # ffmpegthumbnailer
-      ffmpeg-full
+      ffmpegthumbnailer
+      ffmpeg_6-full
+      mlt
       pavucontrol # audio gui control
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
