@@ -4,7 +4,7 @@
   home.packages = with pkgs; [
     unstable.digikam
     unstable.darktable
-    unstable.kdePackages.kdenlive
+    kdePackages.kdenlive
     siril
 
     # games

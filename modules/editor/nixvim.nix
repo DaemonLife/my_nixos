@@ -17,6 +17,7 @@
       # --- Plugins ---
       extraPlugins = with pkgs; [
         vimPlugins.nvim-biscuits # annotations at the end of a closing tag/bracket/parenthesis/etc
+        vimPlugins.vim-table-mode # :help table-mode. <leader>tic <leader>tdc
       ];
 
       plugins = {
@@ -204,6 +205,10 @@
           # D is Super key
           key = "<D-Space>";
           mode = [ "i" ];
+        }
+        {
+          action = "<leader>";
+          key = " ";
         }
 
         # fixs for ru 

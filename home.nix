@@ -27,7 +27,7 @@
       zip
       unzip
       fzy
-      dua # disk usage TUI tool. Run: dua i
+      # dua # disk usage TUI tool. Run: dua i. REMOVED: ncdu is better
 
       # Network
       overskride # bluetooth gui
@@ -36,6 +36,7 @@
       qbittorrent # torrent client
       tor-browser
       deltachat-desktop
+      vivaldi
 
       # Media
       unstable.gimp
@@ -51,18 +52,13 @@
       obs-studio
       upscayl
       freefilesync
+      foliate
 
       # Theming
       vimix-icon-theme # cursor icon
-      # gnome-tweaks
       gowall # Tool to convert a Wallpaper's color scheme
       grc
       fontpreview # --preview-text "Привет, как дела, это просто тест шрифта!!! 1234567890?*# Just a test for my font."
-      ## Fonts
-      # unifont_upper
-      # unifont-csur
-      # libsForQt5.qt5ct
-      # kdePackages.qt6ct
 
       # Utils
       dconf-editor
@@ -88,7 +84,7 @@
       hunspellDicts.en_US # spellcheck
 
       # Gaming
-      unstable.portablemc # minecraft cli launcher
+      # unstable.portablemc # minecraft cli launcher
       curseofwar # stategy cli game
       vitetris # tetris cli game
       unstable.mindustry-wayland
