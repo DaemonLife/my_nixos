@@ -35,7 +35,6 @@
       bitwarden-cli
       qbittorrent # torrent client
       tor-browser
-      ungoogled-chromium
       deltachat-desktop
 
       # Media

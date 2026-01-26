@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-tick_tock=0
+tick_tock=1
 green=$(tput setaf 2)
 yellow=$(tput setaf 3)
 white=$(tput setaf 7)
@@ -8,10 +8,14 @@ bold=$(tput bold)
 dim=$(tput dim)
 star="O"
 ball="o"
+sleep=0.07
+area_reduce=3 # 1-5 or more
+star_flash_chance=8 # 1-10
 
 main() {
   cols=$(tput cols)
   rows=$(tput lines)
+  rows=$rows+1 # TEST!
   center=$((cols / 2))
   max_H=$(((rows - 4) / 4 - 1))
   max_W=$(((cols - 15) / 8 - 1))
@@ -26,8 +30,10 @@ loop() {
   while true; do
     lights
     draw_star
-    tick_tock=$((1 - tick_tock))
-    sleep 1
+    if (($((RANDOM % 10 + 1)) < $star_flash_chance)); then 
+        tick_tock=$((1 - tick_tock))
+    fi
+    sleep $sleep
   done
 }
 
@@ -102,7 +108,7 @@ lights() {
     done
   done
   # on
-  for ((i = 0; i < area / 5; i++)); do
+  for ((i = 0; i < area / $area_reduce; i++)); do
     tree_H=${#w[*]}
     random_pre_y=$((RANDOM % tree_H))
     random_pre_x=$((RANDOM % cols))
