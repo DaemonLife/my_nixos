@@ -54,6 +54,7 @@
       upscayl
       freefilesync
       foliate
+      ascii-draw
 
       # Theming
       vimix-icon-theme # cursor icon
@@ -89,6 +90,7 @@
       curseofwar # stategy cli game
       vitetris # tetris cli game
       unstable.mindustry-wayland
+      # unstable.chess-tui
       # dwarf-fortress-packages.dwarf-fortress-full
     ];
   };

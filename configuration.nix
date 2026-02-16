@@ -169,9 +169,11 @@
     nautilus
     net-tools # for netstat
     wget
+    nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # folder size tree
     mangohud # Steam performance GUI
     gdb # gnu debugger for some applications
+    nix-init # create pkgs 
   ];
 
   # --------------------------------

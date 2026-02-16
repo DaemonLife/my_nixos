@@ -1,15 +1,12 @@
-{ config
-, lib
-, ...
-}: {
+{ config, lib, ... }: {
   programs.kitty = with config.lib.stylix.colors; {
     enable = true;
     # shellIntegration.enableZshIntegration = true;
     shellIntegration.enableFishIntegration = true;
 
-    font = lib.mkForce {
-      name = "UnifontExMono";
-    };
+    # font = lib.mkForce {
+    #   name = "UnifontExMono";
+    # };
 
     keybindings = {
       "ctrl+shift+c" = "copy_or_interrupt";
@@ -21,7 +18,7 @@
     settings = {
       shell = "fish";
       editor = "$EDITOR";
-      linux_display_server = "wayland";
+      # linux_display_server = "wayland";
       enable_audio_bell = false;
       visual_bell_duration = "0.1";
       hide_window_decorations = "yes";
