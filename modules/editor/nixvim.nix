@@ -21,7 +21,27 @@
 
     plugins = {
 
-      treesitter.enable = true; # need for nvim-biscuits
+      treesitter = {
+        enable = true; # need for nvim-biscuits
+        # highlight.enable = true;
+        # indent.enable = true;
+        # folding.enable = true;
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          json
+          lua
+          make
+          markdown
+          nix
+          regex
+          toml
+          vim
+          vimdoc
+          xml
+          python
+        ];
+      };
+      telescope.enable = true;
       nix.enable = true;
       render-markdown.enable = true;
       colorizer.enable = true; # colors for hex code
@@ -161,9 +181,10 @@
     };
 
     keymaps = [
+      { action = "<leader>"; key = " "; } # space is leader
       {
-        action = "";
-        key = "<leader>";
+        action = ""; # don't make an annoying space 
+        key = "<leader>"; 
         mode = [ "v" ];
       }
       {
@@ -171,11 +192,40 @@
         key = "<D-Space>"; # D is Super key
         mode = [ "i" ];
       }
-      { action = "<leader>"; key = " "; }
+      { action = "<C-u>"; key = "<C-г>"; } # rus up
+      { action = "<C-d>"; key = "<C-в>"; } # rus down
+      {
+        action = "<C-w>";
+        key = "<C-ц>"; # rus remove back word
+        mode = "i";
+        options.remap = true;
+      }
 
-      # fix for ru 
-      { action = "<C-u>"; key = "<C-г>"; }
-      { action = "<C-d>"; key = "<C-в>"; }
+      # telescope
+      {
+        mode = "n";
+        key = "<leader>ff";
+        action = "<cmd>Telescope find_files<CR>";
+        options.desc = "Find files";
+      }
+      {
+        mode = "n";
+        key = "<leader>fg";
+        action = "<cmd>Telescope live_grep<CR>";
+        options.desc = "Live grep";
+      }
+      {
+        mode = "n";
+        key = "<leader>аа"; # rus
+        action = "<cmd>Telescope find_files<CR>";
+        options.desc = "Find files";
+      }
+      {
+        mode = "n";
+        key = "<leader>ап"; # rus
+        action = "<cmd>Telescope live_grep<CR>";
+        options.desc = "Live grep";
+      }
 
       # --- new redo ---
       {
@@ -183,13 +233,11 @@
         key = "U";
         options.desc = "Redo.";
       }
-      # rus
       {
         action = "<cmd>redo<CR><CR>";
-        key = "Г";
+        key = "Г"; # rus
         options.desc = "Redo.";
       }
-      # --- new redo ---
 
       # --- new clipboard control ---
       {
@@ -204,20 +252,18 @@
         mode = [ "n" "v" ];
         options.desc = "Paste from system clipboard.";
       }
-      # rus
       {
         action = ''"+yl'';
-        key = "<leader>н";
+        key = "<leader>н"; # rus
         mode = [ "n" "v" ];
         options.desc = "Copy to system clipboard.";
       }
       {
         action = ''"+pl'';
-        key = "<leader>з";
+        key = "<leader>з"; # rus
         mode = [ "n" "v" ];
         options.desc = "Paste from system clipboard.";
       }
-      # --- new clipboard control ---
 
       # --- new comment control ---
       {
@@ -238,10 +284,9 @@
           desc = "Comment in visual mode.";
         };
       }
-      # rus
       {
         action = "gcc";
-        key = "<leader>с";
+        key = "<leader>с"; # rus
         mode = "n";
         options = {
           remap = true;
@@ -250,31 +295,20 @@
       }
       {
         action = "gc";
-        key = "<leader>с";
+        key = "<leader>с"; # rus
         mode = "v";
         options = {
           remap = true;
           desc = "Comment in visual mode.";
         };
       }
-      # --- new comment control ---
 
       # --- soft string jumping ---
       { action = "gj"; key = "j"; }
       { action = "gk"; key = "k"; }
-      # rus
-      { action = "gj"; key = "о"; }
-      { action = "gk"; key = "л"; }
-      # --- soft string jumping ---
+      { action = "gj"; key = "о"; } # rus
+      { action = "gk"; key = "л"; } # rus
 
-      # -- delete back word for rus ---
-      {
-        action = "<C-w>";
-        key = "<C-ц>";
-        mode = "i";
-        options.remap = true;
-      }
-      # -- delete back word for rus ---
     ];
 
     # extra plugin and ru keymap support

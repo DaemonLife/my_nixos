@@ -34,6 +34,7 @@
       bluetui # bluetooth tui
       bitwarden-cli
       qbittorrent # torrent client
+      unstable.transmission_4-gtk
       tor-browser
       deltachat-desktop
       vivaldi
@@ -70,6 +71,7 @@
       wev # key events in wayland
       nwg-displays # gui for display setup
       gucharmap # character map
+      sc-im # vim spreadsheet program for terminal
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # Docs
@@ -84,6 +86,7 @@
       hunspell # spellcheck
       hunspellDicts.ru_RU # spellcheck
       hunspellDicts.en_US # spellcheck
+      ripgrep
 
       # Gaming
       # unstable.portablemc # minecraft cli launcher

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# https://github.com/stgiga/UnifontEX
+
 mkdir ~/.local/share/fonts/
 cp * ~/.local/share/fonts/
 fc-cache -fv
