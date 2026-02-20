@@ -6,13 +6,6 @@
       # os help - for help
       os = "$HOME/nix/scripts/nix_rebuild.sh";
 
-      gitp = ''
-        git add .
-        set msg (string join " " $argv)
-        git commit -m "$msg"
-        git push && echo "Push complited!"
-      '';
-
       # battery configuration will be restored at the next boot
       tlp-set-full-bat = "sudo tlp fullcharge bat1";
       tlp-set-conserv-bat = "sudo tlp setcharge bat1";
@@ -91,6 +84,14 @@
 
       fish_prompt = ''
         printf '%s@%s %s%s%s%s \n> ' $USER $hostname (set_color $fish_color_cwd) $PWD (set_color normal) (fish_vcs_prompt)
+      '';
+
+      gitp = ''
+        set msg (string join " " $argv)
+        git add .
+        git commit -m "$msg"
+        git push
+        echo "Push completed!"
       '';
 
       # yazi setup
