@@ -1,7 +1,4 @@
-{ pkgs
-, config
-, ...
-}: {
+{ pkgs, config, ... }: {
   programs.fish = with config.lib.stylix.colors; {
     enable = true;
 
@@ -9,9 +6,13 @@
       # os help - for help
       os = "$HOME/nix/scripts/nix_rebuild.sh";
 
-      # # for windows fs on lenovo
-      # cdwin = "$HOME/nix/scripts/cdwin.sh && cd /mnt/windows/Users/user/$1";
-      #
+      gitp = ''
+        git add .
+        set msg (string join " " $argv)
+        git commit -m "$msg"
+        git push && echo "Push complited!"
+      '';
+
       # battery configuration will be restored at the next boot
       tlp-set-full-bat = "sudo tlp fullcharge bat1";
       tlp-set-conserv-bat = "sudo tlp setcharge bat1";
@@ -19,8 +20,7 @@
     };
 
     shellAbbrs = {
-      jrnl = " jrnl"; # symbold ' ' for hide from shell history
-      # jrnl-tags = " jrnl -on year --format json | jq -r '.entries[] | \"\\(.date) \\(.tags | join(\", \"))\"'";
+      jrnl = " jrnl";
       jrnl-tags = ''
          set tag "боль"
         jrnl --format json | jq -r --arg tag "@$tag" '
@@ -64,7 +64,8 @@
       set ___fish_git_prompt_char_cleanstate v
       set ___fish_git_prompt_char_dirtystate ⁕
       set ___fish_git_prompt_char_invalidstate x
-      set ___fish_git_prompt_char_stagedstate ⸱
+      # set ___fish_git_prompt_char_stagedstate ⸱
+      set ___fish_git_prompt_char_stagedstate +
       set ___fish_git_prompt_char_stashstate 🏴
       set ___fish_git_prompt_char_stateseparator '|'
       set ___fish_git_prompt_char_untrackedfiles …

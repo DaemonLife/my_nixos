@@ -106,7 +106,7 @@ in
 
         "${modifier}+Shift+27" = "reload"; # r
         "${modifier}+24" = "kill"; # q
-        "${modifier}+38" = "exec ${pkgs.dmenu}/bin/dmenu_run -i -fn ' Unifont-20'"; # a
+        "${modifier}+38" = "exec bash $HOME/nix/scripts/i3_dmenu_run.sh"; # a
         "${modifier}+41" = "fullscreen"; # f
         "${modifier}+26" = "layout toggle splith splitv tabbed"; # e
         "${modifier}+27" = "mode resize"; # r
@@ -206,8 +206,7 @@ in
       bindsym F1 exec cmus-remote -r
       bindsym F2 exec cmus-remote -u
       bindsym F3 exec cmus-remote -n
-      bindsym F10 exec bash $HOME/nix/scripts/i3lock.sh
-      bindsym Mod4+Shift+l exec bash $HOME/nix/scripts/i3lock.sh
+      bindsym F10 exec bash $HOME/nix/scripts/i3_lock.sh
 
       gaps inner 0
       gaps outer 0
