@@ -23,9 +23,6 @@
 
       treesitter = {
         enable = true; # need for nvim-biscuits
-        # highlight.enable = true;
-        # indent.enable = true;
-        # folding.enable = true;
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
           bash
           json
@@ -44,6 +41,11 @@
       nix.enable = true;
       render-markdown.enable = true;
       colorizer.enable = true; # colors for hex code
+
+      indent-blankline = {
+        enable = true;
+        settings = { indent.char = "│"; };
+      };
 
       mini = {
         enable = true;
@@ -80,18 +82,10 @@
         };
 
       };
-
       lsp-format = {
         enable = true;
         lspServersToEnable = "all";
       };
-
-      indent-blankline = {
-        enable = true;
-        # settings = { indent.char = "⁚"; };
-        settings = { indent.char = "│"; };
-      };
-
     };
 
     opts = {
@@ -164,13 +158,13 @@
       {
         mode = "n";
         key = "<leader>ff";
-        action = "<cmd>Pick files<CR>";
+        action = "<cmd>lua MiniPick.builtin.files(nil,{source={cwd='~'}})<CR>"; # search in home
         options.desc = "Find files";
       }
       {
         mode = "n";
         key = "<leader>fg";
-        action = "<cmd>Pick grep_live<CR>";
+        action = "<cmd>lua MiniPick.builtin.grep_live(nil,{source={cwd='~'}})<CR>"; # search in home
         options.desc = "Live grep";
       }
       {
@@ -182,13 +176,13 @@
       {
         mode = "n";
         key = "<leader>аа"; # rus
-        action = "<cmd>Pick files<CR>";
+        action = "<cmd>lua MiniPick.builtin.files(nil,{source={cwd='~'}})<CR>"; # search in home
         options.desc = "Find files";
       }
       {
         mode = "n";
         key = "<leader>ап"; # rus
-        action = "<cmd>Pick grep_live<CR>";
+        action = "<cmd>lua MiniPick.builtin.grep_live(nil,{source={cwd='~'}})<CR>"; # search in home
         options.desc = "Live grep";
       }
       {
