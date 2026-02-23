@@ -72,7 +72,6 @@
       nwg-displays # gui for display setup
       gucharmap # character map
       sc-im # vim spreadsheet program for terminal
-      unison
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # Docs

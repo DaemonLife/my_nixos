@@ -12,6 +12,7 @@
     ./nomacs.nix
     ./chess/cli-chess.nix
     ./xdg.nix
+    ./unison.nix
 
     ./shell/_import.nix
     ./terminal/_import.nix
