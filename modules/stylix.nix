@@ -19,28 +19,28 @@
     fonts = {
       monospace = {
         package = pkgs.unifont;
-        name = "UnifontExMono"; # my local font
+        name = "Unifont"; # my local font
       };
       sansSerif = {
         package = pkgs.unifont;
-        name = "UnifontExMono"; # my local font
+        name = "Unifont"; # my local font
       };
       serif = {
         package = pkgs.unifont;
-        name = "UnifontExMono"; # my local font
+        name = "Unifont"; # my local font
       };
       emoji = {
         package = pkgs.unifont;
-        name = "UnifontExMono"; # my local font
+        name = "Unifont"; # my local font
       };
 
       sizes = {
         # be careful when using certain values (for example 19)
         # check fonts settings in qt6ct program for valid values (I hate it)
-        applications = 18;
-        terminal = 18;
+        applications = 20;
+        terminal = 22;
         # Window titles, status bars, and other general elements of the desktop.
-        desktop = 15;
+        desktop = 16;
         popups = config.stylix.fonts.sizes.desktop;
       };
     };

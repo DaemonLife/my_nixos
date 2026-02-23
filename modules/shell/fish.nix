@@ -9,20 +9,27 @@
       # battery configuration will be restored at the next boot
       tlp-set-full-bat = "sudo tlp fullcharge bat1";
       tlp-set-conserv-bat = "sudo tlp setcharge bat1";
-      cmus-connect-phone = "eval (ssh-agent -c) && ssh-add ~/.ssh/termux && sshfs -p 8022 u0_a183@192.168.0.190:/data/data/com.termux/files/home/storage/music/my ~/Music/termux_music/";
+
+      # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
+      cmus-connect-phone = "bash $HOME/nix/scripts/cmus-connect-phone.sh";
+      linux-phone = "ssh -p 8025 user@myphone";
     };
 
     shellAbbrs = {
       jrnl = " jrnl";
       jrnl-tags = ''
-         set tag "боль"
-        jrnl --format json | jq -r --arg tag "@$tag" '
-          .entries[]
-          | select((.tags // []) | map(startswith($tag)) | any)
-          | "\(.date) \((.tags // [] | map(select(startswith($tag))) | join(" ")))"
+        set
+        tag "боль"
+        jrnl - -format json | jq - r - -arg tag
+        "@$tag" '.entries [ ]
+        |
+        select
+        ((.tags // [ ]) | map (startswith ($tag)) | any)
+        | "\(.date) \((.tags // [] | map(select(startswith($tag))) | join(" ")))"
         '
       '';
-      yt-dlp-best = ''yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]"''; # add URL
+      yt-dlp-best = ''
+        yt-dlp - f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" ''; # add URL
     };
 
     plugins = [
@@ -39,13 +46,13 @@
     # when login to shell
     loginShellInit = ''
       if not set -q DISPLAY
-        if test (tty) = "/dev/tty1"
-          # echo "Run niri-session"
-          # bash $HOME/nix/scripts/start_niri.sh
-          # niri-session
-          # exec uwsm start hyprland-uwsm.desktop
-          WLR_RENDERER=vulkan exec sway
-        end
+      if test (tty) = "/dev/tty1"
+      # echo "Run niri-session"
+      # bash $HOME/nix/scripts/start_niri.sh
+      # niri-session
+      # exec uwsm start hyprland-uwsm.desktop
+      WLR_RENDERER=vulkan exec sway
+      end
       end
     '';
 
@@ -96,13 +103,17 @@
 
       # yazi setup
       y = ''
-        set tmp (mktemp -t "yazi-cwd.XXXXXX")
-        yazi $argv --cwd-file="$tmp"
-        if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-        	builtin cd -- "$cwd"
+          set tmp (mktemp -t "yazi-cwd.XXXXXX")
+          yazi $argv --cwd-file="$tmp"
+          if set cwd (command cat -- "$tmp");
+        and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
         end
         rm -f -- "$tmp"
       '';
     };
   };
 }
+
+
+

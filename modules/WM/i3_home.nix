@@ -57,10 +57,10 @@ in
     enable = true;
     config = rec {
       modifier = "Mod4";
-      terminal = "alacritty";
+      terminal = "kitty";
 
       fonts = {
-        names = [ "UnifontExMono" ];
+        names = [ "Unifont" ];
         size = lib.mkForce 20.0;
       };
 
@@ -137,7 +137,7 @@ in
 
       keybindings = {
         "${modifier}+space" = "exec bash $HOME/nix/scripts/i3_layout_change.sh";
-        "${modifier}+Return" = "exec --no-startup-id alacritty";
+        "${modifier}+Return" = "exec --no-startup-id ${terminal}";
         "${modifier}+n" = "exec nautilus";
 
         # "${modifier}+F10" = "exec bash $HOME/scripts/i3lock";

@@ -72,6 +72,7 @@
       nwg-displays # gui for display setup
       gucharmap # character map
       sc-im # vim spreadsheet program for terminal
+      unison
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # Docs
@@ -86,7 +87,6 @@
       hunspell # spellcheck
       hunspellDicts.ru_RU # spellcheck
       hunspellDicts.en_US # spellcheck
-      ripgrep
 
       # Gaming
       # unstable.portablemc # minecraft cli launcher
@@ -103,6 +103,7 @@
   # --------------------------------
 
   programs = {
+    ripgrep.enable = true;
     fastfetch = {
       enable = true;
     };
