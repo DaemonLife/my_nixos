@@ -54,7 +54,7 @@
       mediainfo = mediainfo;
       wl-clipboard = wl-clipboard;
       toggle-pane = toggle-pane;
-      # mime-ext = mime-ext; # fast mime-type by file extancions
+      mime-ext = mime-ext; # fast mime-type by file extancions
     };
 
     settings = {
@@ -63,12 +63,12 @@
       plugin = {
         prepend_fetchers = [
           # --- plugin mime-ext ---
-          # {
-          #   id = "mime";
-          #   name = "*";
-          #   run = "mime-ext";
-          #   prio = "high";
-          # }
+          {
+            id = "mime";
+            name = "*";
+            run = "mime-ext";
+            prio = "high";
+          }
           # --- plugin git ---
           {
             id = "git";
@@ -445,6 +445,39 @@
 
     keymap = {
       mgr.prepend_keymap = [
+        # go to folder
+        {
+          on = [ "g" "d" ];
+          run = "cd ~/Downloads";
+        }
+        {
+          on = [ "g" "v" ];
+          run = "cd ~/Videos";
+        }
+        {
+          on = [ "g" "N" ];
+          run = "cd ~/Documents/Notes";
+        }
+        {
+          on = [ "g" "n" ];
+          run = "cd ~/nix";
+        }
+        {
+          on = [ "п" "в" ]; # ru
+          run = "cd ~/Downloads";
+        }
+        {
+          on = [ "п" "м" ]; # ru
+          run = "cd ~/Videos";
+        }
+        {
+          on = [ "п" "Т" ]; # ru
+          run = "cd ~/Documents/Notes";
+        }
+        {
+          on = [ "п" "т" ]; # ru
+          run = "cd ~/nix";
+        }
         # plugin system clipboard support
         {
           on = "Y";
