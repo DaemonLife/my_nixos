@@ -11,8 +11,9 @@
       tlp-set-conserv-bat = "sudo tlp setcharge bat1";
 
       # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
-      cmus-connect-phone = "bash $HOME/nix/scripts/cmus-connect-phone.sh";
-      linux-phone = "ssh -p 8025 user@myphone";
+      myphone-connect-cmus = "bash $HOME/nix/scripts/myphone-connect-cmus.sh 8022";
+      myphone-open-linux = "ssh -p 8025 user@myphone";
+      myphone-sync-notes = "unison $HOME/Documents/Notes ssh://user@myphone:8025//home/user/Documents/Notes";
     };
 
     shellAbbrs = {
