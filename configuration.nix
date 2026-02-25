@@ -253,12 +253,12 @@
     };
     gamemode = {
       enable = true; # Set run game parameters in Steam: gamemoderun %command%
-      settings = {
-        custom = {
-          start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-          end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-        };
-      };
+      # settings = {
+        # custom = {
+        #   start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+        #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+        # };
+      # };
     };
     gamescope = {
       enable = true; # Using: gamescope

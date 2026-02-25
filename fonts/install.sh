@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # https://github.com/stgiga/UnifontEX
 
-# font name: Unifont
+# font name: UnifontExMono
 
 mkdir ~/.local/share/fonts/
 cp * ~/.local/share/fonts/

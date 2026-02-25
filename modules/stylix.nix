@@ -4,10 +4,7 @@
 
     image = ../images/space8.jpg;
 
-    # based theme 
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/horizon-terminal-dark.yaml";
-
-    # blue light free theme!
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-hard.yaml";
 
     cursor = {
@@ -18,20 +15,20 @@
 
     fonts = {
       monospace = {
-        package = pkgs.unifont;
-        name = "Unifont"; # my local font
+        # package = pkgs.unifont; # "Unifont" is not correct
+        name = "UnifontExMono"; # my local font
       };
       sansSerif = {
-        package = pkgs.unifont;
-        name = "Unifont"; # my local font
+        # package = pkgs.unifont;
+        name = "UnifontExMono"; # my local font
       };
       serif = {
-        package = pkgs.unifont;
-        name = "Unifont"; # my local font
+        # package = pkgs.unifont;
+        name = "UnifontExMono"; # my local font
       };
       emoji = {
-        package = pkgs.unifont;
-        name = "Unifont"; # my local font
+        # package = pkgs.unifont;
+        name = "UnifontExMono"; # my local font
       };
 
       sizes = {
@@ -55,9 +52,5 @@
     polarity = "dark";
   };
 
-  # QT STUFF WORKS DON'T TOUCH IT
-  # qt.enable = lib.mkForce true;
-  # qt.platformTheme = "gnome";
-  # qt.style = "adwaita-dark";
   stylix.targets.qt.enable = true;
 }

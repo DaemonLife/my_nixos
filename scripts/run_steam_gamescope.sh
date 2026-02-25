@@ -7,7 +7,7 @@ gamescopeArgs=(
   --mangoapp # performance overlay
   --rt
   --steam
-  --sdr-gamut-wideness 1 # or >=0
+  # --sdr-gamut-wideness 1 # or >=0
 )
 steamArgs=(
   -pipewire-dmabuf
@@ -26,7 +26,7 @@ mangoConfig=(
   # no_display
 )
 mangoVars=(
-  # MANGOHUD=1
+  MANGOHUD=1
   MANGOHUD_CONFIG="$(
     IFS=,
     echo "${mangoConfig[*]}"
