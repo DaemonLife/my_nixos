@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, ... }: {
 
   home.packages = with pkgs; [ nil nixpkgs-fmt ];
 
@@ -37,7 +37,9 @@
       nix.enable = true;
       render-markdown.enable = true;
       colorizer.enable = true; # colors for hex code
-      indent-blankline = { enable = true; settings.indent.char = "│"; };
+
+      indent-blankline = { enable = true; settings = { indent.char = "│"; }; };
+
       lualine = {
         enable = true; # statusline
         settings.options = {
@@ -76,8 +78,8 @@
           };
         };
       };
-      lsp-format = { enable = true; lspServersToEnable = "all"; };
 
+      lsp-format = { enable = true; lspServersToEnable = "all"; };
     };
 
     opts = {
@@ -111,13 +113,13 @@
     };
 
     extraConfigVim = ''
-        \" enable title and setup
-        set title
-        set titlestring=nvim
+      " enable title and setup
+      set title
+      set titlestring=nvim
 
-        \" transparent bg
-        autocmd VimEnter * highlight Normal guibg=NONE ctermbg=NONE
-      '';
+      " transparent bg
+      autocmd VimEnter * highlight Normal guibg=NONE ctermbg=NONE
+    '';
 
     # Setups for some files 
     autoCmd = [
@@ -145,6 +147,24 @@
         mode = "i";
         options.remap = true;
       }
+      # disable numbers
+      {
+        action = ''
+          <cmd>if &number | set nonumber norelativenumber | set signcolumn=no | else | set number relativenumber | set signcolumn=yes | endif<CR>
+        '';
+        key = "<leader>n";
+        mode = [ "i" "n" "v" ];
+        options.remap = true;
+      }
+      {
+        action = ''
+          <cmd>if &number | set nonumber norelativenumber | set signcolumn=no | else | set number relativenumber | set signcolumn=yes | endif<CR>
+        '';
+        key = "<leader>т"; # ru
+        mode = [ "i" "n" "v" ];
+        options.remap = true;
+      }
+
 
       # mini search (like telescope)
       {
