@@ -53,9 +53,12 @@
 
   time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
   # powerManagement.enable = true; # NixOS power management tool
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ]; # DNS provider
+  networking = {
+    hostName = "nixos";
+    networkmanager.enable = true;
+    nameservers = [ "1.1.1.1" "1.0.0.1" ]; # DNS provider
+    hosts = { "192.168.1.150" = [ "myphone" ]; }; # local DNS
+  };
   hardware.bluetooth = { enable = true; powerOnBoot = false; };
 
   services.printing.enable = true;
