@@ -235,11 +235,11 @@
       # settings = {
       # custom = {
       #   start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-      #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+      #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'"; 
       # };
       # };
     };
-
+    nix-ld.enable = true; # run bin files
     dconf.enable = true;
     htop.enable = true;
     git.enable = true;

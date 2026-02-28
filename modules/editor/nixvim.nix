@@ -153,7 +153,7 @@
           <cmd>if &number | set nonumber norelativenumber | set signcolumn=no | else | set number relativenumber | set signcolumn=yes | endif<CR>
         '';
         key = "<leader>n";
-        mode = [ "i" "n" "v" ];
+        mode = [ "n" "v" ];
         options.remap = true;
       }
       {
@@ -161,7 +161,7 @@
           <cmd>if &number | set nonumber norelativenumber | set signcolumn=no | else | set number relativenumber | set signcolumn=yes | endif<CR>
         '';
         key = "<leader>т"; # ru
-        mode = [ "i" "n" "v" ];
+        mode = [ "n" "v" ];
         options.remap = true;
       }
 
