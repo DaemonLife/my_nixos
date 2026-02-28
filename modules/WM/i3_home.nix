@@ -36,7 +36,6 @@ in
     echo '${i3blocks_config}' > config
   '';
 
-  # clipboard for x11
   home.packages = with pkgs; [
     scrot # screenshot
     brightnessctl
@@ -60,8 +59,8 @@ in
       terminal = "kitty";
 
       fonts = {
-        names = [ "Unifont" ];
-        size = lib.mkForce 20.0;
+        names = [ "${config.stylix.fonts.monospace.name}" ];
+        size = lib.mkForce "${toString (config.stylix.fonts.sizes.terminal)}";
       };
 
       bars = [{
@@ -69,7 +68,7 @@ in
         statusCommand = "i3blocks";
         fonts = {
           names = [ "${config.stylix.fonts.monospace.name}" ];
-          size = lib.mkForce 20.0;
+          size = lib.mkForce "${toString (config.stylix.fonts.sizes.terminal)}";
         };
         colors = {
           background = "#${base00}";
@@ -94,10 +93,9 @@ in
             border = "#${base08}";
           };
         };
-        extraConfig = ''
-          separator_symbol |
-        '';
+        extraConfig = ''separator_symbol |'';
       }];
+
       keycodebindings = {
         "${modifier}+43" = "focus left"; # h
         "${modifier}+44" = "focus down"; # j

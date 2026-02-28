@@ -38,10 +38,7 @@ with config.lib.stylix.colors; let
   '';
 in
 {
-  home.packages = with pkgs; [
-    telegram-desktop
-  ];
-
+  home.packages = with pkgs; [ telegram-desktop ];
   home.activation.telegram_desktop = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     # create binds
     mkdir -p $HOME/.local/share/TelegramDesktop/tdata &&

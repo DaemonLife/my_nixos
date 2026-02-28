@@ -90,9 +90,10 @@ let
 in
 {
 
-  gtk = {
-    enable = true;
-    iconTheme.name = "Vimix";
+  gtk = { enable = true; iconTheme.name = "Vimix"; };
+  dconf.settings = {
+    # hide gnome window close button
+    "org/gnome/desktop/wm/preferences" = { button-layout = ""; };
   };
 
 }

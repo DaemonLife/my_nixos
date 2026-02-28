@@ -1,9 +1,4 @@
-{ config
-, pkgs
-, lib
-, username
-, ...
-}: {
+{ config, pkgs, lib, username, ... }: {
   imports = [ ./modules/_import.nix ];
 
   home = {
@@ -27,7 +22,6 @@
       zip
       unzip
       fzy
-      # dua # disk usage TUI tool. Run: dua i. REMOVED: ncdu is better
 
       # Network
       overskride # bluetooth gui
@@ -103,25 +97,9 @@
 
   programs = {
     ripgrep.enable = true;
-    fastfetch = {
-      enable = true;
-    };
-    yt-dlp = {
-      enable = true;
-    };
-    imv = {
-      enable = true;
-    };
-
-    bash = {
-      initExtra = ''
-        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-        then
-          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-        fi
-      '';
-    };
+    fastfetch.enable = true;
+    yt-dlp.enable = true;
+    imv.enable = true;
 
     btop = {
       enable = true;
@@ -132,13 +110,14 @@
         vim_keys = lib.mkForce true;
       };
     };
-  };
 
-  # dconf = {
-  #   settings = {
-  #     "org/gnome/desktop/wm/preferences" = {
-  #       button-layout = ""; # disable top right buttons
-  #     };
-  #   };
-  # };
+    bash.initExtra = ''
+      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
+      then
+        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
+        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
+      fi
+    '';
+
+  };
 }

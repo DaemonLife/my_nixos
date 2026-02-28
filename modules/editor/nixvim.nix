@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, lib, ... }: {
 
   home.packages = with pkgs; [ nil nixpkgs-fmt ];
 
@@ -8,10 +8,7 @@
     viAlias = true;
     vimAlias = true;
 
-    globals = {
-      mapleader = " ";
-      maplocalleader = " ";
-    };
+    globals = { mapleader = " "; maplocalleader = " "; };
 
     # --- Plugins ---
     extraPlugins = with pkgs; [
@@ -20,7 +17,6 @@
     ];
 
     plugins = {
-
       treesitter = {
         enable = true; # need for nvim-biscuits
         grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
@@ -49,21 +45,70 @@
 
       mini = {
         enable = true;
-        mockDevIcons = true;
+        # mockDevIcons = true;
         modules = {
           basics = { };
           comment = { };
           completion = { };
           surround = { };
           pairs = { };
-          animate = { };
-          icons = { };
+          # animate = { };
+          # icons = { };
           notify = { };
-          starter = { }; # start screen
-          statusline = { };
+          # starter = { }; # start screen
           git = { };
           diff = { };
           pick = { }; # like telescope
+          statusline = {
+            enable = true;
+            settings = {
+              use_icons = false;
+            };
+            content.active.__raw = '' 
+              function()
+                local MiniStatusline = require('mini.statusline')
+
+                local filetype = function()
+                  local ft = vim.bo.filetype
+                  return string.format('%s', ft)
+                end
+
+                local location = function(args)
+                  if MiniStatusline.is_truncated(args.trunc_width) then
+                    return '%02l|%02v'
+                  end
+                  return '%02l/%02L|%02v/%02{virtcol("$")-1}'
+                end
+
+                -- Use only HEAD name as summary string for GIT
+                local format_summary = function(data)
+                  local summary = vim.b[data.buf].minigit_summary
+                  vim.b[data.buf].minigit_summary_string = summary.head_name or ""
+                end
+                local au_opts = { pattern = "MiniGitUpdated", callback = format_summary }
+                vim.api.nvim_create_autocmd("User", au_opts)
+
+                local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120, icon = "" })
+                local git           = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
+                local diff          = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
+                local diagnostics   = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "",
+                                      signs = {ERROR = 'x', WARN = '!', INFO = '?', HINT = '*'} })
+                local filename      = MiniStatusline.section_filename({ trunc_width = 140, icon = "" })
+                local location      = location({ trunc_width = 75, icon = "" })
+                local search        = MiniStatusline.section_searchcount({ trunc_width = 75, icon = "" })
+                
+                return MiniStatusline.combine_groups({
+                  { hl = mode_hl,                  strings = {mode:upper()}},
+                  { hl = 'MiniStatuslineDevinfo',  strings = {git, diff}},
+                  '%<', -- Mark general truncate point
+                  { hl = 'MiniStatuslineFilename', strings = { filename } },
+                  '%=', -- End left alignment
+                  { hl = 'MiniStatuslineDevinfo',  strings = { filetype(), diagnostics } },
+                  { hl = mode_hl,                  strings = { search, location } },
+                })
+              end
+            '';
+          };
         };
       };
 
@@ -80,12 +125,9 @@
             };
           };
         };
+      };
 
-      };
-      lsp-format = {
-        enable = true;
-        lspServersToEnable = "all";
-      };
+      lsp-format = { enable = true; lspServersToEnable = "all"; };
     };
 
     opts = {

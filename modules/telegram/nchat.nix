@@ -1,8 +1,6 @@
-{config, ...}:
+{ config, ... }:
 with config.lib.stylix.colors; {
-  home.package = with pkgs; [
-    nchat
-  ];
+  home.package = with pkgs; [ nchat ];
 
   # user names fg colors
   home.file.".config/nchat/usercolor.conf".text = ''

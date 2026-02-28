@@ -10,8 +10,6 @@
   # SYSTEM THEME
   # --------------------------------
 
-  stylix.targets.grub.enable = false;
-
   # TTYI colors
   console = with config.lib.stylix.colors; {
     colors = lib.mkForce [
@@ -33,22 +31,19 @@
       "${base06}" # base06
     ];
   };
+  stylix.targets.grub.enable = false;
 
   # --------------------------------
   # ENVIRONMENTS
   # --------------------------------
 
   environment = {
-    variables =
-      let
-        EDITOR = "vi";
-      in
-      {
-        EDITOR = "${EDITOR}";
-        SYSTEMD_EDITOR = "${EDITOR}";
-        VISUAL = "${EDITOR}";
-        BROWSER = "qutebrowser";
-      };
+    variables = let EDITOR = "vi"; in {
+      EDITOR = "${EDITOR}";
+      SYSTEMD_EDITOR = "${EDITOR}";
+      VISUAL = "${EDITOR}";
+      BROWSER = "qutebrowser";
+    };
     sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
@@ -56,20 +51,13 @@
   # HARDWARE SETTINGS
   # --------------------------------
 
-  powerManagement.enable = true; # NixOS power management tool
-
-  # Network
-  networking.hostName = "nixos"; # Define your hostname.
+  time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
+  # powerManagement.enable = true; # NixOS power management tool
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
-  # };
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ]; # DNS provider
+  hardware.bluetooth = { enable = true; powerOnBoot = false; };
 
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = false;
-
-  # Print and scan
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [
     gutenprint # Drivers for many different printers from many different vendors.
@@ -89,7 +77,6 @@
   services.udev.packages = [ pkgs.sane-airscan ]; # device manager for the Linux kernel
 
   # Sound
-  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -97,12 +84,8 @@
     pulse.enable = true; # important for waybar
     jack.enable = true; # If you want to use JACK applications
   };
+  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
 
-  # Time
-  time.timeZone = "Europe/Moscow";
-  time.hardwareClockInLocalTime = true;
-
-  # Lang
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
@@ -125,7 +108,7 @@
     description = "user";
     shell = pkgs.fish;
     useDefaultShell = true;
-
+    packages = with pkgs; [ flatpak ];
     extraGroups = [
       "networkmanager"
       "wheel"
@@ -134,8 +117,6 @@
       "scanner"
       "lp"
     ];
-
-    packages = with pkgs; [ flatpak ];
   };
 
   # --------------------------------
@@ -144,10 +125,7 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
+    settings.experimental-features = [ "nix-command" "flakes" ];
     optimise.automatic = true;
     settings.auto-optimise-store = true;
   };
@@ -172,8 +150,8 @@
     nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # folder size tree
     mangohud # Steam performance GUI
-    gdb # gnu debugger for some applications
-    nix-init # create pkgs 
+    # gdb # gnu debugger for some applications
+    # nix-init # create pkgs 
   ];
 
   # --------------------------------
@@ -183,8 +161,8 @@
   xdg.portal = lib.mkDefault {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-    wlr.enable = true;
-    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+    # wlr.enable = true;
+    # config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
   };
 
   # Android emulator. Read https://nixos.wiki/wiki/WayDroid
@@ -243,31 +221,23 @@
       enable = true;
       gamescopeSession.enable = true;
       protontricks.enable = true;
-      extraCompatPackages = with pkgs; [
-        proton-ge-bin
-      ];
-      # Open ports in the firewall for:
+      extraCompatPackages = with pkgs; [ proton-ge-bin ];
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
+    gamescope = { enable = true; capSysNice = true; };
     gamemode = {
       enable = true; # Set run game parameters in Steam: gamemoderun %command%
       # settings = {
-        # custom = {
-        #   start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-        #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-        # };
+      # custom = {
+      #   start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
+      #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
+      # };
       # };
     };
-    gamescope = {
-      enable = true; # Using: gamescope
-      capSysNice = true;
-    };
-    # ------ Steam ------
 
     dconf.enable = true;
-    foot.enable = true;
     htop.enable = true;
     git.enable = true;
     fish.enable = true;
@@ -285,25 +255,6 @@
     #   settingsFile = "/etc/xray/config.json";
     # };
 
-    # zapret = {
-    #   enable = true;
-    #   params =
-    #     [
-    #       # "--methodeol"
-    #       "--dpi-desync=multisplit --dpi-desync-split-pos=method+2"
-    #     ];
-    #   whitelist =
-    #     [
-    #       "youtube.com"
-    #       "googlevideo.com"
-    #       "ytimg.com"
-    #       "youtu.be"
-    #
-    #       "search.nixos.org"
-    #       "nixos.org"
-    #     ];
-    # };
-
     # auto username in tty
     getty = {
       loginOptions = "-- \\u";
@@ -314,8 +265,8 @@
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
-    power-profiles-daemon.enable = false; # disable for tlp
-    thermald.enable = true; # Thermald prevents overheating
+    # power-profiles-daemon.enable = false; # disable for tlp
+    # thermald.enable = true; # Thermald prevents overheating NEED DEBUG IT!!!!
     colord.enable = true; # color manager
   }; # close services
 
@@ -357,7 +308,6 @@
   # BOOT OPTIONS
   # --------------------------------
 
-  # boot.supportedFilesystems = [ "ntfs" ];
   boot.loader = {
     grub = {
       enable = true;
@@ -368,20 +318,15 @@
       splashImage = lib.mkForce null;
       theme = lib.mkForce null;
       fontSize = lib.mkForce 60;
-      extraConfig = lib.mkForce ''
-        GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"
-      '';
+      extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
     };
-    efi = {
-      canTouchEfiVariables = true;
-    };
+    efi.canTouchEfiVariables = true;
   };
 
   # --------------------------------
   # OTHER STUFF
   # --------------------------------
 
-  # Open ports in the firewall.
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [

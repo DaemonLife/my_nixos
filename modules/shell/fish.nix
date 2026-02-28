@@ -87,7 +87,6 @@
     '';
 
     functions = {
-      # disable it
       fish_greeting = "bash $HOME/nix/scripts/print_art.sh";
 
       fish_prompt = ''

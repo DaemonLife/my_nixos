@@ -1,8 +1,5 @@
-{ pkgs
-, config
-, lib
-, ...
-}: {
+{ pkgs, config, lib, ... }: {
+
   home.packages = with pkgs; [
     dragon-drop
     bat
@@ -17,7 +14,6 @@
 
   programs.yazi = with config.lib.stylix.colors; {
     enable = true;
-    # package = pkgs.yazi-unwrapped;
     enableFishIntegration = true;
 
     initLua = ''

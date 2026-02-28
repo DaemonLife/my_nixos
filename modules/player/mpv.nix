@@ -72,7 +72,7 @@
       };
     };
 
-  }; # program.mpv
+  };
 
   # other script
   home.file.".config/mpv/scripts/mpv-sub_not_forced_not_sdh.lua".text = ''

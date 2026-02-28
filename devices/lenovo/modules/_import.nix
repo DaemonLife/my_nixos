@@ -1,7 +1,7 @@
 { ... }: {
   imports = [
     # ./hyprland.nix
-    ./sway.nix
+    # ./sway.nix
     ./fish.nix
   ];
 }
