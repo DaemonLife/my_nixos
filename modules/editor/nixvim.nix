@@ -35,9 +35,34 @@
         ];
       };
       nix.enable = true;
-      render-markdown.enable = true;
-      colorizer.enable = true; # colors for hex code
+      render-markdown = {
+        enable = true;
+        settings = {
+          render_modes = true; # true mean all modes
+          sign.enabled = false; # icon on number column
+          bullet.icons = [ "- " "* " "- " ]; # list icons
+          indent = { enabled = true; icon = ""; };
+          code = {
+            width = "block";
+            border = "thin"; # hide it is very annoying!!!
+            right_pad = 1;
+            left_pad = 1;
+          };
+          heading = {
+            icons = [
+              "# "
+              "## "
+              "### "
+              "#### "
+              "##### "
+              "###### "
+            ];
+            backgrounds = [ "" ]; # disable color bg
+          };
+        };
+      };
 
+      colorizer.enable = true; # colors for hex code
       indent-blankline = { enable = true; settings = { indent.char = "│"; }; };
 
       lualine = {

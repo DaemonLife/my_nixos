@@ -155,6 +155,26 @@
     mangohud # Steam performance GUI
     # gdb # gnu debugger for some applications
     # nix-init # create pkgs 
+
+    # --- minecraft --- 
+    # libGL
+    # glfw
+    # glfw3-minecraft
+    # xorg.libX11
+    # xorg.libXcursor
+    # xorg.libXext
+    # xorg.libXrandr
+    # xorg.libXxf86vm
+    # udev # oshi
+    # vulkan-loader # VulkanMod's lwjgl
+    # flite # text2speech
+    # openal
+    # udev
+    # alsa-lib
+    # libjack2
+    # alsa-lib
+    # libpulseaudio
+    portablemc
   ];
 
   # --------------------------------
@@ -222,6 +242,12 @@
     # ------ Steam ------
     steam = {
       enable = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          MANGOHUD = "1";
+          GAMEMODERUN = "1";
+        };
+      };
       gamescopeSession.enable = true;
       protontricks.enable = true;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
@@ -230,15 +256,8 @@
       localNetworkGameTransfers.openFirewall = true;
     };
     gamescope = { enable = true; capSysNice = true; };
-    gamemode = {
-      enable = true; # Set run game parameters in Steam: gamemoderun %command%
-      # settings = {
-      # custom = {
-      #   start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-      #   end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'"; 
-      # };
-      # };
-    };
+    gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
+
     nix-ld.enable = true; # run bin files
     dconf.enable = true;
     htop.enable = true;
