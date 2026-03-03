@@ -1,6 +1,13 @@
 { config, pkgs, ... }: {
 
-  home.packages = with pkgs; [ nil nixpkgs-fmt ];
+  home.packages = with pkgs; [
+    nil
+    nixpkgs-fmt
+
+    # image plugin support:
+    luajitPackages.magick
+    imagemagick
+  ];
 
   programs.nixvim = with config.lib.stylix.colors; {
     enable = true;
@@ -35,18 +42,35 @@
         ];
       };
       nix.enable = true;
+
+      image = {
+        enable = true;
+        settings = {
+          processor = "magick_cli"; # "magick_cli" or "magick_rock"
+          backend = "kitty";
+          max_height = 12;
+          max_width = 20;
+          integrations.markdown = {
+            enabled = true;
+            only_render_image_at_cursor = true;
+            only_render_image_at_cursor_mode = "inline"; # "popup" or "inline"
+            floating_windows = true;
+          };
+        };
+      };
+
       render-markdown = {
         enable = true;
         settings = {
           render_modes = true; # true mean all modes
           sign.enabled = false; # icon on number column
           bullet.icons = [ "- " "* " "- " ]; # list icons
-          indent = { enabled = true; icon = ""; };
+          # indent = { enabled = true; icon = ""; };
           code = {
             width = "block";
             border = "thin"; # hide it is very annoying!!!
-            right_pad = 1;
-            left_pad = 1;
+            # right_pad = 1;
+            # left_pad = 1;
           };
           heading = {
             icons = [
@@ -63,7 +87,29 @@
       };
 
       colorizer.enable = true; # colors for hex code
-      indent-blankline = { enable = true; settings = { indent.char = "│"; }; };
+      blink-indent = {
+        enable = true;
+        settings = {
+          mappings = { goto_top = "[i"; goto_bottom = "]i"; };
+          static = {
+            enabled = true;
+            # char = "│";
+            highlights = [ "BlinkIndent" ];
+          };
+          scope = {
+            enabled = true;
+            # char = "│";
+            highlights = [
+              "BlinkIndentYellow"
+              "BlinkIndentCyan"
+              "BlinkIndentRed"
+              "BlinkIndentGreen"
+              "BlinkIndentViolet"
+              "BlinkIndentOrange"
+            ];
+          };
+        };
+      };
 
       lualine = {
         enable = true; # statusline
@@ -105,6 +151,31 @@
       };
 
       lsp-format = { enable = true; lspServersToEnable = "all"; };
+    };
+
+    highlightOverride = {
+      # line number column colors bg
+      "LineNrAbove".bg = "#${base00}";
+      # "CursorLineSign".bg = "#${base00}";
+      "CursorLineNr".bg = "#${base01}";
+      "SignColumn".bg = "#${base00}";
+      "LineNr".bg = "#${base00}";
+      "LineNrBelow".bg = "#${base00}";
+
+      # line number column colors fg
+      "LineNrAbove".fg = "#${base03}";
+      "LineNr".fg = "#${base03}";
+      "CursorLineNr".fg = "#${base04}";
+      "LineNrBelow".fg = "#${base03}";
+
+      # indent line colors
+      "BlinkIndent".fg = "#${base01}";
+      "BlinkIndentRed".fg = "#${base08}";
+      "BlinkIndentOrange".fg = "#${base09}";
+      "BlinkIndentYellow".fg = "#${base0A}";
+      "BlinkIndentGreen".fg = "#${base0B}";
+      "BlinkIndentViolet".fg = "#${base0E}";
+      "BlinkIndentCyan".fg = "#${base0D}";
     };
 
     opts = {

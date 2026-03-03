@@ -1,7 +1,7 @@
 # for configuration.nix
-{ ... }: {
+{ username, ... }: {
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
-  users.users.user.extraGroups = [ "docker" ];
+  users.users.${username}.extraGroups = [ "docker" ];
 }
 
