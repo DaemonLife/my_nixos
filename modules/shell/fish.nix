@@ -2,19 +2,24 @@
   programs.fish = with config.lib.stylix.colors; {
     enable = true;
 
-    shellAliases = {
-      # os help - for help
-      os = "$HOME/nix/scripts/nix_rebuild.sh";
+    shellAliases =
+      let
+        myphone_port = "8025";
+        myphone_username = "u0_a345";
+      in
+      {
+        os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
 
-      # battery configuration will be restored at the next boot
-      tlp-set-full-bat = "sudo tlp fullcharge bat1";
-      tlp-set-conserv-bat = "sudo tlp setcharge bat1";
+        # battery configuration will be restored at the next boot
+        tlp-set-full-bat = "sudo tlp fullcharge bat1";
+        tlp-set-conserv-bat = "sudo tlp setcharge bat1";
 
-      # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
-      myphone-connect-cmus = "bash $HOME/nix/scripts/myphone-connect-cmus.sh 8022";
-      myphone-open-linux = "ssh -p 8025 user@myphone";
-      myphone-sync-notes = "unison $HOME/Documents/Notes ssh://user@myphone:8025//home/user/Documents/Notes";
-    };
+        # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
+        myphone-connect-cmus = "bash $HOME/nix/scripts/myphone-connect-cmus.sh ${myphone_port} ${myphone_username}";
+        myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
+        # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
+        myphone-sync-notes = "unison -ignorelocks $HOME/Documents/Notes ssh://${myphone_username}@myphone:${myphone_port}//data/data/com.termux/files/home/Notes";
+      };
 
     shellAbbrs = {
       jrnl = " jrnl";

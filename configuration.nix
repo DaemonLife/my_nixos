@@ -7,76 +7,50 @@
   ];
 
   # --------------------------------
-  # SYSTEM THEME
+  # NET AND HARDWARE SETTINGS
   # --------------------------------
 
-  # TTYI colors
-  console = with config.lib.stylix.colors; {
-    colors = lib.mkForce [
-      "000000" # background
-      "${base08}" # red
-      "${base0B}" # green
-      "${base0A}" # yellow
-      "${base0D}" # blue
-      "${base0E}" # magenta
-      "${base0C}" # cyan
-      "${base05}" # base0s
-      "${base03}" # base03
-      "${base08}" # red
-      "${base0B}" # green
-      "${base0A}" # yellow
-      "${base0D}" # blue
-      "${base0E}" # magenta
-      "${base0C}" # cyan
-      "${base06}" # base06
-    ];
-  };
-  stylix.targets.grub.enable = false;
-
-  # --------------------------------
-  # ENVIRONMENTS
-  # --------------------------------
-
-  environment = {
-    variables = let EDITOR = "vi"; in {
-      EDITOR = "${EDITOR}";
-      SYSTEMD_EDITOR = "${EDITOR}";
-      VISUAL = "${EDITOR}";
-      BROWSER = "qutebrowser";
-    };
-    sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
-  };
-
-  # --------------------------------
-  # HARDWARE SETTINGS
-  # --------------------------------
-
-  time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
-  # powerManagement.enable = true; # NixOS power management tool
   networking = {
-    hostName = "nixos";
     networkmanager.enable = true;
+    hostName = "nixos";
     nameservers = [ "1.1.1.1" "1.0.0.1" ]; # DNS provider
     hosts = { "192.168.1.150" = [ "myphone" ]; }; # local DNS
+    nftables.enable = true; # disable old iptables
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        6567 # mindusty server
+      ];
+      allowedUDPPorts = [
+        6567 # mindusty server
+      ];
+    };
   };
-  hardware.bluetooth = { enable = true; powerOnBoot = false; };
 
-  services.printing.enable = true;
-  services.printing.drivers = with pkgs; [
-    gutenprint # Drivers for many different printers from many different vendors.
-    # gutenprintBin # Additional, binary-only drivers for some printers.
-    # hplip # Drivers for HP printers.
-    # postscript-lexmark # Postscript drivers for Lexmark
-    # splix # Drivers for printers supporting SPL (Samsung Printer Language).
-    # brlaser # Drivers for some Brother printers
-    # brgenml1lpr # Generic drivers for more Brother printers
-    # fxlinuxprint # Fuji Xerox Linux Printer Driver
-    # samsung-unified-linux-driver # Proprietary Samsung Drivers
-    # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
-    # foomatic-db-ppds-withNonfreeDb
-  ];
-  hardware.sane.enable = true; # enables support for scanners
-  hardware.sane.extraBackends = [ pkgs.sane-airscan ];
+  hardware.bluetooth = { enable = true; powerOnBoot = false; };
+  time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
+  # powerManagement.enable = true; # NixOS power management tool
+
+  # Printers
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      gutenprint # Drivers for many different printers from many different vendors.
+      # gutenprintBin # Additional, binary-only drivers for some printers.
+      # hplip # Drivers for HP printers.
+      # postscript-lexmark # Postscript drivers for Lexmark
+      # splix # Drivers for printers supporting SPL (Samsung Printer Language).
+      # brlaser # Drivers for some Brother printers
+      # brgenml1lpr # Generic drivers for more Brother printers
+      # fxlinuxprint # Fuji Xerox Linux Printer Driver
+      # samsung-unified-linux-driver # Proprietary Samsung Drivers
+      # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
+      # foomatic-db-ppds-withNonfreeDb
+    ];
+  };
+
+  # Scanners
+  hardware.sane = { enable = true; extraBackends = [ pkgs.sane-airscan ]; };
   services.udev.packages = [ pkgs.sane-airscan ]; # device manager for the Linux kernel
 
   # Sound
@@ -89,6 +63,7 @@
   };
   security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
 
+  # Region
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
@@ -108,18 +83,25 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    description = "user";
+    description = "my user";
     shell = pkgs.fish;
     useDefaultShell = true;
     packages = with pkgs; [ flatpak ];
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "video"
-      "input"
-      "scanner"
-      "lp"
-    ];
+    extraGroups = [ "networkmanager" "wheel" "video" "input" "scanner" "lp" ];
+  };
+
+  # --------------------------------
+  # ENVIRONMENTS
+  # --------------------------------
+
+  environment = {
+    variables = let EDITOR = "vi"; in {
+      EDITOR = "${EDITOR}";
+      SYSTEMD_EDITOR = "${EDITOR}";
+      VISUAL = "${EDITOR}";
+      BROWSER = "qutebrowser";
+    };
+    sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
   # --------------------------------
@@ -129,8 +111,8 @@
   nixpkgs.config.allowUnfree = true;
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
-    optimise.automatic = true;
     settings.auto-optimise-store = true;
+    optimise.automatic = true;
   };
 
   # --------------------------------
@@ -153,28 +135,6 @@
     nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # folder size tree
     mangohud # Steam performance GUI
-    # gdb # gnu debugger for some applications
-    # nix-init # create pkgs 
-
-    # --- minecraft --- 
-    # libGL
-    # glfw
-    # glfw3-minecraft
-    # xorg.libX11
-    # xorg.libXcursor
-    # xorg.libXext
-    # xorg.libXrandr
-    # xorg.libXxf86vm
-    # udev # oshi
-    # vulkan-loader # VulkanMod's lwjgl
-    # flite # text2speech
-    # openal
-    # udev
-    # alsa-lib
-    # libjack2
-    # alsa-lib
-    # libpulseaudio
-    portablemc
   ];
 
   # --------------------------------
@@ -192,33 +152,24 @@
   # virtualisation.waydroid.enable = true;
 
   programs = {
-    # --- hyprland ---
-    # hyprland = {
-    #   enable = true;
-    #   withUWSM = true;
-    # };
-    # --- hyprland ---
-
+    # hyprland = { enable = true; withUWSM = true; };
     # niri.enable = true;
 
     nh = {
       enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 7d --keep 5";
-      clean.dates = "weekly";
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep-since 7d --keep 5";
+      };
       flake = "/home/${username}/nix";
     };
 
-    # --- thunar ---
     # thunar = {
     #   enable = true;
-    #   plugins = with pkgs.xfce; [
-    #     thunar-archive-plugin
-    #     thunar-media-tags-plugin
-    #   ];
+    #   plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-media-tags-plugin ];
     # };
     # xfconf.enable = true;
-    # --- thunar ---
 
     # proxychains = {
     #   # just default settings ...
@@ -242,12 +193,7 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      package = pkgs.steam.override {
-        extraEnv = {
-          MANGOHUD = "1";
-          GAMEMODERUN = "1";
-        };
-      };
+      package = pkgs.steam.override { extraEnv = { MANGOHUD = "1"; GAMEMODERUN = "1"; }; };
       gamescopeSession.enable = true;
       protontricks.enable = true;
       extraCompatPackages = with pkgs; [ proton-ge-bin ];
@@ -272,25 +218,17 @@
   # --------------------------------
 
   services = {
-    # xray = {
-    #   enable = true;
-    #   settingsFile = "/etc/xray/config.json";
-    # };
-
     # auto username in tty
-    getty = {
-      loginOptions = "-- \\u";
-      autologinUser = "${username}";
-      autologinOnce = true; # only first login after boot
-    };
+    getty = { loginOptions = "-- \\u"; autologinUser = "${username}"; autologinOnce = true; };
 
+    # xray = { enable = true; settingsFile = "/etc/xray/config.json"; };
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
     # power-profiles-daemon.enable = false; # disable for tlp
     # thermald.enable = true; # Thermald prevents overheating NEED DEBUG IT!!!!
     colord.enable = true; # color manager
-  }; # close services
+  };
 
   systemd = {
     # authentication for programs
@@ -346,16 +284,28 @@
   };
 
   # --------------------------------
-  # OTHER STUFF
+  # SYSTEM THEME
   # --------------------------------
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      6567 # mindusty server
-    ];
-    allowedUDPPorts = [
-      6567 # mindusty server
-    ];
-  };
+  # TTYI colors
+  console.colors = with config.lib.stylix.colors; lib.mkForce [
+    "000000" # background
+    "${base08}" # red
+    "${base0B}" # green
+    "${base0A}" # yellow
+    "${base0D}" # blue
+    "${base0E}" # magenta
+    "${base0C}" # cyan
+    "${base05}" # base05
+    "${base03}" # base03
+    "${base08}" # red
+    "${base0B}" # green
+    "${base0A}" # yellow
+    "${base0D}" # blue
+    "${base0E}" # magenta
+    "${base0C}" # cyan
+    "${base06}" # base06
+  ];
+  stylix.targets.grub.enable = false;
+
 }
