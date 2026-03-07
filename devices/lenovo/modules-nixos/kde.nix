@@ -22,4 +22,10 @@
       wayland-utils # Wayland utilities
       wl-clipboard # Command-line copy/paste utilities for Wayland
     ];
+
+  networking.firewall = {
+    # kdeconnect
+    allowedTCPPortRanges = [{ from = 1714; to = 1764; }];
+    allowedUDPPortRanges = [{ from = 1714; to = 1764; }];
+  };
 }

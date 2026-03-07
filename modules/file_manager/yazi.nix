@@ -474,6 +474,17 @@
           on = [ "п" "т" ]; # ru
           run = "cd ~/nix";
         }
+        # open shell here
+        {
+          on = "<C-s>";
+          run = ''shell "$SHELL" --block'';
+          desc = "Open $SHELL here";
+        }
+        {
+          on = "<C-ы>";
+          run = ''shell "$SHELL" --block'';
+          desc = "Open $SHELL here";
+        }
         # plugin system clipboard support
         {
           on = "Y";

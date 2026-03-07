@@ -1,0 +1,1 @@
+/nix/store/m03rh5xqwda5ydxxs1hqvnv9dva3xhk2-home-manager-files/nix/modules/shell/my.zsh-theme

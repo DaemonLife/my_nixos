@@ -29,7 +29,6 @@
 
   hardware.bluetooth = { enable = true; powerOnBoot = false; };
   time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
-  # powerManagement.enable = true; # NixOS power management tool
 
   # Printers
   services.printing = {
@@ -84,7 +83,8 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "my user";
-    shell = pkgs.fish;
+    # shell = pkgs.fish;
+    shell = pkgs.zsh;
     useDefaultShell = true;
     packages = with pkgs; [ flatpak ];
     extraGroups = [ "networkmanager" "wheel" "video" "input" "scanner" "lp" ];
@@ -101,6 +101,7 @@
       VISUAL = "${EDITOR}";
       BROWSER = "qutebrowser";
     };
+    shells = with pkgs; [ zsh ];
     sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
@@ -208,8 +209,8 @@
     dconf.enable = true;
     htop.enable = true;
     git.enable = true;
-    fish.enable = true;
     amnezia-vpn.enable = true;
+    zsh.enable = true;
     # ssh.startAgent = true; # agent for ssh keys
   };
 
@@ -218,6 +219,28 @@
   # --------------------------------
 
   services = {
+
+    # battery 
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance"; # super performance
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # super save power
+
+        PLATFORM_PROFILE_ON_BAT = "low-power"; # super save power
+
+        CPU_MIN_PERF_ON_AC = 0;
+        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MIN_PERF_ON_BAT = 0;
+        CPU_MAX_PERF_ON_BAT = 80;
+
+        START_CHARGE_THRESH_BAT0 = 0;
+        STOP_CHARGE_THRESH_BAT0 = 1;
+
+        DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth";
+      };
+    };
+
     # auto username in tty
     getty = { loginOptions = "-- \\u"; autologinUser = "${username}"; autologinOnce = true; };
 
@@ -225,8 +248,6 @@
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
-    # power-profiles-daemon.enable = false; # disable for tlp
-    # thermald.enable = true; # Thermald prevents overheating NEED DEBUG IT!!!!
     colord.enable = true; # color manager
   };
 

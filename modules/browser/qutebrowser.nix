@@ -279,21 +279,21 @@
         ];
       };
 
-      fonts =
-        let
-          font_size = config.stylix.fonts.sizes.terminal;
-        in
-        {
-          web.size = lib.mkForce {
-            default = font_size;
-            default_fixed = font_size;
-            minimum = font_size;
-            minimum_logical = font_size;
-          };
-          default_family = lib.mkForce config.stylix.fonts.monospace.name;
-          web.family.fixed = lib.mkForce config.stylix.fonts.monospace.name;
-          default_size = lib.mkForce "${toString (font_size)}pt";
-        };
+      # fonts =
+      #   let
+      #     font_size = config.stylix.fonts.sizes.terminal;
+      #   in
+      #   {
+      #     web.size = lib.mkForce {
+      #       default = font_size;
+      #       default_fixed = font_size;
+      #       minimum = font_size;
+      #       minimum_logical = font_size;
+      #     };
+      #     default_family = lib.mkForce config.stylix.fonts.monospace.name;
+      #     web.family.fixed = lib.mkForce config.stylix.fonts.monospace.name;
+      #     default_size = lib.mkForce "${toString (font_size)}pt";
+      #   };
 
       fileselect = {
         handler = "external";

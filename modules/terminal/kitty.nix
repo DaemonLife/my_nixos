@@ -1,8 +1,8 @@
 { config, lib, ... }: {
   programs.kitty = with config.lib.stylix.colors; {
     enable = true;
-    # shellIntegration.enableZshIntegration = true;
-    shellIntegration.enableFishIntegration = true;
+    shellIntegration.enableZshIntegration = true;
+    # shellIntegration.enableFishIntegration = true;
 
     keybindings = {
       "ctrl+shift+c" = "copy_or_interrupt";
@@ -12,7 +12,7 @@
     };
 
     settings = {
-      shell = "fish";
+      shell = "zsh";
       enable_audio_bell = false;
       visual_bell_duration = "0.1";
       open_url_with = "$BROWSER";
