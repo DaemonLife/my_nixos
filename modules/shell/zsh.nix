@@ -34,7 +34,7 @@
 
     siteFunctions = {
       gitp = ''
-        git add .
+        git add $(git rev-parse --show-toplevel)/.
         git commit -m "$*"
         git push
         echo "Push completed!"

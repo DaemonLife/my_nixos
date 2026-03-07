@@ -12,7 +12,7 @@
     };
 
     settings = {
-      shell = "zsh";
+      # shell = "zsh";
       enable_audio_bell = false;
       visual_bell_duration = "0.1";
       open_url_with = "$BROWSER";
