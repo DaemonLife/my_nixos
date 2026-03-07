@@ -52,6 +52,11 @@ in
   ];
   programs.nixvim.clipboard.providers.xclip.enable = true;
 
+  # notification daemon
+  services.dunst = {
+    enable = true;
+  };
+
   xsession.windowManager.i3 = with config.lib.stylix.colors; {
     enable = true;
     config = rec {
@@ -113,7 +118,9 @@ in
         "${modifier}+Shift+44" = "workspace next"; # j
         "${modifier}+Shift+45" = "workspace prev"; # k
 
-        "${modifier}+29" = "exec ${terminal} --hold -e $HOME/nix/scripts/y.fish"; # y
+        "${modifier}+29" = ''
+          exec ${terminal} --hold zsh -i -c ~/nix/scripts/y.sh
+        ''; # y
 
         "${modifier}+Ctrl+43" = "move left"; # h
         "${modifier}+Ctrl+44" = "move down"; # j
@@ -164,20 +171,14 @@ in
       };
 
       startup = [
-        { command = "bluetooth off"; notification = true; }
-
         # color manager
         { command = "xiccd"; notification = true; }
         # primary monitor sets its icc color profile as default for programs!
         { command = "xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1"; notification = false; }
-
-        # darktable opencl
-        { command = "export ROC_ENABLE_PRE_VEGA=1 RUSTICL_ENABLE=amdgpu,amdgpu-pro,radv,radeon,radeonsi DRI_PRIME=0 QT_QPA_PLATFORM=xcb"; notification = false; }
-
         # background image
         { command = "feh --bg-scale $HOME/nix/images/image_good2.jpg"; notification = false; }
 
-        { command = "${pkgs.udiskie}/bin/udiskie -a"; }
+        { command = "${pkgs.udiskie}/bin/udiskie -as"; }
       ];
 
     };
