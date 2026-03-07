@@ -56,12 +56,12 @@
     };
 
     initContent = ''
-      source $HOME/nix/modules/shell/my.zsh-theme;
+      source $HOME/.config/zsh/my.zsh-theme;
       PATH="$HOME/.cargo/bin $PATH"
     '';
   };
 
-  home.file."/nix/modules/shell/my.zsh-theme".text = ''
+  home.file.".config/zsh/my.zsh-theme".text = ''
     PROMPT=$'%{$fg[green]%}%/%{$reset_color%} $(git_prompt_info)$(bzr_prompt_info)%{$fg[white]%}[%n@%m]%{$reset_color%} %{$fg[white]%}[%T]%{$reset_color%}
     %{$fg[white]%}>%{$reset_color%} '
 
