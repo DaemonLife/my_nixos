@@ -50,12 +50,8 @@ in
     xev # keycodes check
     xkb-switch # print current layout
   ];
-  programs.nixvim.clipboard.providers.xclip.enable = true;
-
-  # notification daemon
-  services.dunst = {
-    enable = true;
-  };
+  programs.nixvim.clipboard.providers.xclip.enable = true; # vim clipboard support
+  services.dunst.enable = true; # notification daemon
 
   xsession.windowManager.i3 = with config.lib.stylix.colors; {
     enable = true;
@@ -138,6 +134,7 @@ in
 
         "${modifier}+56" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec $BROWSER"; # b
         "${modifier}+28" = "exec AyuGram || exec Telegram"; # t
+        "${modifier}+40" = "exec bash $HOME/nix/scripts/run_darktable.sh"; # d
       };
 
       keybindings = {
