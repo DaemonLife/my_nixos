@@ -42,6 +42,7 @@
         ];
       };
       nix.enable = true;
+      # yazi.enable = true; # :Yazi
 
       image = {
         enable = true;

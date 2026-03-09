@@ -1,10 +1,13 @@
+# check file mime type: xdg-mime query filetype [FILE]
+# check mime type in yazi with TAB key if you use mime-ext plugin (mime by files extention)!
+
 { pkgs, config, lib, ... }: {
 
   home.packages = with pkgs; [
     dragon-drop
     bat
     eza
-    # glow
+    glow
     ouch
     mediainfo
     imagemagick
@@ -14,7 +17,11 @@
 
   programs.yazi = with config.lib.stylix.colors; {
     enable = true;
-    enableFishIntegration = true;
+    enableZshIntegration = true;
+
+    ###########################
+    # INIT LUA
+    ###########################
 
     initLua = ''
       require("session"):setup {
@@ -37,8 +44,12 @@
       require("git"):setup()
     '';
 
+    ###########################
+    # PLUGINS INSTALL
+    ###########################
+
+    # plugins support next code format: nixpkg_name = nixpkg_name;
     plugins = with pkgs.yaziPlugins; {
-      # nix_pkg_name = nix_pkg_name; :/
       mount = mount; # shorts: m-ount u-mount e-ject
       smart-enter = smart-enter; # enter to directories
       smart-filter = smart-filter; # cool search+filter
@@ -50,124 +61,15 @@
       mediainfo = mediainfo;
       wl-clipboard = wl-clipboard;
       toggle-pane = toggle-pane;
-      mime-ext = mime-ext; # fast mime-type by file extancions
+      # mime-ext = mime-ext; # fast mime-type by file extencions
     };
+
+    ###########################
+    # MAIN SETTINGS
+    ###########################
 
     settings = {
       floating_window_scaling_factor = 0.5;
-
-      plugin = {
-        prepend_fetchers = [
-          # --- plugin mime-ext ---
-          {
-            id = "mime";
-            name = "*";
-            run = "mime-ext";
-            prio = "high";
-          }
-          # --- plugin git ---
-          {
-            id = "git";
-            name = "*";
-            run = "git";
-          }
-          {
-            id = "git";
-            name = "*/";
-            run = "git";
-          }
-        ];
-        # --- plugin mediainfo ---
-        prepend_preloaders = [
-          {
-            mime = "{audio,video,image}/*";
-            run = "mediainfo";
-          }
-          {
-            mime = "application/subrip";
-            run = "mediainfo";
-          }
-          {
-            mime = "application/postscript";
-            run = "mediainfo";
-          }
-        ];
-
-        prepend_previewers = [
-          # --- plugin mediainfo ---
-          {
-            mime = "{audio,video,image}/*";
-            run = "mediainfo";
-          }
-          {
-            mime = "application/subrip";
-            run = "mediainfo";
-          }
-          {
-            mime = "application/postscript";
-            run = "mediainfo";
-          }
-        ];
-        append_previewers = [
-          # --- Ouch archive previewer ---
-          {
-            mime = "application/*zip";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-tar";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-bzip2";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-7z-compressed";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-rar";
-            run = "ouch";
-          }
-          {
-            mime = "application/vnd.rar";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-xz";
-            run = "ouch";
-          }
-          {
-            mime = "application/xz";
-            run = "ouch";
-          }
-          {
-            mime = "application/x-zstd";
-            run = "ouch";
-          }
-          {
-            mime = "application/zstd";
-            run = "ouch";
-          }
-          {
-            mime = "application/java-archive";
-            run = "ouch";
-          }
-          {
-            name = "*.csv";
-            run = "piper -- bat -p --color=always '$1'";
-          }
-          {
-            name = "*.md";
-            run = ''piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'';
-          }
-          {
-            name = "*/";
-            run = ''piper -- eza -TL=3 --color=always --icons=always --group-directories-first --no-quotes "$1"'';
-          }
-        ];
-      };
 
       tasks = {
         image_alloc = 1073741824; # = 1024*1024*1024 = 1024MB
@@ -175,8 +77,7 @@
       };
 
       preview = {
-        image_filter = "nearest"; # super fast
-        # image_filter = "triangle"; # fast
+        image_filter = "nearest"; # nearest (faster) or triangle (fast)
         image_quality = 60;
         max_width = 800;
         max_height = 800;
@@ -188,13 +89,54 @@
         linemode = "mtime";
       };
 
+      ###########################
+      # PLUGINS PREVIEW
+      ###########################
+
+      plugin = {
+        prepend_fetchers = [
+          # --- plugin mime-ext ---
+          # { id = "mime"; name = "*"; run = "mime-ext"; prio = "high"; }
+
+          # --- plugin git ---
+          { id = "git"; name = "*"; run = "git"; }
+          { id = "git"; name = "*/"; run = "git"; }
+        ];
+
+        prepend_preloaders = [ ]; # background loading
+
+        prepend_previewers = [
+          # --- plugin mediainfo --- (sad no image/jxl support)
+          # { mime = "image/jxl"; run = ''magick''; prio = "high"; }
+          { mime = "{audio,video,image}/*"; run = "mediainfo"; prio = "high"; }
+
+          # --- Ouch archive previewer ---
+          { mime = "application/*zip"; run = "ouch"; }
+          { mime = "application/x-tar"; run = "ouch"; }
+          { mime = "application/x-bzip2"; run = "ouch"; }
+          { mime = "application/x-7z-compressed"; run = "ouch"; }
+          { mime = "application/x-rar"; run = "ouch"; }
+          { mime = "application/vnd.rar"; run = "ouch"; }
+          { mime = "application/x-xz"; run = "ouch"; }
+          { mime = "application/xz"; run = "ouch"; }
+          { mime = "application/x-zstd"; run = "ouch"; }
+          { mime = "application/zstd"; run = "ouch"; }
+          { mime = "application/java-archive"; run = "ouch"; }
+
+          # selected folder tree preview
+          { name = "*/"; run = ''piper -- eza -TL=3 --color=always --icons=never --group-directories-first --no-quotes "$1"''; }
+
+          # other
+          { name = "*.csv"; run = ''piper -- bat -p --color=always "$1"''; }
+          { name = "*.md"; run = ''piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"''; }
+        ];
+      };
+
+      ###########################
+      # OPENER RULES
+      ###########################
+
       opener = {
-        "video" = [{
-          run = ''mpv "$@" >/dev/null 2>&1 &'';
-          desc = "Play video";
-          block = true;
-          orphan = true;
-        }];
         "edit" = [{
           run = ''$EDITOR "$@"'';
           desc = "Edit";
@@ -202,14 +144,20 @@
         }];
         "open" = [{
           run = ''xdg-open "$@"'';
-          desc = "Open";
+          desc = "Open (xdg default)";
+        }];
+        "video" = [{
+          run = ''mpv "$@" >/dev/null 2>&1 &'';
+          desc = "Play video";
+          block = true;
+          orphan = true;
         }];
         "image" = [{
           run = ''gwenview "$@"'';
           desc = "Open in gwenview";
           orphan = true;
         }];
-        "raw image" = [{
+        "image-raw" = [{
           run = ''nomacs "$@"'';
           desc = "Open in nomacs";
           orphan = true;
@@ -236,210 +184,83 @@
         }];
       };
 
-      # check file mime type: xdg-mime query filetype [FILE]
-      # check mime type in yazi with TAB key if you use mime-ext plugin (mime by files extention)!
+      ###########################
+      # OPENER FILES
+      ###########################
+
       open = {
         prepend_rules = [
-          {
-            name = "*.ARW";
-            use = [ "raw image" ];
-          }
-          {
-            mime = "image/*";
-            use = [ "image" ];
-          }
-          {
-            mime = "video/*";
-            use = [ "video" ];
-          }
-          {
-            name = "*.torrent";
-            use = [
-              "qbittorrent"
-              "rtorrent"
-            ];
-          }
-          {
-            mime = "text/html";
-            use = [
-              "qutebrowser"
-              "librewolf"
-              "edit"
-            ];
-          }
-          {
-            mime = "application/octet-stream";
-            use = [ "edit" ];
-          }
-          {
-            mime = "text/plain";
-            use = [ "edit" ];
-          }
-          {
-            mime = "application/java-applet";
-            use = [ "edit" ];
-          }
-          {
-            mime = "application/json";
-            use = [ "edit" ];
-          }
-          {
-            mime = "*";
-            use = [ "edit" ];
-          }
+          { name = "*.{ARW,NEF}"; use = [ "image-raw" ]; }
+          { mime = "image/*"; use = [ "image" ]; }
+          { mime = "video/*"; use = [ "video" ]; }
+          { name = "*.torrent"; use = [ "qbittorrent" "rtorrent" ]; }
+          { mime = "text/html"; use = [ "qutebrowser" "librewolf" "edit" ]; }
+          { mime = "text/plain"; use = [ "edit" ]; }
+          { mime = "application/{octet-stream,java-applet,json}"; use = [ "edit" ]; }
+          { mime = "*"; use = [ "edit" ]; }
         ];
-        append_rules = [ ];
       };
     };
 
+    ###########################
+    # COLOR THEME
+    ###########################
+
     theme = lib.mkForce {
       tabs = {
-        active = {
-          fg = "#${base00}";
-          bg = "#${base0B}";
-        };
-        inactive = {
-          fg = "#${base03}";
-          bg = "#${base01}";
-        };
-        sep_inner = {
-          open = "";
-          close = "";
-        };
-        sep_outer = {
-          open = "";
-          close = "";
-        };
+        active = { fg = "#${base00}"; bg = "#${base0B}"; };
+        inactive = { fg = "#${base03}"; bg = "#${base01}"; };
+        sep_inner = { open = ""; close = ""; };
+        sep_outer = { open = ""; close = ""; };
       };
 
       mgr = {
         border_symbol = "│";
-        border_style = {
-          fg = "#${base01}";
-        };
-
-        count_copied = {
-          fg = "#${base00}";
-          bg = "#${base0B}";
-        };
-        count_cut = {
-          fg = "#${base00}";
-          bg = "#${base08}";
-        };
-        count_selected = {
-          fg = "#${base00}";
-          bg = "#${base0A}";
-        };
+        border_style = { fg = "#${base01}"; };
+        count_copied = { fg = "#${base00}"; bg = "#${base0B}"; };
+        count_cut = { fg = "#${base00}"; bg = "#${base08}"; };
+        count_selected = { fg = "#${base00}"; bg = "#${base0A}"; };
 
         # Color block on the left side separator line in the filename.
-        marker_copied = {
-          bg = "#${base0B}";
-          fg = "#${base0B}";
-        };
-        marker_cut = {
-          bg = "#${base08}";
-          fg = "#${base08}";
-        };
-        marker_marked = {
-          # SEL/V mode
-          bg = "#${base03}";
-          fg = "#${base03}";
-        };
-        marker_selected = {
-          bg = "#${base0A}";
-          fg = "#${base0A}";
-        };
+        marker_copied = { bg = "#${base0B}"; fg = "#${base0B}"; };
+        marker_cut = { bg = "#${base08}"; fg = "#${base08}"; };
+        marker_marked = { bg = "#${base03}"; fg = "#${base03}"; }; # SEL/V mode
+        marker_selected = { bg = "#${base0A}"; fg = "#${base0A}"; };
       };
 
       mode = {
-        normal_main = {
-          fg = "#${base00}";
-          bg = "#${base03}";
-        };
-        normal_alt = {
-          # file size info, etc
-          fg = "#${base04}";
-          bg = "#${base01}";
-        };
-        select_main = {
-          fg = "#${base00}";
-          bg = "#${base0F}";
-        };
-        select_alt = {
-          fg = "#${base04}";
-          bg = "#${base01}";
-        };
-        unset_main = {
-          fg = "#${base00}";
-          bg = "#${base0E}";
-        };
-        unset_alt = {
-          fg = "#${base04}";
-          bg = "#${base01}";
-        };
+        normal_main = { fg = "#${base00}"; bg = "#${base03}"; };
+        normal_alt = { fg = "#${base04}"; bg = "#${base01}"; }; # file size info, etc
+        select_main = { fg = "#${base00}"; bg = "#${base0F}"; };
+        select_alt = { fg = "#${base04}"; bg = "#${base01}"; };
+        unset_main = { fg = "#${base00}"; bg = "#${base0E}"; };
+        unset_alt = { fg = "#${base04}"; bg = "#${base01}"; };
       };
 
       status = {
-        sep_left = {
-          open = "";
-          close = "";
-        };
-        sep_right = {
-          open = "";
-          close = "";
-        };
-        overall = {
-          fg = "#${base04}";
-          bg = "#${base01}";
-        };
+        sep_left = { open = ""; close = ""; };
+        sep_right = { open = ""; close = ""; };
+        overall = { fg = "#${base04}"; bg = "#${base01}"; };
       };
 
       icon = {
-        # disable all icons
         globs = [ ];
         dirs = [ ];
         files = [ ];
         exts = [ ];
         conds = [ ];
-
-        prepend_dirs = [
-          # {
-          #   name = "nix";
-          #   text = "";
-          # }
-          # {
-          #   name = "Music";
-          #   text = "󰝚 ";
-          # }
-          # {
-          #   name = "Downloads";
-          #   text = " ";
-          # }
-          # {
-          #   name = "Documents";
-          #   text = "󰈙 ";
-          # }
-          # {
-          #   name = "Videos";
-          #   text = " ";
-          # }
-          # {
-          #   name = "Pictures";
-          #   text = " ";
-          # }
-          # {
-          #   name = "home";
-          #   text = " ";
-          # }
-          # {
-          #   name = "Public";
-          #   text = "󰿆 ";
-          # }
-        ];
+        prepend_dirs = [{ name = "nix"; text = "*"; }];
       };
     };
 
+    ###########################
+    # KEYMAP SETUP
+    ###########################
+
     keymap = {
+      input.prepend_keymap = [
+        { run = "escape"; on = [ "<Esc>" ]; }
+      ];
       mgr.prepend_keymap = [
         # go to folder
         {
@@ -591,7 +412,7 @@
           desc = "Restore";
         }
 
-        # other rus
+        ###### other default rus ######
         {
           on = "Р";
           run = "back";
