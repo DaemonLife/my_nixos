@@ -25,17 +25,28 @@ let
 in
 {
 
+  programs.jrnl = {
+    enable = true;
+    settings = {
+      editor = "${config.home.sessionVariables.EDITOR}";
+      journals = {
+        default = "$HOME/.local/share/jrnl/journal.txt";
+        main = "/mnt/temp/jrnl/jrnl.txt";
+      };
+    };
+  };
+
   # home.packages = with pkgs; [ jrnl ];
 
-  home.packages = with pkgs; [
-    python312
-    (jrnl.override { python3 = python312; }) # bug with python > 312
-  ];
-
-  home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p $HOME/.config/jrnl 
-    cd $HOME/.config/jrnl 
-    echo "${confTemplate}" > jrnl.yaml;
-  '';
-
+  # home.packages = with pkgs; [
+  #   python312
+  #   (jrnl.override { python3 = python312; }) # bug with python > 312
+  # ];
+  #
+  # home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  #   mkdir -p $HOME/.config/jrnl 
+  #   cd $HOME/.config/jrnl 
+  #   echo "${confTemplate}" > jrnl.yaml;
+  # '';
+  #
 }

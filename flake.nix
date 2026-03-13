@@ -2,52 +2,20 @@
   description = "DaemonLife's flake";
 
   inputs = {
-
-    ### stable ###
-
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     stylix = {
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nixvim = {
       url = "github:nix-community/nixvim/nixos-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ### unstable ###
-
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-
-    # home-manager = {
-    #   url = "github:nix-community/home-manager"; 
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    # stylix = {
-    #   url = "github:nix-community/stylix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # nixvim = {
-    #   url = "github:nix-community/nixvim";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
-    # nvf = {
-    #   url = "github:NotAShelf/nvf";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
 
   outputs =
@@ -57,7 +25,6 @@
     , stylix
     , nixpkgs-unstable
     , nixos-hardware
-      # , nvf
     , nixvim
     , ...
     } @ inputs:
@@ -69,18 +36,17 @@
       # Creating configuration function
       mkNixosConfig = device: {
         inherit system;
-        specialArgs = { username = user; };
+        specialArgs.username = user;
         modules = builtins.concatLists [
           [
             ./configuration.nix # main config
             ./devices/${device}/configuration.nix # device config
-            # nvf.nixosModules.default
             stylix.nixosModules.stylix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = { username = user; };
+              home-manager.extraSpecialArgs.username = user;
               home-manager.users.${user}.imports = [
                 ./home.nix # main home config
                 ./devices/${device}/home.nix # device home config
@@ -92,26 +58,22 @@
             {
               nixpkgs.overlays = [
                 (final: prev: {
-                  unstable = import nixpkgs-unstable {
-                    inherit system;
-                    config.allowUnfree = true;
-                  };
+                  unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
                 })
               ];
             }
           ]
           # Add device module from flake hardware
-          (
-            if device == "gpd-pocket-3"
-            then [ nixos-hardware.nixosModules.${device} ]
-            else [ ] # If there is no hardware module
-          )
+          (if device == "gpd-pocket-3"
+          then [ nixos-hardware.nixosModules.${device} ]
+          # If there is no hardware module
+          else [ ])
         ];
       };
     in
     {
+      # create configurations for my devices
       nixosConfigurations = {
-        # create configurations for my devices
         gpd-pocket-3 = nixpkgs.lib.nixosSystem (mkNixosConfig "gpd-pocket-3");
         lenovo = nixpkgs.lib.nixosSystem (mkNixosConfig "lenovo");
       };

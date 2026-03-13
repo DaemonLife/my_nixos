@@ -7,10 +7,10 @@
     ./gtk.nix
     ./fzf.nix
     ./stylix.nix
-    ./joplin.nix
+    # ./joplin.nix
     ./GIMP.nix
     ./nomacs.nix
-    ./chess/cli-chess.nix
+    # ./chess/cli-chess.nix
     ./xdg.nix
     ./unison.nix
 
@@ -19,7 +19,6 @@
     ./editor/_import.nix
     ./file_manager/_import.nix
     ./WM/_import.nix
-
     ./player/_import.nix
     ./telegram/_import.nix
     ./browser/_import.nix

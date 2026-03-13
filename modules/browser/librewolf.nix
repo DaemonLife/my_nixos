@@ -1,18 +1,15 @@
-{
-  config,
-  lib,
-  ...
-}: {
+{ config, lib, ... }: {
   stylix.targets.librewolf = {
     enable = true;
-    profileNames = [
-      "user"
-    ];
-    firefoxGnomeTheme.enable = true;
+    profileNames = [ "user" ];
+    # firefoxGnomeTheme.enable = true;
   };
 
   programs.librewolf = with config.lib.stylix.colors; {
     enable = true;
+    profiles = {
+      "user" = { id = 0; };
+    };
     settings = {
       "identity.fxaccounts.enabled" = true; # firefox sync
       "privacy.clearOnShutdown.history" = true;

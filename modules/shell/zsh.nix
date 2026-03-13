@@ -20,6 +20,7 @@
       in
       {
         os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
+        tt = "tt --notheme --highlight1 --blockcursor";
 
         # battery configuration will be restored at the next boot
         tlp-set-full-bat = "sudo tlp fullcharge bat1";

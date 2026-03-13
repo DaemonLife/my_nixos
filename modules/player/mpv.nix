@@ -23,7 +23,7 @@
       # ui settings
       osc = true; # false for disable default ui
       osd-bar = true; # false for disable default ui
-      border = false;
+      # border = false;
       fullscreen = "no";
       # osd-font = "";
       osd-font-size = 30;
@@ -47,8 +47,8 @@
       cache = "yes";
       # cache-default = 4000000;
       demuxer-readahead-secs = 20;
-      demuxer-max-bytes = "256MiB";
-      demuxer-max-back-bytes = "256MiB";
+      demuxer-max-bytes = "2048MiB";
+      demuxer-max-back-bytes = "2048MiB";
       # interpolation = true;
       # video-sync = "display-resample";
 

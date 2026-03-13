@@ -16,17 +16,9 @@
     # --------------------------------
 
     packages = with pkgs; [
-      pipx
-      exiftool
-      imagemagick
-      zip
-      unzip
-      fzy
-
       # Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
-      bitwarden-cli
       qbittorrent # torrent client
       unstable.transmission_4-gtk
       tor-browser
@@ -34,59 +26,61 @@
       vivaldi
 
       # Media
-      unstable.gimp
       helvum # A GTK patchbay for pipewire
-      imagemagick
-      ffmpegthumbnailer
       pavucontrol # audio gui control
+      flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
+      unstable.gimp
       nomacs-qt6 # fast image viewer for RAW (no icc support)
       unstable.kdePackages.gwenview # imave viewer with icc support
       unstable.kdePackages.kimageformats # jxl and raw rendering
-      kodi-wayland
       obs-studio
       upscayl
       freefilesync
-      foliate
       ascii-draw
 
       # Theming
       vimix-icon-theme # cursor icon
       gowall # Tool to convert a Wallpaper's color scheme
       grc
+      dconf-editor
+      wev # key events in wayland
+      gucharmap # character map
+      imagemagick
+      # ffmpegthumbnailer
       fontpreview # --preview-text "Привет, как дела, это просто тест шрифта!!! 1234567890?*# Just a test for my font."
 
       # Utils
-      dconf-editor
       cool-retro-term
       veracrypt
       cmatrix # matrix in terminal
-      wev # key events in wayland
       nwg-displays # gui for display setup
-      gucharmap # character map
       sc-im # vim spreadsheet program for terminal
+      pipx
+      exiftool
+      fzy
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # Docs
       onlyoffice-desktopeditors
       stellarium # astro map
       astroterm # astro map ASCII
+      foliate # book reader
       epy # cli book reader
       tldr # community documentation
       russ # rss tui reader
-      gnome-feeds # gui rss reader
+
       # libreoffice
-      hunspell # spellcheck
-      hunspellDicts.ru_RU # spellcheck
-      hunspellDicts.en_US # spellcheck
+      # hunspell # spellcheck
+      # hunspellDicts.ru_RU # spellcheck
+      # hunspellDicts.en_US # spellcheck
 
       # Gaming
       # unstable.portablemc # minecraft cli launcher
       curseofwar # stategy cli game
       vitetris # tetris cli game
-      unstable.mindustry-wayland
-      # unstable.chess-tui
+      unstable.chess-tui
       # dwarf-fortress-packages.dwarf-fortress-full
     ];
   };
@@ -99,7 +93,6 @@
     ripgrep.enable = true;
     fastfetch.enable = true;
     yt-dlp.enable = true;
-    imv.enable = true;
 
     btop = {
       enable = true;
@@ -110,14 +103,5 @@
         vim_keys = lib.mkForce true;
       };
     };
-
-    # bash.initExtra = ''
-    #   if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-    #   then
-    #     shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-    #     exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-    #   fi
-    # '';
-
   };
 }
