@@ -128,7 +128,7 @@
           comment = { };
           completion = { };
           surround = { };
-          pairs = { };
+          # pairs = { }; # auto double "" and ''
           notify = { };
           git = { };
           diff = { };

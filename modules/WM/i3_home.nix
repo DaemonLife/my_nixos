@@ -132,14 +132,16 @@ in
         "${modifier}+Print" = "exec scrot -u $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png";
         "${modifier}+Shift+39" = "exec scrot -s $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png"; # s
 
-        "${modifier}+56" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec $BROWSER"; # b
-        "${modifier}+28" = "exec AyuGram || exec Telegram"; # t
+        # "${modifier}+56" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec $BROWSER"; # b
+        "${modifier}+56" = "exec firefox"; # b
+        "${modifier}+55" = "exec AmneziaVPN"; # v
+        "${modifier}+28" = ''exec bash -c "AyuGram || Telegram || flatpak run org.telegram.desktop"''; # t
         "${modifier}+40" = "exec bash $HOME/nix/scripts/run_darktable.sh"; # d
       };
 
       keybindings = {
         "${modifier}+space" = "exec bash $HOME/nix/scripts/i3_layout_change.sh";
-        "${modifier}+Return" = "exec --no-startup-id ${terminal}";
+        "${modifier}+Return" = "exec bash $HOME/nix/scripts/i3_run_terminal.sh ${terminal}";
         "${modifier}+n" = "exec nautilus";
 
         # "${modifier}+F10" = "exec bash $HOME/scripts/i3lock";
