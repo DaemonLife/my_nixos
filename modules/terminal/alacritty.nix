@@ -13,6 +13,7 @@
       };
 
       # font = lib.mkForce {
+      #   normal.size = 28;
       #   normal = { family = "GeistMono Nerd Font Mono"; style = "Regular"; };
       #   bold = { family = "GeistMono Nerd Font Mono"; style = "Bold"; };
       #   italic = { family = "GeistMono Nerd Font Mono"; style = "Italic"; };
@@ -20,7 +21,7 @@
       # };
 
       terminal = {
-        shell = "fish";
+        shell = "zsh";
       };
 
     };

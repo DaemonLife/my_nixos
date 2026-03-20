@@ -114,6 +114,7 @@ in
         "${modifier}+Shift+44" = "workspace next"; # j
         "${modifier}+Shift+45" = "workspace prev"; # k
 
+        # exec ${terminal} --hold --command ~/nix/scripts/y.sh
         "${modifier}+29" = ''
           exec ${terminal} --hold zsh -i -c ~/nix/scripts/y.sh
         ''; # y
@@ -184,8 +185,8 @@ in
 
     extraConfig = ''
       floating_modifier Mod4
-      default_border pixel 4
-      default_floating_border normal 2
+      default_border pixel 5
+      default_floating_border normal 5
       hide_edge_borders none
       focus_wrapping yes
       focus_follows_mouse yes

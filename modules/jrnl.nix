@@ -1,6 +1,6 @@
 { pkgs, lib, config, ... }:
 let
-  confTemplate = ''
+  conf = ''
     colors:
       body: none
       date: yellow
@@ -27,26 +27,20 @@ in
 
   programs.jrnl = {
     enable = true;
-    settings = {
-      editor = "${config.home.sessionVariables.EDITOR}";
-      journals = {
-        default = "$HOME/.local/share/jrnl/journal.txt";
-        main = "/mnt/temp/jrnl/jrnl.txt";
-      };
-    };
+    # settings = {
+    #   editor = "${config.home.sessionVariables.EDITOR}";
+    #   journals = {
+    #     default = "$HOME/.local/share/jrnl/journal.txt";
+    #     main = "/mnt/temp/jrnl/jrnl.txt";
+    #   };
+    # };
   };
 
-  # home.packages = with pkgs; [ jrnl ];
-
-  # home.packages = with pkgs; [
-  #   python312
-  #   (jrnl.override { python3 = python312; }) # bug with python > 312
-  # ];
-  #
-  # home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-  #   mkdir -p $HOME/.config/jrnl 
-  #   cd $HOME/.config/jrnl 
-  #   echo "${confTemplate}" > jrnl.yaml;
-  # '';
+  home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p $HOME/.config/jrnl 
+    cd $HOME/.config/jrnl 
+    echo "${conf}" > jrnl.yaml;
+    # echo -n "version: `${pkgs.jrnl}/bin/jrnl --version | head -n 1 | awk '{print $2}'`" >> jrnl.yaml;
+  '';
   #
 }

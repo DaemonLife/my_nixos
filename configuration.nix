@@ -113,6 +113,8 @@
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
     settings.auto-optimise-store = true;
+    # ability to specify additional binary caches (devenv)
+    settings.trusted-users = [ "user" ];
     optimise.automatic = true;
   };
 
@@ -132,12 +134,15 @@
     udiskie # auto disks mount
     nautilus
     net-tools # for netstat
+    sysstat # for iostat
+    iotop
     wget
     nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # folder size tree
     mangohud # Steam performance GUI
     zip
     unzip
+    devenv # python venv
   ];
 
   # --------------------------------

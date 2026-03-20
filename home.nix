@@ -48,7 +48,6 @@
       wev # key events in wayland
       gucharmap # character map
       imagemagick
-      # ffmpegthumbnailer
       fontpreview # --preview-text "Привет, как дела, это просто тест шрифта!!! 1234567890?*# Just a test for my font."
 
       # Utils
@@ -60,6 +59,7 @@
       pipx
       exiftool
       fzy
+      translate-shell
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # Docs
