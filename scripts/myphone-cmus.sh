@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 CMUS_FOLDER="$HOME/Music/myphone"
-PORT=$1
-PHONE_USERNAME=$2
+PHONE_USERNAME=$1
+PORT=$2
 
 mkdir -p $CMUS_FOLDER && echo "Created new directory $CMUS_FOLDER";
 

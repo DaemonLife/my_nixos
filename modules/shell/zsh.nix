@@ -27,10 +27,11 @@
         tlp-set-conserv-bat = "sudo tlp setcharge bat1";
 
         # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
-        myphone-connect-cmus = "bash $HOME/nix/scripts/myphone-connect-cmus.sh ${myphone_port} ${myphone_username}";
+        myphone-cmus = "bash $HOME/nix/scripts/myphone-cmus.sh ${myphone_username} ${myphone_port}";
         myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
         # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
-        myphone-sync-notes = "unison -ignorelocks $HOME/Documents/Notes ssh://${myphone_username}@myphone:${myphone_port}//data/data/com.termux/files/home/Notes";
+        myphone-sync = "bash $HOME/nix/scripts/myphone-sync.sh ${myphone_username} ${myphone_port}";
+        # myphone-sync-notes = "unison -ignorelocks $HOME/Documents/Notes ssh://${myphone_username}@myphone:${myphone_port}//data/data/com.termux/files/home/Notes";
       };
 
     siteFunctions = {
