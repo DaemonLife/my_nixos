@@ -179,24 +179,24 @@
     # };
     # xfconf.enable = true;
 
-    # proxychains = {
-    #   # just default settings ...
-    #   enable = true;
-    #   proxyDNS = true;
-    #   chain.type = "strict";
-    #   localnet = "127.0.0.0/255.0.0.0";
-    #   tcpReadTimeOut = 15000;
-    #   tcpConnectTimeOut = 8000;
-    #   remoteDNSSubnet = 224;
-    #   proxies = {
-    #     myproxy = {
-    #       type = "socks5";
-    #       host = "127.0.0.1";
-    #       port = 10808; # ... and only my port
-    #       enable = true;
-    #     };
-    #   };
-    # };
+    proxychains = {
+      # just default settings ...
+      enable = true;
+      proxyDNS = true;
+      chain.type = "strict";
+      localnet = "127.0.0.0/255.0.0.0";
+      tcpReadTimeOut = 15000;
+      tcpConnectTimeOut = 8000;
+      remoteDNSSubnet = 224;
+      proxies = {
+        myproxy = {
+          type = "socks5";
+          host = "127.0.0.1";
+          port = 20170; # ... and only my v2rayA port 
+          enable = true;
+        };
+      };
+    };
 
     # ------ Steam ------
     steam = {
@@ -252,6 +252,7 @@
     getty = { loginOptions = "-- \\u"; autologinUser = "${username}"; autologinOnce = true; };
 
     # xray = { enable = true; settingsFile = "/etc/xray/config.json"; };
+    v2raya.enable = true;
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities

@@ -20,8 +20,8 @@
     # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bugs!)
   };
 
-  # boot.kernelPackages = pkgs.linuxPackages_lqx; # switch to gaming kernel
-  boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # switch to gaming kernel
+  # boot.kernelPackages = pkgs.linuxPackages_lqx; # need compiling
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # bug with darktable
 
   environment.systemPackages = with pkgs; [
     amdgpu_top # Tool to display AMDGPU usage
