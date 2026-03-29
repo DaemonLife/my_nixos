@@ -31,7 +31,7 @@
       flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
-      unstable.gimp
+      # unstable.gimp # use flatpack
       nomacs-qt6 # fast image viewer for RAW (no icc support)
       unstable.kdePackages.gwenview # imave viewer with icc support
       unstable.kdePackages.kimageformats # jxl and raw rendering

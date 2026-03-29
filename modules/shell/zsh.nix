@@ -50,6 +50,8 @@
         rm -f -- "$tmp"
       '';
 
+      trr = ''trans :ru "$*" && echo '';
+      tre = ''trans :en "$*" && echo '';
     };
 
     prezto = {
