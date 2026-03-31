@@ -59,9 +59,11 @@
       set color_titleline_fg=black
       set color_titleline_bg=green
 
-      # time and other stuff
+      # time, progress and other stuff
       set color_statusline_fg=gray
       set color_statusline_bg=black
+      set color_statusline_progress_bg=magenta
+      set color_statusline_progress_fg=black
 
       # cmd
       set color_cmdline_fg=gray
@@ -98,6 +100,7 @@
       set format_title=%a - %l - %t (%y) - cmus
       set confirm_run=false
       set status_display_program=~/nix/modules/player/cmus_notify.sh
+      set progress_bar=color
 
       # select follow played track, toggle with f key
       set follow=true
