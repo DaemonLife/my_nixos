@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     unstable.digikam
     unstable.darktable
+    unstable.hugin
     kdePackages.kdenlive
     siril
 

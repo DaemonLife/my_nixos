@@ -20,7 +20,7 @@
     # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bugs!)
   };
 
-  boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel
+  # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel
   # boot.kernelPackages = pkgs.linuxPackages_lqx; # need compiling
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # bug with darktable
 
