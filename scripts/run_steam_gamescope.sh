@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# SteamDeck=1 mangohud gamemoderun %command%
+
 set -xeuo pipefail
 
 gamescopeArgs=(
