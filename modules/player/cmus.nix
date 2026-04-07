@@ -57,13 +57,13 @@
 
       # song title
       set color_titleline_fg=black
-      set color_titleline_bg=green
+      set color_titleline_bg=blue
 
-      # time, progress and other stuff
-      set color_statusline_fg=gray
-      set color_statusline_bg=black
-      set color_statusline_progress_bg=magenta
+      # progress line
       set color_statusline_progress_fg=black
+      set color_statusline_progress_bg=yellow
+      set color_statusline_fg=white
+      set color_statusline_bg=black
 
       # cmd
       set color_cmdline_fg=gray

@@ -3,6 +3,6 @@
     # ./hyprland.nix
     # ./sway.nix
     # ./fish.nix
-    ./kubernetes.nix
+    # ./kubernetes.nix
   ];
 }

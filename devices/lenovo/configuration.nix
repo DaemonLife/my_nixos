@@ -10,11 +10,9 @@
   # --------------------------------
 
   hardware = {
-    cpu.amd.updateMicrocode = true;
     graphics = {
       enable = true;
       enable32Bit = true;
-      # extraPackages = with pkgs; [ unstable.mesa.opencl ]; # OpenCL support using rusticl
       extraPackages = with pkgs; [ mesa.opencl ]; # OpenCL support using rusticl
     };
     # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bugs!)
@@ -31,15 +29,6 @@
     displaycal
     argyllcms # for displaycal
   ];
-
-  # --------------------------------
-  # HIBERNATION
-  # --------------------------------
-
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16 * 1024; # 16GB
-  }];
 
   system.stateVersion = "24.11";
 }

@@ -134,8 +134,8 @@ in
         "${modifier}+Shift+39" = "exec scrot -s $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png"; # s
 
         # "${modifier}+56" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec $BROWSER"; # b
-        "${modifier}+56" = "exec firefox"; # b
-        "${modifier}+Shift+56" = "exec proxychains4 firefox"; # b
+        "${modifier}+56" = "exec librewolf"; # b
+        "${modifier}+Shift+56" = "exec proxychains4 librewolf"; # b
         "${modifier}+55" = "exec AmneziaVPN"; # v
         "${modifier}+28" = ''exec bash -c "AyuGram || Telegram || flatpak run org.telegram.desktop"''; # t
         "${modifier}+40" = "exec bash $HOME/nix/scripts/run_darktable.sh"; # d
