@@ -30,5 +30,24 @@
     argyllcms # for displaycal
   ];
 
+  # --------------------------------
+  # HIBERNATION
+  # --------------------------------
+
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16 * 1024; # 16GB
+  }];
+  boot.initrd.systemd.enable = true; # idk but it works
+
+  # (NOT TESTED) Specifies what to do when the laptop lid is closed
+  services.logind.settings = {
+    Login.HandleLidSwitch = "suspend-then-hibernate";
+  };
+
+  # --------------------------------
+  # OTHER
+  # --------------------------------
+
   system.stateVersion = "24.11";
 }

@@ -126,7 +126,7 @@
     gparted
     exfatprogs # exfat gparted support
     ntfs3g # ntfs support
-    os-prober # to find systems in grub
+    #os-prober # to find systems in grub
     sshfs # ssh mount as directory
     jdk # java
     iwd # wifi cli, don't delete!
@@ -298,17 +298,18 @@
   # --------------------------------
 
   boot.loader = {
-    grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
-      useOSProber = true;
-      default = "saved";
-      splashImage = lib.mkForce null;
-      theme = lib.mkForce null;
-      fontSize = lib.mkForce 60;
-      extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
-    };
+  #  grub = {
+  #    enable = true;
+  #    device = "nodev";
+  #    efiSupport = true;
+  #    useOSProber = true;
+  #    default = "saved";
+  #    splashImage = lib.mkForce null;
+  #    theme = lib.mkForce null;
+  #    fontSize = lib.mkForce 60;
+  #    extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
+  #  };
+    systemd-boot.enable = true;
     efi.canTouchEfiVariables = true;
   };
 

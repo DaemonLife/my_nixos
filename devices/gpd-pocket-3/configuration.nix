@@ -12,11 +12,13 @@
   boot.initrd.systemd.enable = true;
 
   # Specifies what to do when the laptop lid is closed
-  services.logind = {
-    settings = {
-      Login.HandleLidSwitch = "suspend-then-hibernate";
-    };
+  services.logind.settings = {
+    Login.HandleLidSwitch = "suspend-then-hibernate";
   };
+
+  # --------------------------------
+  # OTHER
+  # --------------------------------
 
   system.stateVersion = "24.11";
 }
