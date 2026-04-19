@@ -138,6 +138,8 @@ in
         "${modifier}+Shift+56" = "exec proxychains4 librewolf"; # b
         "${modifier}+55" = "exec AmneziaVPN"; # v
         "${modifier}+28" = ''exec bash -c "AyuGram || Telegram || flatpak run org.telegram.desktop"''; # t
+        "${modifier}+58" = "exec fractal"; # m
+        "${modifier}+Shift+58" = "exec proxychains4 fractal"; # m
         "${modifier}+40" = "exec bash $HOME/nix/scripts/run_darktable.sh"; # d
       };
 
@@ -203,9 +205,9 @@ in
       client.background #ffffff
 
 
-      bindsym F1 exec cmus-remote -r
-      bindsym F2 exec cmus-remote -u
-      bindsym F3 exec cmus-remote -n
+      bindsym F1 exec cmus-remote -r # prev song
+      bindsym F9 exec cmus-remote -u # pause song
+      bindsym F3 exec cmus-remote -n # pext song
       bindsym F10 exec bash $HOME/nix/scripts/i3_lock.sh
 
       gaps inner 0
@@ -213,6 +215,25 @@ in
       smart_borders on
 
       exec xset s 600 && xset dpms 0 0 0 && xss-lock -- sh -c 'setxkbmap us && i3lock -k -c 000000'
+
+      # --- monitors setup ---
+
+      # msk screen position
+      # exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1
+
+      # lenovo screen color profile
+      # stable
+      # exec colormgr device-add-profile "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
+      exec colormgr device-make-profile-default "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
+      # unstable
+      exec colormgr device-add-profile "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
+      exec colormgr device-make-profile-default "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
+
+      # ktc screen color profile
+      exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
+      exec colormgr device-make-profile-default "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
+
+      # --- workspaces --- 
 
       workspace "1" output "eDP-1"
       workspace "2" output "eDP-1"

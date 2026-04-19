@@ -52,8 +52,8 @@
         rm -f -- "$tmp"
       '';
 
-      trr = ''trans :ru "$*" && echo '';
-      tre = ''trans :en "$*" && echo '';
+      trr = ''trans :ru -show-original-phonetics n -show-translation-phonetics n -show-prompt-message n -show-alternatives n -show-original n "$*" && echo '';
+      tre = ''trans :en -show-original-phonetics n -show-translation-phonetics n -show-prompt-message n -show-alternatives n -show-original n "$*" && echo '';
     };
 
     prezto = {

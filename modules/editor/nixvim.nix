@@ -24,23 +24,24 @@
     ];
 
     plugins = {
-      treesitter = {
-        enable = true; # need for nvim-biscuits
-        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
-          bash
-          json
-          lua
-          make
-          markdown
-          nix
-          regex
-          toml
-          vim
-          vimdoc
-          xml
-          python
-        ];
-      };
+      # disable for unstable
+      # treesitter = {
+      #   enable = true; # need for nvim-biscuits
+      # grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+      #   bash
+      #   json
+      #   lua
+      #   make
+      #   markdown
+      #   nix
+      #   regex
+      #   toml
+      #   vim
+      #   vimdoc
+      #   xml
+      #   python
+      # ];
+      # };
       nix.enable = true;
       # yazi.enable = true; # :Yazi
 
@@ -220,7 +221,7 @@
 
     # Setups for some files 
     autoCmd = [
-      { event = "VimEnter"; command = "setlocal spell spelllang=en,ru"; }
+      { event = "VimEnter"; command = "setlocal spell spelllang=en,ru"; } # run it manually first if it doesn't work 
       { event = "FileType"; pattern = "nix"; command = "setlocal tabstop=2 shiftwidth=2"; }
     ];
 

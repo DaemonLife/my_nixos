@@ -9,18 +9,16 @@
   # iGPU, pkgs, kernel
   # --------------------------------
 
-  hardware = {
-    graphics = {
-      enable = true;
-      enable32Bit = true;
-      extraPackages = with pkgs; [ mesa.opencl ]; # OpenCL support using rusticl
-    };
-    # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bugs!)
-  };
+  # hardware = {
+  #   graphics = {
+  #     enable = true;
+  #     enable32Bit = true;
+  # extraPackages = with pkgs; [ mesa.opencl ]; # OpenCL support using rusticl
+  # };
+  # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
+  # };
 
-  # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel
-  # boot.kernelPackages = pkgs.linuxPackages_lqx; # need compiling
-  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest; # bug with darktable
+  # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel (bug with darktable on both channels)
 
   environment.systemPackages = with pkgs; [
     amdgpu_top # Tool to display AMDGPU usage
@@ -49,5 +47,5 @@
   # OTHER
   # --------------------------------
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 }

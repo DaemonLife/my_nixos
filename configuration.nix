@@ -83,7 +83,6 @@
   users.users.${username} = {
     isNormalUser = true;
     description = "my user";
-    # shell = pkgs.fish;
     shell = pkgs.zsh;
     useDefaultShell = true;
     packages = with pkgs; [ flatpak ];
@@ -126,7 +125,6 @@
     gparted
     exfatprogs # exfat gparted support
     ntfs3g # ntfs support
-    #os-prober # to find systems in grub
     sshfs # ssh mount as directory
     jdk # java
     iwd # wifi cli, don't delete!
@@ -143,6 +141,7 @@
     zip
     unzip
     devenv # python venv
+    # libsecret # for matrix 
   ];
 
   # --------------------------------
@@ -163,15 +162,15 @@
     # hyprland = { enable = true; withUWSM = true; };
     # niri.enable = true;
 
-    nh = {
-      enable = true;
-      clean = {
-        enable = true;
-        dates = "weekly";
-        extraArgs = "--keep-since 7d --keep 5";
-      };
-      flake = "/home/${username}/nix";
-    };
+    # nh = {
+    #   enable = true;
+    #   clean = {
+    #     enable = true;
+    #     dates = "weekly";
+    #     extraArgs = "--keep-since 7d --keep 5";
+    #   };
+    #   flake = "/home/${username}/nix";
+    # };
 
     # thunar = {
     #   enable = true;
@@ -260,56 +259,66 @@
   };
 
   systemd = {
-    # authentication for programs
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
+    # stable branch
+    # sleep.extraConfig = ''
+    #   AllowSuspend=yes
+    #   AllowHibernation=yes
+    #   # AllowHybridSleep=yes
+    #   AllowSuspendThenHibernate=yes
+    #   HibernateDelaySec=3600
+    # '';
 
-    sleep.extraConfig = ''
-      AllowSuspend=yes
-      AllowHibernation=yes
+    # unstable branch
+    sleep.settings.Sleep = {
+      AllowSuspend = "yes";
+      AllowHibernation = "yes";
       # AllowHybridSleep=yes
-      AllowSuspendThenHibernate=yes
-      HibernateDelaySec=3600
-    '';
+      AllowSuspendThenHibernate = "yes";
+      HibernateDelaySec = 3600;
+    };
   };
 
   # --------------------------------
   # SECURITY
   # --------------------------------
 
+  # authentication for programs (frontend)
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = [ "graphical-session.target" ];
+    wants = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
   security = {
-    polkit.enable = true; # authentication support for sway
+    polkit.enable = true; # authentication support (backed)
     # pam.services.swaylock = { }; # screen lock
   };
+  services.gnome.gnome-keyring.enable = true; # secret portal for matrix
 
   # --------------------------------
   # BOOT OPTIONS
   # --------------------------------
 
   boot.loader = {
-  #  grub = {
-  #    enable = true;
-  #    device = "nodev";
-  #    efiSupport = true;
-  #    useOSProber = true;
-  #    default = "saved";
-  #    splashImage = lib.mkForce null;
-  #    theme = lib.mkForce null;
-  #    fontSize = lib.mkForce 60;
-  #    extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
-  #  };
     systemd-boot.enable = true;
+    #  grub = {
+    #    enable = true;
+    #    device = "nodev";
+    #    efiSupport = true;
+    #    useOSProber = true;
+    #    default = "saved";
+    #    splashImage = lib.mkForce null;
+    #    theme = lib.mkForce null;
+    #    fontSize = lib.mkForce 60;
+    #    extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
+    #  };
     efi.canTouchEfiVariables = true;
   };
 

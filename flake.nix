@@ -2,20 +2,40 @@
   description = "DaemonLife's flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    ## stable ##
+
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # home-manager = {
+    #   url = "github:nix-community/home-manager/release-25.11";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # stylix = {
+    #   url = "github:nix-community/stylix/release-25.11";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    # nixvim = {
+    #   url = "github:nix-community/nixvim/nixos-25.11";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    ## unstable ###
+
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      url = "github:nix-community/stylix/release-25.11";
+      url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-25.11";
+      url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
   };
 
   outputs =
@@ -23,8 +43,7 @@
     , nixpkgs
     , home-manager
     , stylix
-    , nixpkgs-unstable
-    , nixos-hardware
+      # , nixpkgs-unstable
     , nixvim
     , ...
     } @ inputs:
@@ -55,19 +74,19 @@
               home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
             }
             # unstable pkgs
-            {
-              nixpkgs.overlays = [
-                (final: prev: {
-                  unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
-                })
-              ];
-            }
+            # {
+            #   nixpkgs.overlays = [
+            #     (final: prev: {
+            #       unstable = import nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+            #     })
+            #   ];
+            # }
           ]
           # Add device module from flake hardware
-          (if device == "gpd-pocket-3"
-          then [ nixos-hardware.nixosModules.${device} ]
+          # (if device == "gpd-pocket-3"
+          # then [ nixos-hardware.nixosModules.${device} ]
           # If there is no hardware module
-          else [ ])
+          # else [ ])
         ];
       };
     in

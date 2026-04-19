@@ -9,38 +9,39 @@
       BROWSER = "qutebrowser";
       TERMINAL = "foot";
     };
-    stateVersion = "24.05";
 
     # --------------------------------
     # HOME PKGS
     # --------------------------------
 
     packages = with pkgs; [
-      # Network
+      # - Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
       qbittorrent # torrent client
-      unstable.transmission_4-gtk
       tor-browser
       deltachat-desktop
+      element-desktop
+      fractal # matrix clietn
       vivaldi
 
-      # Media
-      helvum # A GTK patchbay for pipewire
+      # - Media
+      # helvum # A GTK patchbay for pipewire (stable)
+      crosspipe # A GTK patchbay for pipewire (unstable)
       pavucontrol # audio gui control
       flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
       easyeffects # microphone effects
       nomacs-qt6 # fast image viewer for RAW (no icc support)
-      unstable.kdePackages.gwenview # imave viewer with icc support
-      unstable.kdePackages.kimageformats # jxl and raw rendering
+      kdePackages.gwenview # imave viewer with icc support
+      kdePackages.kimageformats # jxl and raw rendering
       obs-studio
       upscayl
       freefilesync
       ascii-draw
 
-      # Theming
+      # - Theming
       vimix-icon-theme # cursor icon
       gowall # Tool to convert a Wallpaper's color scheme
       grc
@@ -50,7 +51,7 @@
       imagemagick
       fontpreview # --preview-text "Привет, как дела, это просто тест шрифта!!! 1234567890?*# Just a test for my font."
 
-      # Utils
+      # - Utils
       cool-retro-term
       veracrypt
       cmatrix # matrix in terminal
@@ -63,8 +64,9 @@
       bc # gnu calculator
       # https://github.com/ChrisBuilds/terminaltexteffects
 
-      # Docs
-      onlyoffice-desktopeditors
+      # - Docs
+      simple-scan # gnome gui scanner
+      pdfarranger # gnome pdf merge 
       stellarium # astro map
       astroterm # astro map ASCII
       foliate # book reader
@@ -72,16 +74,19 @@
       tldr # community documentation
       russ # rss tui reader
 
-      # libreoffice
-      # hunspell # spellcheck
-      # hunspellDicts.ru_RU # spellcheck
-      # hunspellDicts.en_US # spellcheck
+      # -- Office
+      # onlyoffice-desktopeditors
+      libreoffice-fresh
+      hunspell # spellcheck for LO
+      hunspellDicts.ru-ru # spell check for LO
+      hunspellDicts.en-us # spellcheck for LO
 
-      # Gaming
+      # - Gaming
       # unstable.portablemc # minecraft cli launcher
       curseofwar # stategy cli game
       vitetris # tetris cli game
-      unstable.chess-tui
+      # unstable.chess-tui
+      chess-tui
       # dwarf-fortress-packages.dwarf-fortress-full
     ];
   };

@@ -24,7 +24,7 @@
       "browser.gesture.swipe.right" = "";
       "browser.tabs.firefox-view" = false;
       # "browser.uidensity" = 0; # 0 - normal, 1 - compact, 2 - touch
-      # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
     };
 
     # profiles.user.extensions.force = true;
@@ -102,14 +102,14 @@
     #
     #
     # '';
-    #
-    # # NEW PAGE SETAP
-    # profiles.user.userContent =
-    #   # css
-    #   ''
-    #     @-moz-document url("about:home"),url(about:preferences),url("about:blank"),url("about:newtab"),url("about:privatebrowsing"){
-    #         body{background-color:#${base00}!important;--newtab-search-icon: transparent !important;}
-    #     }
-    #   '';
+
+    # NEW PAGE SETAP
+    profiles.user.userContent =
+      # css
+      ''
+        @-moz-document url("about:home"),url(about:preferences),url("about:blank"),url("about:newtab"),url("about:privatebrowsing"){
+            body{background-color:#${base00}!important;--newtab-search-icon: transparent !important;}
+        }
+      '';
   };
 }
