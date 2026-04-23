@@ -120,7 +120,7 @@
       bind -f common e run eartag
 
       # remove selected file
-      bind -f common D run sh -c 'trash-put "$@" && cmus-remote -C "update-cache" && cmus-remote -C "player-next"' sh {}
+      bind -f common D run sh -c 'trash-put "$@" && cmus-remote -C update &' sh {}
 
     '';
   };

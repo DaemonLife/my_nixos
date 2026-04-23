@@ -50,7 +50,7 @@ in
     xev # keycodes check
     xkb-switch # print current layout
   ];
-  programs.nixvim.clipboard.providers.xclip.enable = true; # vim clipboard support
+  # programs.nixvim.clipboard.providers.xclip.enable = true; # vim clipboard support
   services.dunst.enable = true; # notification daemon
 
   xsession.windowManager.i3 = with config.lib.stylix.colors; {
@@ -138,8 +138,7 @@ in
         "${modifier}+Shift+56" = "exec proxychains4 librewolf"; # b
         "${modifier}+55" = "exec AmneziaVPN"; # v
         "${modifier}+28" = ''exec bash -c "AyuGram || Telegram || flatpak run org.telegram.desktop"''; # t
-        "${modifier}+58" = "exec fractal"; # m
-        "${modifier}+Shift+58" = "exec proxychains4 fractal"; # m
+        "${modifier}+58" = "exec proxychains4 fractal"; # m
         "${modifier}+40" = "exec bash $HOME/nix/scripts/run_darktable.sh"; # d
       };
 

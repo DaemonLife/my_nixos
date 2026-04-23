@@ -31,8 +31,12 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixvim = {
-      url = "github:nix-community/nixvim";
+    # nixvim = {
+    #   url = "github:nix-community/nixvim";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+    nvf = {
+      url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -43,8 +47,9 @@
     , nixpkgs
     , home-manager
     , stylix
+    , nvf
       # , nixpkgs-unstable
-    , nixvim
+      # , nixvim
     , ...
     } @ inputs:
     let
@@ -71,7 +76,10 @@
                 ./devices/${device}/home.nix # device home config
               ];
               home-manager.backupFileExtension = "bkp";
-              home-manager.sharedModules = [ nixvim.homeModules.nixvim ];
+              home-manager.sharedModules = [
+                # nixvim.homeModules.nixvim
+                nvf.homeManagerModules.default
+              ];
             }
             # unstable pkgs
             # {

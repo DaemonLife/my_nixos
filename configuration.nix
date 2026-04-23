@@ -1,9 +1,13 @@
-{ config, pkgs, lib, username, ... }: {
-
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  ...
+}: {
   imports = [
     ./modules/stylix.nix
     ./modules/WM/i3_configuration.nix
-    # ./modules/editor/nvf.nix
   ];
 
   # --------------------------------
@@ -13,8 +17,8 @@
   networking = {
     networkmanager.enable = true;
     hostName = "nixos";
-    nameservers = [ "1.1.1.1" "1.0.0.1" ]; # DNS provider
-    hosts = { "192.168.1.150" = [ "myphone" ]; }; # local DNS
+    nameservers = ["1.1.1.1" "1.0.0.1"]; # DNS provider
+    hosts = {"192.168.1.150" = ["myphone"];}; # local DNS
     nftables.enable = true; # disable old iptables
     firewall = {
       enable = true;
@@ -27,8 +31,14 @@
     };
   };
 
-  hardware.bluetooth = { enable = true; powerOnBoot = false; };
-  time = { timeZone = "Europe/Moscow"; hardwareClockInLocalTime = true; };
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;
+  };
+  time = {
+    timeZone = "Europe/Moscow";
+    hardwareClockInLocalTime = true;
+  };
 
   # Printers
   services.printing = {
@@ -49,8 +59,11 @@
   };
 
   # Scanners
-  hardware.sane = { enable = true; extraBackends = [ pkgs.sane-airscan ]; };
-  services.udev.packages = [ pkgs.sane-airscan ]; # device manager for the Linux kernel
+  hardware.sane = {
+    enable = true;
+    extraBackends = [pkgs.sane-airscan];
+  };
+  services.udev.packages = [pkgs.sane-airscan]; # device manager for the Linux kernel
 
   # Sound
   services.pipewire = {
@@ -85,8 +98,8 @@
     description = "my user";
     shell = pkgs.zsh;
     useDefaultShell = true;
-    packages = with pkgs; [ flatpak ];
-    extraGroups = [ "networkmanager" "wheel" "video" "input" "scanner" "lp" ];
+    packages = with pkgs; [flatpak];
+    extraGroups = ["networkmanager" "wheel" "video" "input" "scanner" "lp"];
   };
 
   # --------------------------------
@@ -94,13 +107,15 @@
   # --------------------------------
 
   environment = {
-    variables = let EDITOR = "vi"; in {
+    variables = let
+      EDITOR = "vi";
+    in {
       EDITOR = "${EDITOR}";
       SYSTEMD_EDITOR = "${EDITOR}";
       VISUAL = "${EDITOR}";
       BROWSER = "qutebrowser";
     };
-    shells = with pkgs; [ zsh ];
+    shells = with pkgs; [zsh];
     sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
@@ -110,10 +125,10 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = ["nix-command" "flakes"];
     settings.auto-optimise-store = true;
     # ability to specify additional binary caches (devenv)
-    settings.trusted-users = [ "user" ];
+    settings.trusted-users = ["user"];
     optimise.automatic = true;
   };
 
@@ -141,7 +156,7 @@
     zip
     unzip
     devenv # python venv
-    # libsecret # for matrix 
+    # libsecret # for matrix
   ];
 
   # --------------------------------
@@ -150,7 +165,7 @@
 
   xdg.portal = lib.mkDefault {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
     # wlr.enable = true;
     # config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
   };
@@ -191,7 +206,8 @@
         myproxy = {
           type = "socks5";
           host = "127.0.0.1";
-          port = 20170; # ... and only my v2rayA port 
+          # ... and only my v2rayA port
+          port = 20170;
           enable = true;
         };
       };
@@ -200,15 +216,23 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      package = pkgs.steam.override { extraEnv = { MANGOHUD = "1"; GAMEMODERUN = "1"; }; };
+      package = pkgs.steam.override {
+        extraEnv = {
+          MANGOHUD = "1";
+          GAMEMODERUN = "1";
+        };
+      };
       gamescopeSession.enable = true;
       protontricks.enable = true;
-      extraCompatPackages = with pkgs; [ proton-ge-bin ];
+      extraCompatPackages = with pkgs; [proton-ge-bin];
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
-    gamescope = { enable = true; capSysNice = true; };
+    gamescope = {
+      enable = true;
+      capSysNice = true;
+    };
     gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
     nix-ld.enable = true; # run bin files
@@ -225,8 +249,7 @@
   # --------------------------------
 
   services = {
-
-    # battery 
+    # battery
     tlp = {
       enable = true;
       settings = {
@@ -248,7 +271,11 @@
     };
 
     # auto username in tty
-    getty = { loginOptions = "-- \\u"; autologinUser = "${username}"; autologinOnce = true; };
+    getty = {
+      loginOptions = "-- \\u";
+      autologinUser = "${username}";
+      autologinOnce = true;
+    };
 
     # xray = { enable = true; settingsFile = "/etc/xray/config.json"; };
     v2raya.enable = true;
@@ -285,9 +312,9 @@
   # authentication for programs (frontend)
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     description = "polkit-gnome-authentication-agent-1";
-    wantedBy = [ "graphical-session.target" ];
-    wants = [ "graphical-session.target" ];
-    after = [ "graphical-session.target" ];
+    wantedBy = ["graphical-session.target"];
+    wants = ["graphical-session.target"];
+    after = ["graphical-session.target"];
     serviceConfig = {
       Type = "simple";
       ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
@@ -327,24 +354,24 @@
   # --------------------------------
 
   # TTYI colors
-  console.colors = with config.lib.stylix.colors; lib.mkForce [
-    "000000" # background
-    "${base08}" # red
-    "${base0B}" # green
-    "${base0A}" # yellow
-    "${base0D}" # blue
-    "${base0E}" # magenta
-    "${base0C}" # cyan
-    "${base05}" # base05
-    "${base03}" # base03
-    "${base08}" # red
-    "${base0B}" # green
-    "${base0A}" # yellow
-    "${base0D}" # blue
-    "${base0E}" # magenta
-    "${base0C}" # cyan
-    "${base06}" # base06
-  ];
+  console.colors = with config.lib.stylix.colors;
+    lib.mkForce [
+      "000000" # background
+      "${base08}" # red
+      "${base0B}" # green
+      "${base0A}" # yellow
+      "${base0D}" # blue
+      "${base0E}" # magenta
+      "${base0C}" # cyan
+      "${base05}" # base05
+      "${base03}" # base03
+      "${base08}" # red
+      "${base0B}" # green
+      "${base0A}" # yellow
+      "${base0D}" # blue
+      "${base0E}" # magenta
+      "${base0C}" # cyan
+      "${base06}" # base06
+    ];
   stylix.targets.grub.enable = false;
-
 }

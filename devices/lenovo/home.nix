@@ -15,6 +15,7 @@
 
     # games
     bottles
+    lutris
   ];
 
   dconf.settings = {

@@ -14,20 +14,21 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    
 
     globals = { mapleader = " "; maplocalleader = " "; };
 
     # --- Plugins ---
-    extraPlugins = with pkgs; [
-      vimPlugins.nvim-biscuits # annotations at the end of a closing tag/bracket/parenthesis/etc
-      vimPlugins.vim-table-mode # :help table-mode. <leader>tic <leader>tdc
-    ];
+    # extraPlugins = with pkgs; [
+    #   vimPlugins.nvim-biscuits # annotations at the end of a closing tag/bracket/parenthesis/etc
+    #   vimPlugins.vim-table-mode # :help table-mode. <leader>tic <leader>tdc
+    # ];
 
     plugins = {
       # disable for unstable
       # treesitter = {
-      #   enable = true; # need for nvim-biscuits
-      # grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+      # enable = true; # need for nvim-biscuits
+      # grammarPackages = with config.programs.nixvim.plugins.treesitter.package.builtGrammars; [
       #   bash
       #   json
       #   lua
@@ -387,8 +388,8 @@
     ];
 
     # extra plugin and ru keymap support
+    # require("nvim-biscuits").setup({ cursor_line_only = true })
     extraConfigLua = ''
-      require("nvim-biscuits").setup({ cursor_line_only = true })
 
       vim.opt.langmap = table.concat({
         "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ",
