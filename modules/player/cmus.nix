@@ -1,5 +1,8 @@
-{ pkgs, ... }: {
-
+{
+  pkgs,
+  config,
+  ...
+}: {
   home.packages = with pkgs; [
     eartag # music tag editor
   ];
@@ -120,7 +123,7 @@
       bind -f common e run eartag
 
       # remove selected file
-      bind -f common D run sh -c 'trash-put "$@" && cmus-remote -C update &' sh {}
+      bind -f common D run sh -c 'file="$1"; dest="${config.home.homeDirectory}/.local/share/Trash/files"; [ -f "$file" ] || exit 0; ${pkgs.cmus}/bin/cmus-remote -C "win-remove" && nohup ${pkgs.coreutils}/bin/mv -- "$file" "$dest"/ >/dev/null 2>&1 &' sh {}
 
     '';
   };
