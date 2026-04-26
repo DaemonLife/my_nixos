@@ -60,7 +60,6 @@
 
     siteFunctions = {
       gitp = ''
-        # git add $(git rev-parse --show-toplevel)/.
         git add -A
         git commit -m "$*"
         git push
