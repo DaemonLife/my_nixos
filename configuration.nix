@@ -286,23 +286,23 @@
   };
 
   systemd = {
-    # stable branch
-    # sleep.extraConfig = ''
-    #   AllowSuspend=yes
-    #   AllowHibernation=yes
-    #   # AllowHybridSleep=yes
-    #   AllowSuspendThenHibernate=yes
-    #   HibernateDelaySec=3600
-    # '';
-
-    # unstable branch
-    sleep.settings.Sleep = {
-      AllowSuspend = "yes";
-      AllowHibernation = "yes";
+    # - stable branch -
+    sleep.extraConfig = ''
+      AllowSuspend=yes
+      AllowHibernation=yes
       # AllowHybridSleep=yes
-      AllowSuspendThenHibernate = "yes";
-      HibernateDelaySec = 3600;
-    };
+      AllowSuspendThenHibernate=yes
+      HibernateDelaySec=3600
+    '';
+
+    # - unstable branch -
+    # sleep.settings.Sleep = {
+    #   AllowSuspend = "yes";
+    #   AllowHibernation = "yes";
+    #   # AllowHybridSleep=yes
+    #   AllowSuspendThenHibernate = "yes";
+    #   HibernateDelaySec = 3600;
+    # };
   };
 
   # --------------------------------

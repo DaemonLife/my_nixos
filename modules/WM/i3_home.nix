@@ -1,7 +1,10 @@
 # for home.nix
-{ pkgs, lib, config, ... }:
-let
-
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   i3blocks_config = ''
     [window]
     command=xtitle -s
@@ -28,10 +31,8 @@ let
     command=date "+%Y-%m-%d %H:%M"
     interval=5
   '';
-in
-{
-
-  home.activation.i3blocks_config = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+in {
+  home.activation.i3blocks_config = lib.hm.dag.entryAfter ["writeBoundary"] ''
     mkdir -p $HOME/.config/i3blocks/; cd $HOME/.config/i3blocks/
     echo '${i3blocks_config}' > config
   '';
@@ -49,6 +50,7 @@ in
     xss-lock
     xev # keycodes check
     xkb-switch # print current layout
+    unstable.fsel # app launcher
   ];
   # programs.nixvim.clipboard.providers.xclip.enable = true; # vim clipboard support
   services.dunst.enable = true; # notification daemon
@@ -60,42 +62,44 @@ in
       terminal = "kitty";
 
       fonts = {
-        names = [ "${config.stylix.fonts.monospace.name}" ];
+        names = ["${config.stylix.fonts.monospace.name}"];
         size = lib.mkForce "${toString (config.stylix.fonts.sizes.terminal)}";
       };
 
-      bars = [{
-        position = "top";
-        statusCommand = "i3blocks";
-        fonts = {
-          names = [ "${config.stylix.fonts.monospace.name}" ];
-          size = lib.mkForce "${toString (config.stylix.fonts.sizes.terminal)}";
-        };
-        colors = {
-          background = "#${base00}";
-          statusline = "#${base06}";
-          separator = "#${base03}";
-
-          focusedWorkspace = {
-            text = "#${base00}";
-            background = "#${base0D}";
-            border = "#${base0D}";
+      bars = [
+        {
+          position = "top";
+          statusCommand = "i3blocks";
+          fonts = {
+            names = ["${config.stylix.fonts.monospace.name}"];
+            size = lib.mkForce "${toString (config.stylix.fonts.sizes.terminal)}";
           };
+          colors = {
+            background = "#${base00}";
+            statusline = "#${base06}";
+            separator = "#${base03}";
 
-          activeWorkspace = {
-            text = "#${base00}";
-            background = "#${base04}";
-            border = "#${base04}";
-          };
+            focusedWorkspace = {
+              text = "#${base00}";
+              background = "#${base0D}";
+              border = "#${base0D}";
+            };
 
-          urgentWorkspace = {
-            text = "#${base00}";
-            background = "#${base08}";
-            border = "#${base08}";
+            activeWorkspace = {
+              text = "#${base00}";
+              background = "#${base04}";
+              border = "#${base04}";
+            };
+
+            urgentWorkspace = {
+              text = "#${base00}";
+              background = "#${base08}";
+              border = "#${base08}";
+            };
           };
-        };
-        extraConfig = ''separator_symbol |'';
-      }];
+          extraConfig = ''separator_symbol |'';
+        }
+      ];
 
       keycodebindings = {
         "${modifier}+43" = "focus left"; # h
@@ -174,15 +178,23 @@ in
 
       startup = [
         # color manager
-        { command = "xiccd"; notification = true; }
+        {
+          command = "xiccd";
+          notification = true;
+        }
         # primary monitor sets its icc color profile as default for programs!
-        { command = "xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1"; notification = false; }
+        {
+          command = "xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1";
+          notification = false;
+        }
         # background image
-        { command = "feh --bg-scale $HOME/nix/images/image_good2.jpg"; notification = false; }
+        {
+          command = "feh --bg-scale $HOME/nix/images/image_good2.jpg";
+          notification = false;
+        }
 
-        { command = "${pkgs.udiskie}/bin/udiskie -as"; }
+        {command = "${pkgs.udiskie}/bin/udiskie -as";}
       ];
-
     };
 
     extraConfig = ''
@@ -232,7 +244,7 @@ in
       exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
       exec colormgr device-make-profile-default "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
 
-      # --- workspaces --- 
+      # --- workspaces ---
 
       workspace "1" output "eDP-1"
       workspace "2" output "eDP-1"
@@ -249,6 +261,3 @@ in
     '';
   };
 }
-
-
-

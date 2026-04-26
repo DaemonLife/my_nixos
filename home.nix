@@ -1,10 +1,16 @@
-{ config, pkgs, lib, username, ... }: {
-  imports = [ ./modules/_import.nix ];
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  ...
+}: {
+  imports = [./modules/_import.nix];
 
   home = {
     username = username;
     homeDirectory = "/home/${username}";
-    sessionPath = [ "/home/${username}/.local/bin" ];
+    sessionPath = ["/home/${username}/.local/bin"];
     sessionVariables = {
       BROWSER = "qutebrowser";
       TERMINAL = "foot";
@@ -26,8 +32,8 @@
       vivaldi
 
       # - Media
-      # helvum # A GTK patchbay for pipewire (stable)
-      crosspipe # A GTK patchbay for pipewire (unstable)
+      helvum # A GTK patchbay for pipewire (stable)
+      # crosspipe # A GTK patchbay for pipewire (unstable)
       pavucontrol # audio gui control
       flacon # gui split music cue
       alsa-utils # audio volume control (?)
@@ -66,7 +72,7 @@
 
       # - Docs
       simple-scan # gnome gui scanner
-      pdfarranger # gnome pdf merge 
+      pdfarranger # gnome pdf merge
       stellarium # astro map
       astroterm # astro map ASCII
       foliate # book reader
@@ -76,7 +82,7 @@
 
       # -- Office
       # onlyoffice-desktopeditors
-      libreoffice-fresh
+      libreoffice
       hunspell # spellcheck for LO
       hunspellDicts.ru-ru # spell check for LO
       hunspellDicts.en-us # spellcheck for LO

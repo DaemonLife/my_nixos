@@ -1,5 +1,9 @@
-{ pkgs, ... }: {
-
+{
+  pkgs,
+  config,
+  username,
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ./modules-nixos/_import.nix
@@ -32,10 +36,12 @@
   # HIBERNATION
   # --------------------------------
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16 * 1024; # 16GB
-  }];
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024; # 16GB
+    }
+  ];
   boot.initrd.systemd.enable = true; # idk but it works
 
   # (NOT TESTED) Specifies what to do when the laptop lid is closed
@@ -48,4 +54,7 @@
   # --------------------------------
 
   system.stateVersion = "25.11";
+  home-manager.users.${username} = {
+    home.stateVersion = config.system.stateVersion;
+  };
 }

@@ -1,44 +1,67 @@
-{ pkgs, config, lib, ... }: {
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     defaultKeymap = "viins"; # viins vicmd emacs
+
+    prezto = {
+      enable = true;
+      editor.keymap = "vi";
+      prompt.theme = "giddie";
+    };
+
     history = {
       size = 10000;
-      ignorePatterns = [ "jrnl *" ];
+      ignorePatterns = ["jrnl *"];
       path = "${config.xdg.dataHome}/zsh/history";
     };
 
-    shellGlobalAliases = { }; # substituted anywhere on a line
-    shellAliases =
-      let
-        myphone_port = "8025";
-        myphone_username = "u0_a345";
-      in
-      {
-        os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
-        tt = "tt --notheme --highlight1 --blockcursor";
+    initContent = ''
+      PATH="$HOME/.cargo/bin $PATH"
+      eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/github 2> /dev/null
+    '';
 
-        # battery configuration will be restored at the next boot
-        tlp-set-full-bat = "sudo tlp fullcharge bat1";
-        tlp-set-conserv-bat = "sudo tlp setcharge bat1";
+    shellGlobalAliases = {};
 
-        cdwin = "bash $HOME/nix/scripts/mount_windows.sh '/dev/nvme0n1p3' 'user' && cd /mnt/windows/Users/user";
+    shellAliases = let
+      myphone_port = "8025";
+      myphone_username = "u0_a345";
+    in {
+      # --- Rebuild ---
+      "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo'';
+      "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo'';
+      "ost" = ''sudo nixos-rebuild test --flake $HOME/nix/.\#lenovo'';
+      "osc" = ''sudo nix-collect-garbage --delete-older-than 3d'';
+      # os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
 
-        # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
-        myphone-cmus = "bash $HOME/nix/scripts/myphone-cmus.sh ${myphone_username} ${myphone_port}";
-        myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
+      # --- Tlp ---
+      tlp-set-full-bat = "sudo tlp fullcharge bat1";
+      tlp-set-conserv-bat = "sudo tlp setcharge bat1";
 
-        # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
-        myphone-sync = "bash $HOME/nix/scripts/myphone-sync.sh ${myphone_username} ${myphone_port}";
-      };
+      cdwin = "bash $HOME/nix/scripts/mount_windows.sh '/dev/nvme0n1p3' 'user' && cd /mnt/windows/Users/user";
+
+      # --- Net ---
+      # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases
+      myphone-cmus = "bash $HOME/nix/scripts/myphone-cmus.sh ${myphone_username} ${myphone_port}";
+      myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
+      # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
+      myphone-sync = "bash $HOME/nix/scripts/myphone-sync.sh ${myphone_username} ${myphone_port}";
+
+      # -- Other ---
+      tt = "tt --notheme --highlight1 --blockcursor";
+    };
 
     siteFunctions = {
       gitp = ''
-        git add $(git rev-parse --show-toplevel)/.
+        # git add $(git rev-parse --show-toplevel)/.
+        git add -A
         git commit -m "$*"
         git push
         echo "Push completed!"
@@ -55,16 +78,6 @@
       trr = ''trans :ru -show-original-phonetics n -show-translation-phonetics n -show-prompt-message n -show-alternatives n -show-original n "$*" && echo '';
       tre = ''trans :en -show-original-phonetics n -show-translation-phonetics n -show-prompt-message n -show-alternatives n -show-original n "$*" && echo '';
     };
-
-    prezto = {
-      enable = true;
-      editor.keymap = "vi";
-      prompt.theme = "giddie";
-    };
-
-    initContent = ''
-      PATH="$HOME/.cargo/bin $PATH"
-    '';
   };
 
   # home.file.".config/zsh/my.zsh-theme".text = ''
@@ -80,5 +93,4 @@
   #   ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}*%{$fg[green]%}"
   #   ZSH_THEME_GIT_PROMPT_CLEAN=""
   # '';
-
 }
