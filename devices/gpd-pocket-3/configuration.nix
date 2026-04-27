@@ -21,4 +21,7 @@
   # --------------------------------
 
   system.stateVersion = "24.11";
+  home-manager.users.user = {
+    home.stateVersion = config.system.stateVersion;
+  };
 }

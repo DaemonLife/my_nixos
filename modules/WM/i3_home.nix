@@ -244,6 +244,9 @@ in {
       exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
       exec colormgr device-make-profile-default "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
 
+      # gpd rotate
+      exec xrandr --output DSI-1 --rotate right
+
       # --- workspaces ---
 
       workspace "1" output "eDP-1"
