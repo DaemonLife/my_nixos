@@ -1,8 +1,7 @@
-{ ... }: {
+{...}: {
   imports = [
-    #NOTE: ./nvf imported from configurations.nix
-
+    ./nvf.nix
+    # ./nixvim.nix
     # ./helix.nix
-    ./nixvim.nix
   ];
 }

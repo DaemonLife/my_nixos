@@ -102,10 +102,7 @@ with config.lib.stylix.colors; let
   '';
 in
 {
-  home.packages = with pkgs; [
-    ayugram-desktop
-  ];
-
+  home.packages = with pkgs; [ ayugram-desktop ];
   home.activation.telegram_ayugram = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p $HOME/.local/share/AyuGramDesktop/tdata
     cd $HOME/.local/share/AyuGramDesktop/tdata

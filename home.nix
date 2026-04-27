@@ -1,93 +1,98 @@
-{ config
-, pkgs
-, lib
-, username
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  ...
 }: {
-  imports = [ ./modules/_import.nix ];
+  imports = [./modules/_import.nix];
 
   home = {
     username = username;
     homeDirectory = "/home/${username}";
-    sessionPath = [ "/home/${username}/.local/bin" ];
+    sessionPath = ["/home/${username}/.local/bin"];
     sessionVariables = {
       BROWSER = "qutebrowser";
       TERMINAL = "foot";
     };
-    stateVersion = "24.05";
 
     # --------------------------------
     # HOME PKGS
     # --------------------------------
 
     packages = with pkgs; [
-      pipx
-      exiftool
-      imagemagick
-      zip
-      unzip
-      fzy
-      # dua # disk usage TUI tool. Run: dua i. REMOVED: ncdu is better
-
-      # Network
+      # - Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
-      bitwarden-cli
       qbittorrent # torrent client
       tor-browser
       deltachat-desktop
+      element-desktop
+      fractal # matrix clietn
       vivaldi
 
-      # Media
-      unstable.gimp
-      helvum # A GTK patchbay for pipewire
-      imagemagick
-      ffmpegthumbnailer
+      # - Media
+      helvum # A GTK patchbay for pipewire (stable)
+      # crosspipe # A GTK patchbay for pipewire (unstable)
       pavucontrol # audio gui control
+      flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
-      nomacs-qt6 # image viewer
-      kdePackages.gwenview
-      kodi-wayland
+      easyeffects # microphone effects
+      nomacs-qt6 # fast image viewer for RAW (no icc support)
+      kdePackages.gwenview # imave viewer with icc support
+      kdePackages.kimageformats # jxl and raw rendering
       obs-studio
       upscayl
       freefilesync
-      foliate
+      ascii-draw
 
-      # Theming
+      # - Theming
       vimix-icon-theme # cursor icon
       gowall # Tool to convert a Wallpaper's color scheme
       grc
+      dconf-editor
+      wev # key events in wayland
+      gucharmap # character map
+      imagemagick
       fontpreview # --preview-text "Привет, как дела, это просто тест шрифта!!! 1234567890?*# Just a test for my font."
 
-      # Utils
-      dconf-editor
+      # - Utils
       cool-retro-term
       veracrypt
       cmatrix # matrix in terminal
-      wev # key events in wayland
       nwg-displays # gui for display setup
-      gucharmap # character map
+      sc-im # vim spreadsheet program for terminal
+      pipx
+      exiftool
+      fzy
+      translate-shell
+      bc # gnu calculator
       # https://github.com/ChrisBuilds/terminaltexteffects
 
-      # Docs
-      onlyoffice-desktopeditors
+      # - Docs
+      simple-scan # gnome gui scanner
+      pdfarranger # gnome pdf merge
       stellarium # astro map
       astroterm # astro map ASCII
+      foliate # book reader
       epy # cli book reader
       tldr # community documentation
       russ # rss tui reader
-      gnome-feeds # gui rss reader
-      # libreoffice
-      hunspell # spellcheck
-      hunspellDicts.ru_RU # spellcheck
-      hunspellDicts.en_US # spellcheck
 
-      # Gaming
+      # -- Office
+      # onlyoffice-desktopeditors
+      libreoffice
+      hunspell # spellcheck for LO
+      hunspellDicts.ru-ru # spell check for LO
+      hunspellDicts.en-us # spellcheck for LO
+
+      # - Gaming
       # unstable.portablemc # minecraft cli launcher
       curseofwar # stategy cli game
       vitetris # tetris cli game
-      unstable.mindustry-wayland
+      # unstable.chess-tui
+      chess-tui
       # dwarf-fortress-packages.dwarf-fortress-full
     ];
   };
@@ -97,25 +102,9 @@
   # --------------------------------
 
   programs = {
-    fastfetch = {
-      enable = true;
-    };
-    yt-dlp = {
-      enable = true;
-    };
-    imv = {
-      enable = true;
-    };
-
-    bash = {
-      initExtra = ''
-        if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-        then
-          shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-          exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-        fi
-      '';
-    };
+    ripgrep.enable = true;
+    fastfetch.enable = true;
+    yt-dlp.enable = true;
 
     btop = {
       enable = true;
@@ -124,14 +113,6 @@
         theme_background = lib.mkForce false;
         rounded_corners = lib.mkForce false;
         vim_keys = lib.mkForce true;
-      };
-    };
-  };
-
-  dconf = {
-    settings = {
-      "org/gnome/desktop/wm/preferences" = {
-        button-layout = ""; # disable top right buttons
       };
     };
   };

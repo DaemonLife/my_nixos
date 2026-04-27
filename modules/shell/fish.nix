@@ -1,35 +1,41 @@
-{ pkgs
-, config
-, ...
-}: {
+{ pkgs, config, ... }: {
   programs.fish = with config.lib.stylix.colors; {
     enable = true;
 
-    shellAliases = {
-      # os help - for help
-      os = "$HOME/nix/scripts/nix_rebuild.sh";
+    shellAliases =
+      let
+        myphone_port = "8025";
+        myphone_username = "u0_a345";
+      in
+      {
+        os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
 
-      # # for windows fs on lenovo
-      # cdwin = "$HOME/nix/scripts/cdwin.sh && cd /mnt/windows/Users/user/$1";
-      #
-      # battery configuration will be restored at the next boot
-      tlp-set-full-bat = "sudo tlp fullcharge bat1";
-      tlp-set-conserv-bat = "sudo tlp setcharge bat1";
-      cmus-connect-phone = "eval (ssh-agent -c) && ssh-add ~/.ssh/termux && sshfs -p 8022 u0_a183@192.168.0.190:/data/data/com.termux/files/home/storage/music/my ~/Music/termux_music/";
-    };
+        # battery configuration will be restored at the next boot
+        tlp-set-full-bat = "sudo tlp fullcharge bat1";
+        tlp-set-conserv-bat = "sudo tlp setcharge bat1";
+
+        # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases 
+        myphone-connect-cmus = "bash $HOME/nix/scripts/myphone-connect-cmus.sh ${myphone_port} ${myphone_username}";
+        myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
+        # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
+        myphone-sync-notes = "unison -ignorelocks $HOME/Documents/Notes ssh://${myphone_username}@myphone:${myphone_port}//data/data/com.termux/files/home/Notes";
+      };
 
     shellAbbrs = {
-      jrnl = " jrnl"; # symbold ' ' for hide from shell history
-      # jrnl-tags = " jrnl -on year --format json | jq -r '.entries[] | \"\\(.date) \\(.tags | join(\", \"))\"'";
+      jrnl = " jrnl";
       jrnl-tags = ''
-         set tag "боль"
-        jrnl --format json | jq -r --arg tag "@$tag" '
-          .entries[]
-          | select((.tags // []) | map(startswith($tag)) | any)
-          | "\(.date) \((.tags // [] | map(select(startswith($tag))) | join(" ")))"
+        set
+        tag "боль"
+        jrnl - -format json | jq - r - -arg tag
+        "@$tag" '.entries [ ]
+        |
+        select
+        ((.tags // [ ]) | map (startswith ($tag)) | any)
+        | "\(.date) \((.tags // [] | map(select(startswith($tag))) | join(" ")))"
         '
       '';
-      yt-dlp-best = ''yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]"''; # add URL
+      yt-dlp-best = ''
+        yt-dlp - f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" ''; # add URL
     };
 
     plugins = [
@@ -46,13 +52,13 @@
     # when login to shell
     loginShellInit = ''
       if not set -q DISPLAY
-        if test (tty) = "/dev/tty1"
-          # echo "Run niri-session"
-          # bash $HOME/nix/scripts/start_niri.sh
-          # niri-session
-          # exec uwsm start hyprland-uwsm.desktop
-          WLR_RENDERER=vulkan exec sway
-        end
+      if test (tty) = "/dev/tty1"
+      # echo "Run niri-session"
+      # bash $HOME/nix/scripts/start_niri.sh
+      # niri-session
+      # exec uwsm start hyprland-uwsm.desktop
+      WLR_RENDERER=vulkan exec sway
+      end
       end
     '';
 
@@ -64,7 +70,8 @@
       set ___fish_git_prompt_char_cleanstate v
       set ___fish_git_prompt_char_dirtystate ⁕
       set ___fish_git_prompt_char_invalidstate x
-      set ___fish_git_prompt_char_stagedstate ⸱
+      # set ___fish_git_prompt_char_stagedstate ⸱
+      set ___fish_git_prompt_char_stagedstate +
       set ___fish_git_prompt_char_stashstate 🏴
       set ___fish_git_prompt_char_stateseparator '|'
       set ___fish_git_prompt_char_untrackedfiles …
@@ -79,25 +86,39 @@
       bind yy fish_clipboard_copy
       bind Y fish_clipboard_copy
       bind p fish_clipboard_paste
+
+      # rust bin
+      set PATH $HOME/.cargo/bin $PATH
     '';
 
     functions = {
-      # disable it
       fish_greeting = "bash $HOME/nix/scripts/print_art.sh";
 
       fish_prompt = ''
         printf '%s@%s %s%s%s%s \n> ' $USER $hostname (set_color $fish_color_cwd) $PWD (set_color normal) (fish_vcs_prompt)
       '';
 
+      gitp = ''
+        set msg (string join " " $argv)
+        git add .
+        git commit -m "$msg"
+        git push
+        echo "Push completed!"
+      '';
+
       # yazi setup
       y = ''
-        set tmp (mktemp -t "yazi-cwd.XXXXXX")
-        yazi $argv --cwd-file="$tmp"
-        if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-        	builtin cd -- "$cwd"
+          set tmp (mktemp -t "yazi-cwd.XXXXXX")
+          yazi $argv --cwd-file="$tmp"
+          if set cwd (command cat -- "$tmp");
+        and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        builtin cd -- "$cwd"
         end
         rm -f -- "$tmp"
       '';
     };
   };
 }
+
+
+

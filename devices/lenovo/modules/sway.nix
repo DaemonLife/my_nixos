@@ -31,14 +31,15 @@
         in
         {
           # monitor msk
-          "Shenzhen KTC Technology Group H27S17 0x00000001" = {
+          # "Shenzhen KTC Technology Group H27S17 0x00000001" = {
+          "DP-1" = {
             mode = "${toString msk.w}x${toString msk.h}@164.998Hz";
             scale = "${toString msk.scale}";
             scale_filter = "smart";
             adaptive_sync = "true"; # always off at monitor (but there is too...?)
             render_bit_depth = "10"; # 6, 8, 10. Maybe flickings bc of 10 and 165Hz
             position = "${toString msk.position_w} ${toString msk.position_h}"; # left position
-            color_profile = "icc /home/user/nix/devices/screens/msk_fast_2026-01-22_15-59_D6500_2.2_VF-S_1xCurve+MTX.icc";
+            color_profile = "icc /home/user/nix/devices/screens/msk_fast.icc";
           };
 
           # lenovo laptop
@@ -46,9 +47,9 @@
             mode = "${toString lenovo.w}x${toString lenovo.h}@60.002Hz";
             scale = "${toString lenovo.scale}";
             adaptive_sync = "true";
-            render_bit_depth = "10"; # 6, 8, 10
+            render_bit_depth = "8"; # 6, 8, 10
             position = "${toString lenovo.position_w} ${toString lenovo.position_h}"; # laptop position for msk
-            color_profile = "icc /home/user/nix/devices/screens/lenovo_slow_2026-01-23_22-18_D6500_2.2_F-S_XYZLUT+MTX.icc";
+            color_profile = "icc /home/user/nix/devices/screens/lenovo_slow.icc";
           };
 
           # monitor gg

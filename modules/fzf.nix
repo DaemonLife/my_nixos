@@ -2,7 +2,7 @@
 
   programs.fzf = with config.lib.stylix.colors; {
     enable = true;
-    enableFishIntegration = true;
+    enableZshIntegration = true;
 
     colors = lib.mkForce {
       fg = "#${base07}";

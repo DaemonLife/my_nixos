@@ -2,16 +2,14 @@
   stylix.targets.firefox = {
     enable = true;
     profileNames = [ "user" ];
-    firefoxGnomeTheme.enable = true;
+    firefoxGnomeTheme.enable = false;
   };
 
   home.packages = with pkgs; [ ];
 
   programs.firefox = with config.lib.stylix.colors; {
     enable = true;
-
     languagePacks = [ "en-US" "ru" ];
-
     policies = {
       # BlockAboutConfig = true;
       DefaultDownloadDirectory = "\${home}/Downloads";
@@ -27,19 +25,18 @@
       "sidebar.revamp" = false;
       "sidebar.verticalTabs" = false;
       # "sidebar.main.tools" = "history";
-      "browser.uidensity" = 1; # 0 - normal, 1 - compact, 2 - touch
-      # "browser.compactmode.show" = true;
+      # "browser.uidensity" = 1; # 0 - normal, 1 - compact, 2 - touch
+      "browser.compactmode.show" = true;
       "browser.gesture.swipe.left" = "";
       "browser.gesture.swipe.right" = "";
       "browser.tabs.firefox-view" = false;
-      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      # "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
       # disable AI
-      "browser.ml.enable" = false;
-      "browser.ml.chat.enabled" = false;
-      "browser.ml.chat.menu" = false;
-      "browser.tabs.groups.smart.enabled" = false;
-      "browser.ml.linkPreview.enabled" = false;
+      "browser.ai.control.default" = "blocked";
+
+      # search
+      "browser.urlbar.showSearchTerms.enabled" = false; # bc annoying bug
 
       # secure
       "browser.contentblocking.category" = "strict";
@@ -47,10 +44,13 @@
       "privacy.globalprivacycontrol.enabled" = true;
       "privacy.userContext.enabled" = true;
       "privacy.userContext.ui.enabled" = true;
+      "dom.security.https_only_mode" = true; # https only?
 
       # disable telemetry
       "datareporting.policy.dataSubmissionEnabled" = false;
       "datareporting.healthreport.uploadEnabled" = false;
+      "datareporting.usage.uploadEnabled" = false;
+
       "toolkit.telemetry.unified" = false;
       "toolkit.telemetry.enabled" = false;
       "toolkit.telemetry.server" = "data:,";
@@ -65,9 +65,8 @@
       "toolkit.coverage.endpoint.base" = "";
       "browser.newtabpage.activity-stream.feeds.telemetry" = false;
       "browser.newtabpage.activity-stream.telemetry" = false;
-      "datareporting.usage.uploadEnabled" = false;
-      "breakpad.reportURL" = "";
       "browser.tabs.crashReporting.sendReport" = false;
+      "breakpad.reportURL" = "";
 
       # ui change
       "browser.discovery.enabled" = false;

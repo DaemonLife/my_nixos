@@ -1,7 +1,4 @@
-{ pkgs
-, config
-, ...
-}: {
+{ pkgs, config, ... }: {
   home.packages = with pkgs; [ libnotify ];
 
   # notify-send "Test messange from shell"

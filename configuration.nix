@@ -1,94 +1,71 @@
-{ config, pkgs, lib, username, ... }: {
-
+{
+  config,
+  pkgs,
+  lib,
+  username,
+  ...
+}: {
   imports = [
     ./modules/stylix.nix
-    # ./modules/editor/nvf.nix
+    ./modules/WM/i3_configuration.nix
   ];
 
   # --------------------------------
-  # SYSTEM THEME
+  # NET AND HARDWARE SETTINGS
   # --------------------------------
 
-  stylix.targets.grub.enable = false;
+  networking = {
+    networkmanager.enable = true;
+    hostName = "nixos";
+    nameservers = ["1.1.1.1" "1.0.0.1"]; # DNS provider
+    hosts = {"192.168.1.150" = ["myphone"];}; # local DNS
+    nftables.enable = true; # disable old iptables
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [
+        6567 # mindusty server
+      ];
+      allowedUDPPorts = [
+        6567 # mindusty server
+      ];
+    };
+  };
 
-  # TTYI colors
-  console = with config.lib.stylix.colors; {
-    colors = lib.mkForce [
-      "000000" # background
-      "${base08}" # red
-      "${base0B}" # green
-      "${base0A}" # yellow
-      "${base0D}" # blue
-      "${base0E}" # magenta
-      "${base0C}" # cyan
-      "${base05}" # base0s
-      "${base03}" # base03
-      "${base08}" # red
-      "${base0B}" # green
-      "${base0A}" # yellow
-      "${base0D}" # blue
-      "${base0E}" # magenta
-      "${base0C}" # cyan
-      "${base06}" # base06
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = false;
+  };
+  time = {
+    timeZone = "Europe/Moscow";
+    hardwareClockInLocalTime = true;
+  };
+
+  # Printers
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [
+      gutenprint # Drivers for many different printers from many different vendors.
+      # gutenprintBin # Additional, binary-only drivers for some printers.
+      # hplip # Drivers for HP printers.
+      # postscript-lexmark # Postscript drivers for Lexmark
+      # splix # Drivers for printers supporting SPL (Samsung Printer Language).
+      # brlaser # Drivers for some Brother printers
+      # brgenml1lpr # Generic drivers for more Brother printers
+      # fxlinuxprint # Fuji Xerox Linux Printer Driver
+      # samsung-unified-linux-driver # Proprietary Samsung Drivers
+      # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
+      # foomatic-db-ppds-withNonfreeDb
     ];
   };
 
-  # --------------------------------
-  # ENVIRONMENTS
-  # --------------------------------
-
-  environment = {
-    variables =
-      let
-        EDITOR = "vi";
-      in
-      {
-        EDITOR = "${EDITOR}";
-        SYSTEMD_EDITOR = "${EDITOR}";
-        VISUAL = "${EDITOR}";
-        BROWSER = "qutebrowser";
-      };
-    sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
+  # Scanners
+  hardware.sane = {
+    enable = true;
+    extraBackends = [pkgs.sane-airscan];
   };
-
-  # --------------------------------
-  # HARDWARE SETTINGS
-  # --------------------------------
-
-  powerManagement.enable = true; # NixOS power management tool
-
-  # Network
-  networking.hostName = "nixos"; # Define your hostname.
-  networking.networkmanager.enable = true;
-  networking.nameservers = [ "1.1.1.1" "1.0.0.1" ];
-  # };
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = false;
-
-  # Print and scan
-  services.printing.enable = true;
-  services.printing.drivers = with pkgs; [
-    gutenprint # Drivers for many different printers from many different vendors.
-    # gutenprintBin # Additional, binary-only drivers for some printers.
-    # hplip # Drivers for HP printers.
-    # postscript-lexmark # Postscript drivers for Lexmark
-    # splix # Drivers for printers supporting SPL (Samsung Printer Language).
-    # brlaser # Drivers for some Brother printers
-    # brgenml1lpr # Generic drivers for more Brother printers
-    # fxlinuxprint # Fuji Xerox Linux Printer Driver
-    # samsung-unified-linux-driver # Proprietary Samsung Drivers
-    # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
-    # foomatic-db-ppds-withNonfreeDb
-  ];
-  hardware.sane.enable = true; # enables support for scanners
-  hardware.sane.extraBackends = [ pkgs.sane-airscan ];
-  services.udev.packages = [ pkgs.sane-airscan ]; # device manager for the Linux kernel
+  services.udev.packages = [pkgs.sane-airscan]; # device manager for the Linux kernel
 
   # Sound
-  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -96,12 +73,9 @@
     pulse.enable = true; # important for waybar
     jack.enable = true; # If you want to use JACK applications
   };
+  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
 
-  # Time
-  time.timeZone = "Europe/Moscow";
-  time.hardwareClockInLocalTime = true;
-
-  # Lang
+  # Region
   i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
@@ -121,20 +95,28 @@
 
   users.users.${username} = {
     isNormalUser = true;
-    description = "user";
-    shell = pkgs.fish;
+    description = "my user";
+    shell = pkgs.zsh;
     useDefaultShell = true;
+    packages = with pkgs; [flatpak];
+    extraGroups = ["networkmanager" "wheel" "video" "input" "scanner" "lp"];
+  };
 
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-      "video"
-      "input"
-      "scanner"
-      "lp"
-    ];
+  # --------------------------------
+  # ENVIRONMENTS
+  # --------------------------------
 
-    packages = with pkgs; [ flatpak ];
+  environment = {
+    variables = let
+      EDITOR = "vi";
+    in {
+      EDITOR = "${EDITOR}";
+      SYSTEMD_EDITOR = "${EDITOR}";
+      VISUAL = "${EDITOR}";
+      BROWSER = "qutebrowser";
+    };
+    shells = with pkgs; [zsh];
+    sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
   };
 
   # --------------------------------
@@ -143,12 +125,11 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
-    settings.experimental-features = [
-      "nix-command"
-      "flakes"
-    ];
-    optimise.automatic = true;
+    settings.experimental-features = ["nix-command" "flakes"];
     settings.auto-optimise-store = true;
+    # ability to specify additional binary caches (devenv)
+    settings.trusted-users = ["user"];
+    optimise.automatic = true;
   };
 
   # --------------------------------
@@ -159,7 +140,6 @@
     gparted
     exfatprogs # exfat gparted support
     ntfs3g # ntfs support
-    os-prober # to find systems in grub
     sshfs # ssh mount as directory
     jdk # java
     iwd # wifi cli, don't delete!
@@ -167,107 +147,100 @@
     udiskie # auto disks mount
     nautilus
     net-tools # for netstat
+    sysstat # for iostat
+    iotop
     wget
+    nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # folder size tree
     mangohud # Steam performance GUI
-
+    zip
+    unzip
+    devenv # python venv
+    # libsecret # for matrix
   ];
 
   # --------------------------------
   # SYSTEM PROGRAMS
   # --------------------------------
 
-  xdg.portal = {
+  xdg.portal = lib.mkDefault {
     enable = true;
-    wlr.enable = true;
-    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    # wlr.enable = true;
+    # config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
   };
 
   # Android emulator. Read https://nixos.wiki/wiki/WayDroid
   # virtualisation.waydroid.enable = true;
 
   programs = {
-    # --- hyprland ---
-    # hyprland = {
-    #   enable = true;
-    #   withUWSM = true;
-    # };
-    # --- hyprland ---
-
+    # hyprland = { enable = true; withUWSM = true; };
     # niri.enable = true;
 
-    nh = {
-      enable = true;
-      clean.enable = true;
-      clean.extraArgs = "--keep-since 7d --keep 5";
-      clean.dates = "weekly";
-      flake = "/home/${username}/nix";
-    };
+    # nh = {
+    #   enable = true;
+    #   clean = {
+    #     enable = true;
+    #     dates = "weekly";
+    #     extraArgs = "--keep-since 7d --keep 5";
+    #   };
+    #   flake = "/home/${username}/nix";
+    # };
 
-    # --- thunar ---
     # thunar = {
     #   enable = true;
-    #   plugins = with pkgs.xfce; [
-    #     thunar-archive-plugin
-    #     thunar-media-tags-plugin
-    #   ];
+    #   plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-media-tags-plugin ];
     # };
     # xfconf.enable = true;
-    # --- thunar ---
 
-    # proxychains = {
-    #   # just default settings ...
-    #   enable = true;
-    #   proxyDNS = true;
-    #   chain.type = "strict";
-    #   localnet = "127.0.0.0/255.0.0.0";
-    #   tcpReadTimeOut = 15000;
-    #   tcpConnectTimeOut = 8000;
-    #   remoteDNSSubnet = 224;
-    #   proxies = {
-    #     myproxy = {
-    #       type = "socks5";
-    #       host = "127.0.0.1";
-    #       port = 10808; # ... and only my port
-    #       enable = true;
-    #     };
-    #   };
-    # };
+    proxychains = {
+      # just default settings ...
+      enable = true;
+      proxyDNS = true;
+      chain.type = "strict";
+      localnet = "127.0.0.0/255.0.0.0";
+      tcpReadTimeOut = 15000;
+      tcpConnectTimeOut = 8000;
+      remoteDNSSubnet = 224;
+      proxies = {
+        myproxy = {
+          type = "socks5";
+          host = "127.0.0.1";
+          # ... and only my v2rayA port
+          port = 20170;
+          enable = true;
+        };
+      };
+    };
 
     # ------ Steam ------
     steam = {
       enable = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          MANGOHUD = "1";
+          GAMEMODERUN = "1";
+        };
+      };
       gamescopeSession.enable = true;
       protontricks.enable = true;
-      extraCompatPackages = with pkgs; [
-        proton-ge-bin
-      ];
-      # Open ports in the firewall for:
+      extraCompatPackages = with pkgs; [proton-ge-bin];
       remotePlay.openFirewall = true;
       dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
-    gamemode = {
-      enable = true; # Set run game parameters in Steam: gamemoderun %command%
-      settings = {
-        custom = {
-          start = "${pkgs.libnotify}/bin/notify-send 'GameMode started'";
-          end = "${pkgs.libnotify}/bin/notify-send 'GameMode ended'";
-        };
-      };
-    };
     gamescope = {
-      enable = true; # Using: gamescope
+      enable = true;
       capSysNice = true;
     };
-    # ------ Steam ------
+    gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
+    nix-ld.enable = true; # run bin files
     dconf.enable = true;
-    foot.enable = true;
     htop.enable = true;
     git.enable = true;
-    fish.enable = true;
     amnezia-vpn.enable = true;
+    zsh.enable = true;
     # ssh.startAgent = true; # agent for ssh keys
   };
 
@@ -276,61 +249,44 @@
   # --------------------------------
 
   services = {
-    # xray = {
-    #   enable = true;
-    #   settingsFile = "/etc/xray/config.json";
-    # };
+    # battery
+    tlp = {
+      enable = true;
+      settings = {
+        CPU_ENERGY_PERF_POLICY_ON_AC = "performance"; # super performance
+        CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # super save power
 
-    # zapret = {
-    #   enable = true;
-    #   params =
-    #     [
-    #       # "--methodeol"
-    #       "--dpi-desync=multisplit --dpi-desync-split-pos=method+2"
-    #     ];
-    #   whitelist =
-    #     [
-    #       "youtube.com"
-    #       "googlevideo.com"
-    #       "ytimg.com"
-    #       "youtu.be"
-    #
-    #       "search.nixos.org"
-    #       "nixos.org"
-    #     ];
-    # };
+        PLATFORM_PROFILE_ON_BAT = "low-power"; # super save power
+
+        CPU_MIN_PERF_ON_AC = 0;
+        CPU_MAX_PERF_ON_AC = 100;
+        CPU_MIN_PERF_ON_BAT = 0;
+        CPU_MAX_PERF_ON_BAT = 80;
+
+        START_CHARGE_THRESH_BAT0 = 0;
+        STOP_CHARGE_THRESH_BAT0 = 1;
+
+        DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth";
+      };
+    };
 
     # auto username in tty
     getty = {
       loginOptions = "-- \\u";
       autologinUser = "${username}";
-      autologinOnce = true; # only first login after boot
+      autologinOnce = true;
     };
 
+    # xray = { enable = true; settingsFile = "/etc/xray/config.json"; };
+    v2raya.enable = true;
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
-    power-profiles-daemon.enable = false; # disable for tlp
-    thermald.enable = true; # Thermald prevents overheating
-    # colord.enable = true; # color manager
-  }; # close services
+    colord.enable = true; # color manager
+  };
 
   systemd = {
-    # authentication for programs
-    user.services.polkit-gnome-authentication-agent-1 = {
-      description = "polkit-gnome-authentication-agent-1";
-      wantedBy = [ "graphical-session.target" ];
-      wants = [ "graphical-session.target" ];
-      after = [ "graphical-session.target" ];
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-    };
-
+    # - stable branch -
     sleep.extraConfig = ''
       AllowSuspend=yes
       AllowHibernation=yes
@@ -338,53 +294,84 @@
       AllowSuspendThenHibernate=yes
       HibernateDelaySec=3600
     '';
+
+    # - unstable branch -
+    # sleep.settings.Sleep = {
+    #   AllowSuspend = "yes";
+    #   AllowHibernation = "yes";
+    #   # AllowHybridSleep=yes
+    #   AllowSuspendThenHibernate = "yes";
+    #   HibernateDelaySec = 3600;
+    # };
   };
 
   # --------------------------------
   # SECURITY
   # --------------------------------
 
-  security = {
-    polkit.enable = true; # authentication support for sway
-    pam.services.swaylock = { }; # screen lock
+  # authentication for programs (frontend)
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    description = "polkit-gnome-authentication-agent-1";
+    wantedBy = ["graphical-session.target"];
+    wants = ["graphical-session.target"];
+    after = ["graphical-session.target"];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
   };
+  security = {
+    polkit.enable = true; # authentication support (backed)
+    # pam.services.swaylock = { }; # screen lock
+  };
+  services.gnome.gnome-keyring.enable = true; # secret portal for matrix
 
   # --------------------------------
   # BOOT OPTIONS
   # --------------------------------
 
-  # boot.supportedFilesystems = [ "ntfs" ];
   boot.loader = {
-    grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
-      useOSProber = true;
-      default = "saved";
-      splashImage = lib.mkForce null;
-      theme = lib.mkForce null;
-      fontSize = lib.mkForce 60;
-      extraConfig = lib.mkForce ''
-        GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"
-      '';
-    };
-    efi = {
-      canTouchEfiVariables = true;
-    };
+    systemd-boot.enable = true;
+    #  grub = {
+    #    enable = true;
+    #    device = "nodev";
+    #    efiSupport = true;
+    #    useOSProber = true;
+    #    default = "saved";
+    #    splashImage = lib.mkForce null;
+    #    theme = lib.mkForce null;
+    #    fontSize = lib.mkForce 60;
+    #    extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
+    #  };
+    efi.canTouchEfiVariables = true;
   };
 
   # --------------------------------
-  # OTHER STUFF
+  # SYSTEM THEME
   # --------------------------------
 
-  # Open ports in the firewall.
-  networking.firewall = {
-    enable = true;
-    allowedTCPPorts = [
-      6567 # mindusty server
+  # TTYI colors
+  console.colors = with config.lib.stylix.colors;
+    lib.mkForce [
+      "000000" # background
+      "${base08}" # red
+      "${base0B}" # green
+      "${base0A}" # yellow
+      "${base0D}" # blue
+      "${base0E}" # magenta
+      "${base0C}" # cyan
+      "${base05}" # base05
+      "${base03}" # base03
+      "${base08}" # red
+      "${base0B}" # green
+      "${base0A}" # yellow
+      "${base0D}" # blue
+      "${base0E}" # magenta
+      "${base0C}" # cyan
+      "${base06}" # base06
     ];
-    allowedUDPPorts = [
-      6567 # mindusty server
-    ];
-  };
+  stylix.targets.grub.enable = false;
 }
