@@ -2,12 +2,13 @@
   imports = [./modules/_import.nix];
 
   home.packages = with pkgs; [
-    unstable.digikam
+    digikam
     unstable.darktable
-    unstable.kdePackages.kdenlive
+    # unstable.kdePackages.kdenlive
 
     # digikam
     # darktable
+    kdePackages.kdenlive
     hugin
     siril
 
