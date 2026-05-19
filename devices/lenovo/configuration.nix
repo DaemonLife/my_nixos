@@ -30,6 +30,7 @@
     clinfo # Print information about available OpenCL platforms and devices
     displaycal
     argyllcms # for displaycal
+    android-tools # adb, fastboot support
   ];
 
   # --------------------------------

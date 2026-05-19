@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   stylix = {
     enable = true;
 
@@ -7,40 +12,40 @@
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/horizon-terminal-dark.yaml";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-material-dark-hard.yaml";
 
-    fonts =
-      let
-        package = pkgs.cozette;
-        name = "CozetteVector";
-        # name = "UnifontExMono"; # my local font
-      in
-      {
-        monospace = {
-          package = package;
-          name = name;
-        };
-        sansSerif = {
-          package = package;
-          name = name;
-        };
-        serif = {
-          package = package;
-          name = name;
-        };
-        emoji = {
-          package = package;
-          name = name;
-        };
-
-        sizes = {
-          # be careful when using certain values (for example 19)
-          # check fonts settings in qt6ct program for valid values (I hate it)
-          applications = 22;
-          terminal = 24;
-          # Window titles, status bars, and other general elements of the desktop.
-          desktop = 20;
-          popups = config.stylix.fonts.sizes.desktop;
-        };
+    fonts = let
+      package = pkgs.nerd-fonts.iosevka-term;
+      name = "IosevkaTerm-NFP";
+      # package = pkgs.cozette;
+      # name = "CozetteVector";
+      # name = "UnifontExMono"; # my local font
+    in {
+      monospace = {
+        package = package;
+        name = name;
       };
+      sansSerif = {
+        package = package;
+        name = name;
+      };
+      serif = {
+        package = package;
+        name = name;
+      };
+      emoji = {
+        package = package;
+        name = name;
+      };
+
+      sizes = {
+        # be careful when using certain values (for example 19)
+        # check fonts settings in qt6ct program for valid values (I hate it)
+        applications = 22;
+        terminal = 24;
+        # Window titles, status bars, and other general elements of the desktop.
+        desktop = 20;
+        popups = config.stylix.fonts.sizes.desktop;
+      };
+    };
 
     cursor = {
       package = pkgs.bibata-cursors;

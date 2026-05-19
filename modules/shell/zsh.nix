@@ -25,6 +25,7 @@
 
     initContent = ''
       PATH="$HOME/.cargo/bin $PATH"
+      export PROXYCHAINS_SOCKS5_PORT=20170
       eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/github 2> /dev/null
     '';
 
@@ -32,7 +33,8 @@
 
     shellAliases = let
       myphone_port = "8025";
-      myphone_username = "u0_a345";
+      # myphone_username = "u0_a345"; # old
+      myphone_username = "u0_a231";
     in {
       # --- Rebuild ---
       "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo'';

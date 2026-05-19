@@ -230,7 +230,7 @@ in {
       # --- monitors setup ---
 
       # msk screen position
-      # exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1
+      exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1
 
       # lenovo screen color profile
       # stable
