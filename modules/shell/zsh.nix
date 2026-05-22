@@ -24,15 +24,17 @@
     };
 
     initContent = ''
-      PATH="$HOME/.cargo/bin $PATH"
-      export PROXYCHAINS_SOCKS5_PORT=20170
-      eval "$(ssh-agent -s)" > /dev/null && ssh-add ~/.ssh/github 2> /dev/null
+      # PATH="$HOME/.cargo/bin $PATH"
+      # export PROXYCHAINS_SOCKS5_PORT=20170
+      # eval "$(ssh-agent -s)" > /dev/null
+      # ssh-add ~/.ssh/github 2> /dev/null
+      # ssh-add ~/.ssh/termux 2> /dev/null
     '';
 
     shellGlobalAliases = {};
 
     shellAliases = let
-      myphone_port = "8025";
+      myphone_port = "8022";
       # myphone_username = "u0_a345"; # old
       myphone_username = "u0_a231";
     in {

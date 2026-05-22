@@ -189,7 +189,7 @@ in {
         }
         # background image
         {
-          command = "feh --bg-scale $HOME/nix/images/image_good2.jpg";
+          command = ''feh --bg-fill $HOME/Pictures/gowall/bg.png'';
           notification = false;
         }
 
@@ -225,7 +225,14 @@ in {
       gaps outer 0
       smart_borders on
 
+      # --- init options ---
       exec xset s 600 && xset dpms 0 0 0 && xss-lock -- sh -c 'setxkbmap us && i3lock -k -c 000000'
+
+      exec PATH="$HOME/.cargo/bin $PATH"
+      exec export PROXYCHAINS_SOCKS5_PORT=20170
+      exec eval "$(ssh-agent -s)" > /dev/null
+      exec ssh-add ~/.ssh/github 2> /dev/null
+      exec ssh-add ~/.ssh/termux 2> /dev/null
 
       # --- monitors setup ---
 
@@ -234,11 +241,11 @@ in {
 
       # lenovo screen color profile
       # stable
-      # exec colormgr device-add-profile "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
+      exec colormgr device-add-profile "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
       exec colormgr device-make-profile-default "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
       # unstable
-      exec colormgr device-add-profile "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
-      exec colormgr device-make-profile-default "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
+      #exec colormgr device-add-profile "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
+      #exec colormgr device-make-profile-default "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
 
       # ktc screen color profile
       exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
