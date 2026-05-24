@@ -24,6 +24,7 @@
     };
 
     initContent = ''
+      bash $HOME/nix/scripts/print_art.sh
       export PATH="$HOME/.cargo/bin:$PATH"
       export PROXYCHAINS_SOCKS5_PORT=20170
       eval "$(ssh-agent -s)" > /dev/null
@@ -58,6 +59,7 @@
       # --- Other ---
       tt = "tt --notheme --highlight1 --blockcursor";
       cdwin = "bash $HOME/nix/scripts/mount_windows.sh '/dev/nvme0n1p3' 'user' && cd /mnt/windows/Users/user";
+      ffmpeg-video-compress = "bash $HOME/nix/scripts/ffmpeg-video-compress.sh";
     };
 
     siteFunctions = {
