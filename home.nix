@@ -27,7 +27,6 @@
       qbittorrent # torrent client
       tor-browser
       deltachat-desktop
-      element-desktop
       fractal # matrix clietn
       vivaldi
 

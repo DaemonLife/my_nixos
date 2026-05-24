@@ -1,14 +1,19 @@
-{ pkgs, config, lib, ... }: {
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     python313Packages.adblock
   ];
 
   programs.qutebrowser = with config.lib.stylix.colors; {
     enable = true;
+    # package = pkgs.unstable.qutebrowser;
     loadAutoconfig = true;
 
-    quickmarks = { };
+    quickmarks = {};
 
     searchEngines = {
       "!w" = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
@@ -180,7 +185,7 @@
 
         blocking = {
           method = "adblock";
-          whitelist = [ ];
+          whitelist = [];
           adblock.lists = [
             "https://github.com/uBlockOrigin/uAssets/raw/master/filters/legacy.txt"
             "https://github.com/uBlockOrigin/uAssets/raw/master/filters/filters.txt"
@@ -238,7 +243,6 @@
         title.format = "{audio}{current_title}";
         title.format_pinned = "{index}";
         close_mouse_button = "right";
-
       };
 
       colors = {
@@ -297,12 +301,12 @@
 
       fileselect = {
         handler = "external";
-        folder.command = [ "foot" "-a" "floating_yazi" "-e" "yazi" "--cwd-file" "{}" ];
-        multiple_files.command = [ "foot" "-a" "floating_yazi" "-e" "yazi" "--chooser-file" "{}" ];
-        single_file.command = [ "foot" "-a" "floating_yazi" "-e" "yazi" "--chooser-file" "{}" ];
+        folder.command = ["foot" "-a" "floating_yazi" "-e" "yazi" "--cwd-file" "{}"];
+        multiple_files.command = ["foot" "-a" "floating_yazi" "-e" "yazi" "--chooser-file" "{}"];
+        single_file.command = ["foot" "-a" "floating_yazi" "-e" "yazi" "--chooser-file" "{}"];
       };
 
-      editor.command = [ "foot" "sh" "-c" "vi" "{file}" ];
+      editor.command = ["foot" "sh" "-c" "vi" "{file}"];
 
       input = {
         insert_mode.auto_leave = true; # if a non-editable element is clicked.

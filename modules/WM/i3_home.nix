@@ -177,23 +177,13 @@ in {
       };
 
       startup = [
-        # color manager
-        {
-          command = "xiccd";
-          notification = true;
-        }
-        # primary monitor sets its icc color profile as default for programs!
-        {
-          command = "xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1";
-          notification = false;
-        }
-        # background image
-        {
-          command = ''feh --bg-fill $HOME/Pictures/gowall/bg.png'';
-          notification = false;
-        }
+        # color manager, primary monitor sets. Its icc color profile as default for programs!
+        {command = "exec xiccd";}
+        {command = "exec xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1";}
 
-        {command = "${pkgs.udiskie}/bin/udiskie -as";}
+        # other
+        {command = ''exec feh --bg-fill $HOME/Pictures/gowall/bg.png'';}
+        {command = "exec ${pkgs.udiskie}/bin/udiskie -as";}
       ];
     };
 
@@ -207,23 +197,23 @@ in {
       focus_on_window_activation urgent
       mouse_warping output
       workspace_layout default
-      workspace_auto_back_and_forth yes
+      # workspace_auto_back_and_forth yes
       client.focused #7daea3 #7daea3 #202020 #e78a4e #7daea3
       client.focused_inactive #7daea3 #7daea3 #202020 #2a2827 #2a2827
       client.unfocused #2a2827 #2a2827 #ddc7a1 #2a2827 #2a2827
       client.urgent #2a2827 #2a2827 #ddc7a1 #2a2827 #2a2827
       client.placeholder #202020 #202020 #ddc7a1 #202020 #202020
       client.background #ffffff
-
-
-      bindsym F1 exec cmus-remote -r # prev song
-      bindsym F9 exec cmus-remote -u # pause song
-      bindsym F3 exec cmus-remote -n # pext song
-      bindsym F10 exec bash $HOME/nix/scripts/i3_lock.sh
-
       gaps inner 0
       gaps outer 0
       smart_borders on
+      popup_during_fullscreen smart
+      floating_minimum_size 500 x 650
+
+      # bindsym F1 exec cmus-remote -r # prev song
+      # bindsym F9 exec cmus-remote -u # pause song
+      # bindsym F3 exec cmus-remote -n # pext song
+      bindsym F10 exec bash $HOME/nix/scripts/i3_lock.sh
 
       # --- init options ---
       exec xset s 600 && xset dpms 0 0 0 && xss-lock -- sh -c 'setxkbmap us && i3lock -k -c 000000'
@@ -236,38 +226,33 @@ in {
 
       # --- monitors setup ---
 
-      # msk screen position
-      exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1
-
-      # lenovo screen color profile
-      # stable
+      # lenovo screen (eDP-1)
       exec colormgr device-add-profile "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
       exec colormgr device-make-profile-default "xrandr-BOE" "icc-53123de069f0e92d45ca97b5848c29e3"
-      # unstable
-      #exec colormgr device-add-profile "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
-      #exec colormgr device-make-profile-default "xrandr-Lenovo" "icc-53123de069f0e92d45ca97b5848c29e3"
 
-      # ktc screen color profile
+      # gpd screen (DSI-1)
+      exec xrandr --output DSI-1 --rotate right
+
+      # ktc screen (DP-2)
       exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
       exec colormgr device-make-profile-default "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
+      exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1
 
-      # gpd rotate
-      exec xrandr --output DSI-1 --rotate right
+      # acer screen (HDMI-1)
+      exec xrandr --output HDMI-1 --scale 1.25
 
       # --- workspaces ---
 
       workspace "1" output "eDP-1"
       workspace "2" output "eDP-1"
-      workspace "3" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "4" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "5" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "6" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "7" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "8" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "9" output "DP-1" "DP-2" "HDMI-A-1"
-      workspace "10" output "DP-1" "DP-2" "HDMI-A-1"
-      popup_during_fullscreen smart
-      floating_minimum_size 500 x 450
+      workspace "3" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "4" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "5" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "6" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "7" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "8" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "9" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
+      workspace "10" output "DP-1" "DP-2" "HDMI-A-1" "HDMI-1"
     '';
   };
 }

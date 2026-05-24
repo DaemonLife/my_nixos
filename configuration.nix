@@ -156,7 +156,8 @@
     zip
     unzip
     devenv # python venv
-    # libsecret # for matrix
+    python3
+    nix-tree # nix pkgs tree
   ];
 
   # --------------------------------
