@@ -218,12 +218,6 @@ in {
       # --- init options ---
       exec xset s 600 && xset dpms 0 0 0 && xss-lock -- sh -c 'setxkbmap us && i3lock -k -c 000000'
 
-      exec PATH="$HOME/.cargo/bin $PATH"
-      exec export PROXYCHAINS_SOCKS5_PORT=20170
-      exec eval "$(ssh-agent -s)" > /dev/null
-      exec ssh-add ~/.ssh/github 2> /dev/null
-      exec ssh-add ~/.ssh/termux 2> /dev/null
-
       # --- monitors setup ---
 
       # lenovo screen (eDP-1)

@@ -23,7 +23,13 @@
       path = "${config.xdg.dataHome}/zsh/history";
     };
 
-    initContent = '''';
+    initContent = ''
+      export PATH="$HOME/.cargo/bin:$PATH"
+      export PROXYCHAINS_SOCKS5_PORT=20170
+      eval "$(ssh-agent -s)" > /dev/null
+      ssh-add ~/.ssh/github 2> /dev/null
+      ssh-add ~/.ssh/termux 2> /dev/null
+    '';
     shellGlobalAliases = {};
     shellAliases = let
       myphone_port = "8022";
@@ -58,8 +64,7 @@
       gitp = ''
         git add -A
         git commit -m "$*"
-        git push
-        echo "Push completed!"
+        git push && echo "Push completed!"
       '';
 
       y = ''
