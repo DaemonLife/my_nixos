@@ -183,7 +183,7 @@ in {
 
         # other
         {command = "exec ${pkgs.udiskie}/bin/udiskie -as";}
-        {command = ''exec sleep 1 && feh --bg-fill $HOME/Pictures/gowall/bg.png'';}
+        {command = "exec feh --bg-fill $HOME/Pictures/gowall/bg.png";}
       ];
     };
 
