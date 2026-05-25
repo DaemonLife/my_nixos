@@ -12,7 +12,8 @@
 
     [layout]
     command=bash $HOME/nix/scripts/i3blocks/layout.sh
-    interval=1
+    interval=persist
+    # interval=1
 
     [wifi]
     command=bash $HOME/nix/scripts/i3blocks/wifi.sh
@@ -28,7 +29,7 @@
     interval=5
 
     [time]
-    command=date "+%Y-%m-%d %H:%M"
+    command=date "+%Y-%m-%d %H:%M "
     interval=5
   '';
 in {
@@ -128,10 +129,10 @@ in {
         "${modifier}+Ctrl+45" = "move up"; # k
         "${modifier}+Ctrl+46" = "move right"; # l
 
-        "Ctrl+43" = "exec brightnessctl set 5%-"; # h
-        "Ctrl+46" = "exec brightnessctl set +5%"; # l
-        "Ctrl+44" = "exec bash $HOME/nix/scripts/volume.sh 5%+"; # j
-        "Ctrl+45" = "exec bash $HOME/nix/scripts/volume.sh 5%-"; # k
+        "${modifier}+Alt+43" = "exec brightnessctl set 5%-"; # h
+        "${modifier}+Alt+46" = "exec brightnessctl set +5%"; # l
+        "${modifier}+Alt+44" = "exec bash $HOME/nix/scripts/volume.sh 5%+"; # j
+        "${modifier}+Alt+45" = "exec bash $HOME/nix/scripts/volume.sh 5%-"; # k
         # screenshot
         "Print" = "exec scrot $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png";
         "${modifier}+Print" = "exec scrot -u $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png";
@@ -177,13 +178,12 @@ in {
       };
 
       startup = [
-        # color manager, primary monitor sets. Its icc color profile as default for programs!
+        # color manager
         {command = "exec xiccd";}
-        {command = "exec xrandr --output DP-1 --primary --output eDP-1 --right-of DP-1";}
 
         # other
-        {command = ''exec feh --bg-fill $HOME/Pictures/gowall/bg.png'';}
         {command = "exec ${pkgs.udiskie}/bin/udiskie -as";}
+        {command = ''exec sleep 1 && feh --bg-fill $HOME/Pictures/gowall/bg.png'';}
       ];
     };
 
@@ -227,7 +227,7 @@ in {
       # gpd screen (DSI-1)
       exec xrandr --output DSI-1 --rotate right
 
-      # ktc screen (DP-2)
+      # ktc screen (DP-2). Primary color profile display.
       exec colormgr device-add-profile "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
       exec colormgr device-make-profile-default "xrandr-Shenzhen KTC Technology Group-H27S17-1" "icc-b84f22071e2dfa90f91cf49f4fb40e7e"
       exec sleep 2 && xrandr --output DP-2 --primary --left-of eDP-1

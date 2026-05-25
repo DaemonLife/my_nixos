@@ -67,6 +67,8 @@
       fzy
       translate-shell
       bc # gnu calculator
+      wego # weather api
+      jq # json parser
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # - Docs
