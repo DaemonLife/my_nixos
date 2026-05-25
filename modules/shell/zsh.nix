@@ -39,8 +39,10 @@
       # --- Rebuild ---
       # "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo'';
       # "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo'';
-      "oss" = ''sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo -v''; # --upgrade --offline
-      "osb" = ''sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo -v'';
+
+      # --upgrade --offline
+      "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo -v'';
+      "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo -v'';
       "ost" = ''sudo nixos-rebuild test --flake $HOME/nix/.\#lenovo -v'';
       "osc" = ''sudo nix-collect-garbage --delete-older-than 3d'';
       # os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help

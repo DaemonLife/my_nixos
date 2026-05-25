@@ -1,8 +1,11 @@
 # check file mime type: xdg-mime query filetype [FILE]
 # check mime type in yazi with TAB key if you use mime-ext plugin (mime by files extention)!
-
-{ pkgs, config, lib, ... }: {
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   home.packages = with pkgs; [
     dragon-drop
     bat
@@ -73,7 +76,7 @@
 
       tasks = {
         image_alloc = 1073741824; # = 1024*1024*1024 = 1024MB
-        image_bound = [ 0 0 ];
+        image_bound = [0 0];
       };
 
       preview = {
@@ -99,36 +102,90 @@
           # { id = "mime"; name = "*"; run = "mime-ext"; prio = "high"; }
 
           # --- plugin git ---
-          { id = "git"; name = "*"; run = "git"; }
-          { id = "git"; name = "*/"; run = "git"; }
+          {
+            id = "git";
+            name = "*";
+            run = "git";
+          }
+          {
+            id = "git";
+            name = "*/";
+            run = "git";
+          }
         ];
 
-        prepend_preloaders = [ ]; # background loading
+        prepend_preloaders = []; # background loading
 
         prepend_previewers = [
           # --- plugin mediainfo --- (sad no image/jxl support)
           # { mime = "image/jxl"; run = ''magick''; prio = "high"; }
-          { mime = "{audio,video,image}/*"; run = "mediainfo"; prio = "high"; }
+          {
+            mime = "{audio,video,image}/*";
+            run = "mediainfo";
+            prio = "high";
+          }
 
           # --- Ouch archive previewer ---
-          { mime = "application/*zip"; run = "ouch"; }
-          { mime = "application/x-tar"; run = "ouch"; }
-          { mime = "application/x-bzip2"; run = "ouch"; }
-          { mime = "application/x-7z-compressed"; run = "ouch"; }
-          { mime = "application/x-rar"; run = "ouch"; }
-          { mime = "application/vnd.rar"; run = "ouch"; }
-          { mime = "application/x-xz"; run = "ouch"; }
-          { mime = "application/xz"; run = "ouch"; }
-          { mime = "application/x-zstd"; run = "ouch"; }
-          { mime = "application/zstd"; run = "ouch"; }
-          { mime = "application/java-archive"; run = "ouch"; }
+          {
+            mime = "application/*zip";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-tar";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-bzip2";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-7z-compressed";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-rar";
+            run = "ouch";
+          }
+          {
+            mime = "application/vnd.rar";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-xz";
+            run = "ouch";
+          }
+          {
+            mime = "application/xz";
+            run = "ouch";
+          }
+          {
+            mime = "application/x-zstd";
+            run = "ouch";
+          }
+          {
+            mime = "application/zstd";
+            run = "ouch";
+          }
+          {
+            mime = "application/java-archive";
+            run = "ouch";
+          }
 
           # selected folder tree preview
-          { name = "*/"; run = ''piper -- eza -TL=3 --color=always --icons=never --group-directories-first --no-quotes "$1"''; }
+          {
+            name = "*/";
+            run = ''piper -- eza -TL=3 --color=always --icons=never --group-directories-first --no-quotes "$1"'';
+          }
 
           # other
-          { name = "*.csv"; run = ''piper -- bat -p --color=always "$1"''; }
-          { name = "*.md"; run = ''piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"''; }
+          {
+            name = "*.csv";
+            run = ''piper -- bat -p --color=always "$1"'';
+          }
+          {
+            name = "*.md";
+            run = ''piper -- CLICOLOR_FORCE=1 glow -w=$w -s=dark "$1"'';
+          }
         ];
       };
 
@@ -137,51 +194,69 @@
       ###########################
 
       opener = {
-        "edit" = [{
-          run = ''$EDITOR "$@"'';
-          desc = "Edit";
-          block = true;
-        }];
-        "open" = [{
-          run = ''xdg-open "$@"'';
-          desc = "Open (xdg default)";
-        }];
-        "video" = [{
-          run = ''mpv "$@" >/dev/null 2>&1 &'';
-          desc = "Play video";
-          block = true;
-          orphan = true;
-        }];
-        "image" = [{
-          run = ''gwenview "$@"'';
-          desc = "Open in gwenview";
-          orphan = true;
-        }];
-        "image-raw" = [{
-          run = ''nomacs "$@"'';
-          desc = "Open in nomacs";
-          orphan = true;
-        }];
-        "librewolf" = [{
-          run = ''librewolf "$@"'';
-          desc = "Open in Librewolf";
-          orphan = true;
-        }];
-        "qutebrowser" = [{
-          run = ''qutebrowser "$@"'';
-          desc = "Open in qutebrowser";
-          orphan = true;
-        }];
-        "qbittorrent" = [{
-          run = ''qbittorrent "$@"'';
-          desc = "Open in qBittorrent";
-          orphan = true;
-        }];
-        "rtorrent" = [{
-          run = ''cp "$@" $HOME/Downloads/rtorrent/watch && kitty --hold sh -c "rtorrent"'';
-          desc = "Open in rtorrent";
-          orphan = true;
-        }];
+        "edit" = [
+          {
+            run = ''$EDITOR "$@"'';
+            desc = "Edit";
+            block = true;
+          }
+        ];
+        "open" = [
+          {
+            run = ''xdg-open "$@"'';
+            desc = "Open (xdg default)";
+          }
+        ];
+        "video" = [
+          {
+            run = ''mpv "$@" >/dev/null 2>&1 &'';
+            desc = "Play video";
+            block = true;
+            orphan = true;
+          }
+        ];
+        "image" = [
+          {
+            run = ''gwenview "$@"'';
+            desc = "Open in gwenview";
+            orphan = true;
+          }
+        ];
+        "image-raw" = [
+          {
+            run = ''nomacs "$@"'';
+            desc = "Open in nomacs";
+            orphan = true;
+          }
+        ];
+        "librewolf" = [
+          {
+            run = ''librewolf "$@"'';
+            desc = "Open in Librewolf";
+            orphan = true;
+          }
+        ];
+        "qutebrowser" = [
+          {
+            run = ''qutebrowser "$@"'';
+            desc = "Open in qutebrowser";
+            orphan = true;
+          }
+        ];
+        "qbittorrent" = [
+          {
+            run = ''qbittorrent "$@"'';
+            desc = "Open in qBittorrent";
+            orphan = true;
+          }
+        ];
+        "rtorrent" = [
+          {
+            run = ''cp "$@" $HOME/Downloads/rtorrent/watch && kitty --hold sh -c "rtorrent"'';
+            desc = "Open in rtorrent";
+            orphan = true;
+          }
+        ];
       };
 
       ###########################
@@ -190,14 +265,38 @@
 
       open = {
         prepend_rules = [
-          { name = "*.{ARW,NEF}"; use = [ "image-raw" ]; }
-          { mime = "image/*"; use = [ "image" ]; }
-          { mime = "video/*"; use = [ "video" ]; }
-          { name = "*.torrent"; use = [ "qbittorrent" "rtorrent" ]; }
-          { mime = "text/html"; use = [ "qutebrowser" "librewolf" "edit" ]; }
-          { mime = "text/plain"; use = [ "edit" ]; }
-          { mime = "application/{octet-stream,java-applet,json}"; use = [ "edit" ]; }
-          { mime = "*"; use = [ "edit" ]; }
+          {
+            name = "*.{ARW,NEF}";
+            use = ["image-raw"];
+          }
+          {
+            mime = "image/*";
+            use = ["image"];
+          }
+          {
+            mime = "video/*";
+            use = ["video"];
+          }
+          {
+            name = "*.torrent";
+            use = ["qbittorrent" "rtorrent"];
+          }
+          {
+            mime = "text/html";
+            use = ["qutebrowser" "librewolf" "edit"];
+          }
+          {
+            mime = "text/plain";
+            use = ["edit"];
+          }
+          {
+            mime = "application/{octet-stream,java-applet,json}";
+            use = ["edit"];
+          }
+          {
+            mime = "*";
+            use = ["edit"];
+          }
         ];
       };
     };
@@ -208,48 +307,108 @@
 
     theme = lib.mkForce {
       tabs = {
-        active = { fg = "#${base00}"; bg = "#${base0B}"; };
-        inactive = { fg = "#${base03}"; bg = "#${base01}"; };
-        sep_inner = { open = ""; close = ""; };
-        sep_outer = { open = ""; close = ""; };
+        active = {
+          fg = "#${base00}";
+          bg = "#${base0B}";
+        };
+        inactive = {
+          fg = "#${base03}";
+          bg = "#${base01}";
+        };
+        sep_inner = {
+          open = "";
+          close = "";
+        };
+        sep_outer = {
+          open = "";
+          close = "";
+        };
       };
 
       mgr = {
         border_symbol = "│";
-        border_style = { fg = "#${base01}"; };
-        count_copied = { fg = "#${base00}"; bg = "#${base0B}"; };
-        count_cut = { fg = "#${base00}"; bg = "#${base08}"; };
-        count_selected = { fg = "#${base00}"; bg = "#${base0A}"; };
+        border_style = {fg = "#${base01}";};
+        count_copied = {
+          fg = "#${base00}";
+          bg = "#${base0B}";
+        };
+        count_cut = {
+          fg = "#${base00}";
+          bg = "#${base08}";
+        };
+        count_selected = {
+          fg = "#${base00}";
+          bg = "#${base0A}";
+        };
 
         # Color block on the left side separator line in the filename.
-        marker_copied = { bg = "#${base0B}"; fg = "#${base0B}"; };
-        marker_cut = { bg = "#${base08}"; fg = "#${base08}"; };
-        marker_marked = { bg = "#${base03}"; fg = "#${base03}"; }; # SEL/V mode
-        marker_selected = { bg = "#${base0A}"; fg = "#${base0A}"; };
+        marker_copied = {
+          bg = "#${base0B}";
+          fg = "#${base0B}";
+        };
+        marker_cut = {
+          bg = "#${base08}";
+          fg = "#${base08}";
+        };
+        marker_marked = {
+          bg = "#${base03}";
+          fg = "#${base03}";
+        }; # SEL/V mode
+        marker_selected = {
+          bg = "#${base0A}";
+          fg = "#${base0A}";
+        };
       };
 
       mode = {
-        normal_main = { fg = "#${base00}"; bg = "#${base03}"; };
-        normal_alt = { fg = "#${base04}"; bg = "#${base01}"; }; # file size info, etc
-        select_main = { fg = "#${base00}"; bg = "#${base0F}"; };
-        select_alt = { fg = "#${base04}"; bg = "#${base01}"; };
-        unset_main = { fg = "#${base00}"; bg = "#${base0E}"; };
-        unset_alt = { fg = "#${base04}"; bg = "#${base01}"; };
+        normal_main = {
+          fg = "#${base00}";
+          bg = "#${base03}";
+        };
+        normal_alt = {
+          fg = "#${base04}";
+          bg = "#${base01}";
+        }; # file size info, etc
+        select_main = {
+          fg = "#${base00}";
+          bg = "#${base0F}";
+        };
+        select_alt = {
+          fg = "#${base04}";
+          bg = "#${base01}";
+        };
+        unset_main = {
+          fg = "#${base00}";
+          bg = "#${base0E}";
+        };
+        unset_alt = {
+          fg = "#${base04}";
+          bg = "#${base01}";
+        };
       };
 
       status = {
-        sep_left = { open = ""; close = ""; };
-        sep_right = { open = ""; close = ""; };
-        overall = { fg = "#${base04}"; bg = "#${base01}"; };
+        sep_left = {
+          open = "";
+          close = "";
+        };
+        sep_right = {
+          open = "";
+          close = "";
+        };
+        overall = {
+          fg = "#${base04}";
+          bg = "#${base01}";
+        };
       };
 
       icon = {
-        globs = [ ];
-        dirs = [ ];
-        files = [ ];
-        exts = [ ];
-        conds = [ ];
-        prepend_dirs = [{ name = "nix"; text = "*"; }];
+        globs = [];
+        dirs = [];
+        files = [];
+        exts = [];
+        conds = [];
+        # prepend_dirs = [{ name = "nix"; text = "*"; }];
       };
     };
 
@@ -259,40 +418,43 @@
 
     keymap = {
       input.prepend_keymap = [
-        { run = "escape"; on = [ "<Esc>" ]; }
+        {
+          run = "escape";
+          on = ["<Esc>"];
+        }
       ];
       mgr.prepend_keymap = [
         # go to folder
         {
-          on = [ "g" "d" ];
+          on = ["g" "d"];
           run = "cd ~/Downloads";
         }
         {
-          on = [ "g" "v" ];
+          on = ["g" "v"];
           run = "cd ~/Videos";
         }
         {
-          on = [ "g" "N" ];
+          on = ["g" "N"];
           run = "cd ~/Documents/Notes";
         }
         {
-          on = [ "g" "n" ];
+          on = ["g" "n"];
           run = "cd ~/nix";
         }
         {
-          on = [ "п" "в" ]; # ru
+          on = ["п" "в"]; # ru
           run = "cd ~/Downloads";
         }
         {
-          on = [ "п" "м" ]; # ru
+          on = ["п" "м"]; # ru
           run = "cd ~/Videos";
         }
         {
-          on = [ "п" "Т" ]; # ru
+          on = ["п" "Т"]; # ru
           run = "cd ~/Documents/Notes";
         }
         {
-          on = [ "п" "т" ]; # ru
+          on = ["п" "т"]; # ru
           run = "cd ~/nix";
         }
         # open shell here
@@ -309,23 +471,23 @@
         # plugin system clipboard support
         {
           on = "Y";
-          run = [ "plugin wl-clipboard" ];
+          run = ["plugin wl-clipboard"];
           desc = "Copy to system clipboard";
         }
         {
           on = "Н"; # ru
-          run = [ "plugin wl-clipboard" ];
+          run = ["plugin wl-clipboard"];
           desc = "Copy to system clipboard";
         }
         # plugin toggle pane
         {
           on = "T";
-          run = [ "plugin toggle-pane min-preview" ];
+          run = ["plugin toggle-pane min-preview"];
           desc = "Show or hide the preview pane";
         }
         {
           on = "Е"; # ru
-          run = [ "plugin toggle-pane min-preview" ];
+          run = ["plugin toggle-pane min-preview"];
           desc = "Show or hide the preview pane";
         }
         # plugin drag and drop
@@ -376,38 +538,38 @@
         }
         # plugin compress
         {
-          on = [ "C" ];
+          on = ["C"];
           run = "plugin ouch";
           desc = "Compress with ouch";
         }
         {
-          on = [ "С" ]; # ru
+          on = ["С"]; # ru
           run = "plugin ouch";
           desc = "Compress with ouch";
         }
         # plugin recycle-bin
         {
-          on = [ "b" "o" ];
+          on = ["b" "o"];
           run = "plugin recycle-bin -- open";
           desc = "Open trash";
         }
         {
-          on = [ "b" "e" ];
+          on = ["b" "e"];
           run = "plugin recycle-bin -- empty";
           desc = "Empty trash";
         }
         {
-          on = [ "b" "D" ];
+          on = ["b" "D"];
           run = "plugin recycle-bin -- emptyDays";
           desc = "Empty trash by [DAYS]";
         }
         {
-          on = [ "b" "d" ];
+          on = ["b" "d"];
           run = "plugin recycle-bin -- delete";
           desc = "Remove completely";
         }
         {
-          on = [ "b" "r" ];
+          on = ["b" "r"];
           run = "plugin recycle-bin -- restore";
           desc = "Restore";
         }

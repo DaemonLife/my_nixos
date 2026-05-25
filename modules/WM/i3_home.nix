@@ -12,8 +12,7 @@
 
     [layout]
     command=bash $HOME/nix/scripts/i3blocks/layout.sh
-    interval=persist
-    # interval=1
+    interval=1
 
     [wifi]
     command=bash $HOME/nix/scripts/i3blocks/wifi.sh
@@ -129,10 +128,10 @@ in {
         "${modifier}+Ctrl+45" = "move up"; # k
         "${modifier}+Ctrl+46" = "move right"; # l
 
-        "${modifier}+Alt+43" = "exec brightnessctl set 5%-"; # h
-        "${modifier}+Alt+46" = "exec brightnessctl set +5%"; # l
-        "${modifier}+Alt+44" = "exec bash $HOME/nix/scripts/volume.sh 5%+"; # j
-        "${modifier}+Alt+45" = "exec bash $HOME/nix/scripts/volume.sh 5%-"; # k
+        "Ctrl+Shift+43" = "exec brightnessctl set 5%-"; # h
+        "Ctrl+Shift+46" = "exec brightnessctl set +5%"; # l
+        "Ctrl+Shift+44" = "exec bash $HOME/nix/scripts/volume.sh 5%+"; # j
+        "Ctrl+Shift+45" = "exec bash $HOME/nix/scripts/volume.sh 5%-"; # k
         # screenshot
         "Print" = "exec scrot $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png";
         "${modifier}+Print" = "exec scrot -u $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png";
