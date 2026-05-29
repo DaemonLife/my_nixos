@@ -45,6 +45,7 @@
       upscayl
       freefilesync
       ascii-draw
+      video-downloader
 
       # - Theming
       vimix-icon-theme # cursor icon

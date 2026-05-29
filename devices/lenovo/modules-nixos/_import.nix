@@ -1,6 +1,6 @@
 {...}: {
   imports = [
-    # ./docker.nix
+    ./docker.nix
     # ./zerotier.nix
     # ./kde.nix
     # ./gnome.nix

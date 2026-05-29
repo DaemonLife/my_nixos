@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! "$file" ]; then
+if [ ! "$1" ]; then
   echo "Error. Select file."
   exit
 fi

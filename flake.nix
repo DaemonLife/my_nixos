@@ -1,18 +1,17 @@
 {
   description = "DaemonLife's flake";
-
   inputs = {
-    ## universal ##
+    # --- universal --- #
 
     nvf = {
       url = "github:NotAShelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    ## stable ##
+    # --- stable branch (and support unstable pkgs) --- #
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -21,12 +20,8 @@
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nixvim = {
-    #   url = "github:nix-community/nixvim/nixos-25.11";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
-    ## unstable ###
+    # --- only unstable branch --- #
 
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # home-manager = {
@@ -37,25 +32,18 @@
     #   url = "github:nix-community/stylix";
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
-    # nixvim = {
-    #   url = "github:nix-community/nixvim";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
   };
 
   outputs = {
-    self,
     nixpkgs,
     nixpkgs-unstable,
     home-manager,
     stylix,
     nvf,
-    # nixvim,
     ...
-  } @ inputs: let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
+  }: let
     user = "user";
+    system = "x86_64-linux";
 
     # Configuration make function
     mkNixosConfig = device: {
@@ -68,21 +56,20 @@
           stylix.nixosModules.stylix
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs.username = user;
-            home-manager.users.${user}.imports = [
-              ./home.nix # main home config
-              ./devices/${device}/home.nix # device home config
-            ];
-            home-manager.backupFileExtension = "bkp";
-            home-manager.sharedModules = [
-              # nixvim.homeModules.nixvim
-              nvf.homeManagerModules.default
-            ];
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs.username = user;
+              users.${user}.imports = [
+                ./home.nix # main home config
+                ./devices/${device}/home.nix # device home config
+              ];
+              backupFileExtension = "bkp";
+              sharedModules = [nvf.homeManagerModules.default];
+            };
           }
 
-          # unstable pkgs
+          # unstable pkgs support
           {
             nixpkgs.overlays = [
               (final: prev: {
