@@ -1,7 +1,7 @@
-{ ... }: {
+{...}: {
   imports = [
     ./librewolf.nix
     # ./firefox.nix
-    ./qutebrowser.nix
+    # ./qutebrowser.nix
   ];
 }

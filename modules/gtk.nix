@@ -1,11 +1,10 @@
-{ config, ... }:
-let
-  gtk_colors =
-    with config.colorScheme.palette; # css
+{config, ...}: let
+  gtk_colors = with config.colorScheme.palette; # css
+  
     ''
       @define-color accent_color #${base0D};
       @define-color accent_bg_color #${base0D};
-      @define-color accent_fg_color #${base02}; 
+      @define-color accent_fg_color #${base02};
       @define-color destructive_color #${base08};
       @define-color destructive_bg_color #${base09};
       @define-color destructive_fg_color #${base0A};
@@ -87,14 +86,14 @@ let
       @define-color dark_4 #${base01};
       @define-color dark_5 #${base00};
     '';
-in
-{
-
-  gtk = { enable = true; iconTheme.name = "Vimix"; };
-  gtk.gtk4.theme = null; # for unstable branch 
+in {
+  gtk = {
+    enable = true;
+    iconTheme.name = "Vimix";
+  };
+  # gtk.gtk4.theme = null; # for unstable branch
   dconf.settings = {
     # hide gnome window close button
-    "org/gnome/desktop/wm/preferences" = { button-layout = ""; };
+    "org/gnome/desktop/wm/preferences" = {button-layout = "";};
   };
-
 }

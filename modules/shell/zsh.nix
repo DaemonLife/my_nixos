@@ -31,6 +31,15 @@
       ssh-add ~/.ssh/github 2> /dev/null
       ssh-add ~/.ssh/termux 2> /dev/null
     '';
+
+    loginExtra = ''
+      if [[ -z $DISPLAY ]]; then
+        if [[ $(tty) == "/dev/tty1" ]]; then
+          exec start-hyprland
+        fi
+      fi
+    '';
+
     shellGlobalAliases = {};
     shellAliases = let
       myphone_port = "8022";

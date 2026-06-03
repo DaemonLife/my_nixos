@@ -3,17 +3,13 @@
 
   home.packages = with pkgs; [
     digikam
-    unstable.darktable
-    # unstable.kdePackages.kdenlive
-
-    # digikam
-    # darktable
+    darktable
     kdePackages.kdenlive
     hugin
     siril
 
     # games
-    bottles
+    # bottles
     lutris
   ];
 

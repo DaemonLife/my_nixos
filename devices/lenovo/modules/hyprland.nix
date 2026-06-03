@@ -1,6 +1,12 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 with config.lib.stylix.colors; {
-
+  # wayland.windowManager.hyprland.configType = "lua"; # adopt to 26.05
+  wayland.windowManager.hyprland.configType = "hyprlang";
   wayland.windowManager.hyprland.settings = {
     general = {
       gaps_in = lib.mkForce 3;
@@ -12,6 +18,14 @@ with config.lib.stylix.colors; {
       scroll_factor = lib.mkForce "1.0";
     };
 
+    # monitor = {
+    #   "desc:Acer Technologies Acer A231H LQT0W0084320" = {
+    #     "position" = "auto-right";
+    #     "mode" = "highres";
+    #     "scale" = 1;
+    #   };
+    # };
+
     monitor = [
       # Lenovo
       "eDP-1,highres,auto-right,2,bitdepth,10,vrr,1,mirror,desc:LG Electronics LG TV 0x01010101"
@@ -22,7 +36,5 @@ with config.lib.stylix.colors; {
       # Random monitor
       ",preferred,auto,1"
     ];
-
   };
-
 }

@@ -72,7 +72,7 @@
     ###########################
 
     settings = {
-      floating_window_scaling_factor = 0.5;
+      # floating_window_scaling_factor = 0.5;
 
       tasks = {
         image_alloc = 1073741824; # = 1024*1024*1024 = 1024MB
@@ -99,7 +99,12 @@
       plugin = {
         prepend_fetchers = [
           # --- plugin mime-ext ---
-          # { id = "mime"; name = "*"; run = "mime-ext"; prio = "high"; }
+          # {
+          #   id = "mime";
+          #   name = "*";
+          #   run = "mime-ext";
+          #   prio = "high";
+          # }
 
           # --- plugin git ---
           {
@@ -265,6 +270,10 @@
 
       open = {
         prepend_rules = [
+          {
+            url = "*/";
+            use = ["notify-send" "another-opener"];
+          }
           {
             name = "*.{ARW,NEF}";
             use = ["image-raw"];

@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }: {
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   imports = [
     (import ./waybar.nix {
       inherit config lib;
@@ -8,7 +13,6 @@
     ./fuzzel.nix
     ./swaylock.nix
     ./swayidle.nix
-    # ./swaywsr.nix
     ./sworkstyle.nix
   ];
 
@@ -26,8 +30,8 @@
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
     enable = true;
-    # package = pkgs.unstable.sway;
-    checkConfig = false; # false because bug with icc profile
+    package = pkgs.unstable.sway;
+    # checkConfig = false; # false because bug with icc profile
     xwayland = true;
     # wrapperFeatures.gtk = true; # gtk apps support
 
@@ -38,29 +42,26 @@
     '';
 
     config = rec {
-      focus = {
-        followMouse = "yes";
-        mouseWarping = true;
-        wrapping = "yes";
-        newWindow = "urgent"; # no autofocus on new windows
-      };
+      # focus = {
+      #   followMouse = "yes";
+      #   mouseWarping = true;
+      #   wrapping = "yes";
+      #   newWindow = "urgent"; # no autofocus on new windows
+      # };
 
       modifier = "Mod4";
-      # terminal = "${pkgs.kitty}/bin/kitty --single-instance";
       terminal = "${pkgs.foot}/bin/foot";
       menu = "${pkgs.fuzzel}/bin/fuzzel -l 16";
-      bars = [{ command = "waybar"; }];
+      bars = [{command = "waybar";}];
       workspaceAutoBackAndForth = true;
 
       startup = [
-        { command = "bluetooth off"; }
-        { command = "autotiling-rs"; }
-        { command = "${pkgs.mako}/bin/mako"; }
-        { command = "${pkgs.udiskie}/bin/udiskie -a"; }
-        { command = "wl-paste -t text --watch clipman store --no-persist"; }
-        { command = "exec bash $HOME/nix/scripts/swayidle.sh"; }
+        {command = "bluetooth off";}
+        {command = "${pkgs.mako}/bin/mako";}
+        {command = "${pkgs.udiskie}/bin/udiskie -a";}
+        {command = "wl-paste -t text --watch clipman store --no-persist";}
+        {command = "exec bash $HOME/nix/scripts/swayidle.sh";}
         {
-          # command = "pkill sworkstyle; sleep 5; ${pkgs.swayest-workstyle}/bin/sworkstyle -d &> /tmp/sworkstyle.log";
           command = "${pkgs.swayest-workstyle}/bin/sworkstyle -d";
           always = true;
         }
@@ -102,24 +103,22 @@
 
       # swaymsg -t get_tree - show window's app_id and class
       floating.criteria = [
-        { title = "Steam - Update News"; }
+        {title = "Steam - Update News";}
         # { title = "Media viewer"; } # telegram
         # { title = "TelegramDesktop"; }
-        { app_id = "rg.pulseaudio.pavucontrol"; }
-        { app_id = "org.kde.kdeconnect.sms"; }
+        {app_id = "rg.pulseaudio.pavucontrol";}
+        {app_id = "org.kde.kdeconnect.sms";}
         # {title = "pulsemixer";} # tailing bug
-        { app_id = "floating_yazi"; }
+        {app_id = "floating_yazi";}
         # {app_id = "floating_nmtui";} # too small window
       ];
 
-      colors =
-        let
-          # default_color = "#${base02}"; # no focus
-          default_color = "#${base01}"; # no focus
-          focused_color = "#${base0D}";
-          indicator_color = "#${base09}";
-          attenction_color = "#${base0D}";
-        in
+      colors = let
+        default_color = "#${base01}"; # no focus
+        focused_color = "#${base0D}";
+        indicator_color = "#${base09}";
+        attenction_color = "#${base0D}";
+      in
         lib.mkForce {
           focused = {
             text = "#${base00}"; # tab header on creation
@@ -133,7 +132,7 @@
             background = focused_color; # selected tab header
             border = focused_color; # selected tab header
             childBorder = default_color; # default border
-            indicator = default_color; # default border
+            indicator = indicator_color; # default border
           };
           unfocused = {
             text = "#${base05}"; # unselected tab header
@@ -210,10 +209,10 @@
 
         "${modifier}+q" = "kill";
         "${modifier}+f" = "fullscreen";
-        "${modifier}+Shift+f" = "floating toggle";
+        "${modifier}+shift+ctrl+e" = "floating toggle";
         "${modifier}+r" = "mode resize";
-        "${modifier}+e" = "layout toggle splith splitv tabbed";
-        # "${modifier}+t" = "layout toggle tabbed splith";
+        "${modifier}+e" = "splitt";
+        "${modifier}+shift+e" = "layout toggle tabbed stacking split";
 
         # ---------------
         # System control
@@ -326,5 +325,4 @@
     '';
     # export _JAVA_AWT_WM_NONREPARENTING=1
   };
-
 }

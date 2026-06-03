@@ -21,30 +21,35 @@
     # --------------------------------
 
     packages = with pkgs; [
+      # pipx bug fix
+      # (pipx.overrideAttrs (old: {
+      #   doCheck = false;
+      # }))
+
       # - Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
       qbittorrent # torrent client
       tor-browser
-      deltachat-desktop
-      fractal # matrix clietn
+      # deltachat-desktop
+      # fractal # matrix clietn
       vivaldi
 
       # - Media
-      helvum # A GTK patchbay for pipewire (stable)
-      # crosspipe # A GTK patchbay for pipewire (unstable)
+      # helvum # A GTK patchbay for pipewire (old)
+      crosspipe # A GTK patchbay for pipewire
       pavucontrol # audio gui control
       flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
       easyeffects # microphone effects
-      nomacs-qt6 # fast image viewer for RAW (no icc support)
+      # nomacs-qt6 # fast image viewer for RAW (no icc support)
       kdePackages.gwenview # imave viewer with icc support
       kdePackages.kimageformats # jxl and raw rendering
       obs-studio
       upscayl
       freefilesync
-      ascii-draw
+      # ascii-draw
       video-downloader
 
       # - Theming
@@ -63,7 +68,6 @@
       cmatrix # matrix in terminal
       nwg-displays # gui for display setup
       sc-im # vim spreadsheet program for terminal
-      pipx
       exiftool
       fzy
       translate-shell
@@ -93,9 +97,7 @@
       # unstable.portablemc # minecraft cli launcher
       curseofwar # stategy cli game
       vitetris # tetris cli game
-      # unstable.chess-tui
       chess-tui
-      # dwarf-fortress-packages.dwarf-fortress-full
     ];
   };
 

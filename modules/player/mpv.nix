@@ -1,4 +1,8 @@
-{ config, pkgs, ... }: {
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs.mpv = with config.lib.stylix.colors; {
     enable = true;
 
@@ -12,7 +16,7 @@
     };
 
     scripts = with pkgs; [
-      mpvScripts.sponsorblock
+      # mpvScripts.sponsorblock
       # mpvScripts.dynamic-crop # press 'C'
       # mpvScripts.crop # press 'C'
       mpvScripts.mpris # for using standard media keys
@@ -71,7 +75,6 @@
         hwdec = true;
       };
     };
-
   };
 
   # other script

@@ -30,7 +30,7 @@
     clinfo # Print information about available OpenCL platforms and devices
     displaycal
     argyllcms # for displaycal
-    android-tools # adb, fastboot support
+    # android-tools # adb, fastboot support
   ];
 
   # --------------------------------
@@ -45,7 +45,6 @@
   ];
   boot.initrd.systemd.enable = true; # idk but it works
 
-  # (NOT TESTED) Specifies what to do when the laptop lid is closed
   services.logind.settings = {
     Login.HandleLidSwitch = "suspend-then-hibernate";
   };

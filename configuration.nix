@@ -7,7 +7,7 @@
 }: {
   imports = [
     ./modules/stylix.nix
-    ./modules/WM/i3_configuration.nix
+    # ./modules/WM/i3_configuration.nix
   ];
 
   # --------------------------------
@@ -44,17 +44,7 @@
   services.printing = {
     enable = true;
     drivers = with pkgs; [
-      gutenprint # Drivers for many different printers from many different vendors.
-      # gutenprintBin # Additional, binary-only drivers for some printers.
-      # hplip # Drivers for HP printers.
-      # postscript-lexmark # Postscript drivers for Lexmark
-      # splix # Drivers for printers supporting SPL (Samsung Printer Language).
-      # brlaser # Drivers for some Brother printers
-      # brgenml1lpr # Generic drivers for more Brother printers
-      # fxlinuxprint # Fuji Xerox Linux Printer Driver
-      # samsung-unified-linux-driver # Proprietary Samsung Drivers
-      # cnijfilter2 # Proprietary drivers for some Canon Pixma devices
-      # foomatic-db-ppds-withNonfreeDb
+      gutenprint
     ];
   };
 
@@ -113,7 +103,7 @@
       EDITOR = "${EDITOR}";
       SYSTEMD_EDITOR = "${EDITOR}";
       VISUAL = "${EDITOR}";
-      BROWSER = "qutebrowser";
+      BROWSER = "librewolf";
     };
     shells = with pkgs; [zsh];
     sessionVariables.NIXOS_OZONE_WL = "1"; # Run Electron apps without XWayland
@@ -155,8 +145,6 @@
     mangohud # Steam performance GUI
     zip
     unzip
-    devenv # python venv
-    python3
     nix-tree # nix pkgs tree
   ];
 
@@ -167,48 +155,23 @@
   xdg.portal = lib.mkDefault {
     enable = true;
     extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    # wlr.enable = true;
-    # config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+    wlr.enable = true;
+    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
   };
 
-  # Android emulator. Read https://nixos.wiki/wiki/WayDroid
-  # virtualisation.waydroid.enable = true;
+  programs = {
+    # hyprland = {
+    #   enable = true;
+    # };
+    # niri.enable = true;
+    sway.enable = true;
 
-  programs.appimage.enable = true;
-  programs.appimage.binfmt = true;
-  programs.appimage.package =
-    pkgs.appimage-run.override
-    {
-      extraPkgs = pkgs: [
-        pkgs.icu
-        pkgs.libxcrypt-legacy
-        pkgs.python312
-        pkgs.python312Packages.torch
-      ];
+    appimage = {
+      enable = true;
+      binfmt = true;
     };
 
-  programs = {
-    # hyprland = { enable = true; withUWSM = true; };
-    # niri.enable = true;
-
-    # nh = {
-    #   enable = true;
-    #   clean = {
-    #     enable = true;
-    #     dates = "weekly";
-    #     extraArgs = "--keep-since 7d --keep 5";
-    #   };
-    #   flake = "/home/${username}/nix";
-    # };
-
-    # thunar = {
-    #   enable = true;
-    #   plugins = with pkgs.xfce; [ thunar-archive-plugin thunar-media-tags-plugin ];
-    # };
-    # xfconf.enable = true;
-
     proxychains = {
-      # just default settings ...
       enable = true;
       proxyDNS = true;
       chain.type = "strict";
@@ -220,7 +183,6 @@
         myproxy = {
           type = "socks5";
           host = "127.0.0.1";
-          # ... and only my v2rayA port
           port = 20170;
           enable = true;
         };
@@ -249,13 +211,11 @@
     };
     gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
-    nix-ld.enable = true; # run bin files
+    # nix-ld.enable = true; # run bin files
     dconf.enable = true;
     htop.enable = true;
     git.enable = true;
-    amnezia-vpn.enable = true;
     zsh.enable = true;
-    # ssh.startAgent = true; # agent for ssh keys
   };
 
   # --------------------------------
@@ -291,7 +251,6 @@
       autologinOnce = true;
     };
 
-    # xray = { enable = true; settingsFile = "/etc/xray/config.json"; };
     v2raya.enable = true;
     openssh.enable = true;
     flatpak.enable = true;
@@ -300,23 +259,22 @@
   };
 
   systemd = {
-    # - stable branch -
-    sleep.extraConfig = ''
-      AllowSuspend=yes
-      AllowHibernation=yes
-      # AllowHybridSleep=yes
-      AllowSuspendThenHibernate=yes
-      HibernateDelaySec=3600
-    '';
+    # - 25.11 branch -
+    # sleep.extraConfig = ''
+    #   AllowSuspend=yes
+    #   AllowHibernation=yes
+    #   AllowHybridSleep=yes
+    #   AllowSuspendThenHibernate=yes
+    #   HibernateDelaySec=3600
+    # '';
 
-    # - unstable branch -
-    # sleep.settings.Sleep = {
-    #   AllowSuspend = "yes";
-    #   AllowHibernation = "yes";
-    #   # AllowHybridSleep=yes
-    #   AllowSuspendThenHibernate = "yes";
-    #   HibernateDelaySec = 3600;
-    # };
+    sleep.settings.Sleep = {
+      AllowSuspend = "yes";
+      AllowHibernation = "yes";
+      AllowHybridSleep = "yes";
+      AllowSuspendThenHibernate = "yes";
+      HibernateDelaySec = 3600;
+    };
   };
 
   # --------------------------------
@@ -324,24 +282,25 @@
   # --------------------------------
 
   # authentication for programs (frontend)
-  systemd.user.services.polkit-gnome-authentication-agent-1 = {
-    description = "polkit-gnome-authentication-agent-1";
-    wantedBy = ["graphical-session.target"];
-    wants = ["graphical-session.target"];
-    after = ["graphical-session.target"];
-    serviceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
+  # systemd.user.services.polkit-gnome-authentication-agent-1 = {
+  #   description = "polkit-gnome-authentication-agent-1";
+  #   wantedBy = ["graphical-session.target"];
+  #   wants = ["graphical-session.target"];
+  #   after = ["graphical-session.target"];
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+  #     Restart = "on-failure";
+  #     RestartSec = 1;
+  #     TimeoutStopSec = 10;
+  #   };
+  # };
+
   security = {
     polkit.enable = true; # authentication support (backed)
-    # pam.services.swaylock = { }; # screen lock
+    pam.services.swaylock = {}; # screen lock
   };
-  services.gnome.gnome-keyring.enable = true; # secret portal for matrix
+  # services.gnome.gnome-keyring.enable = true; # secret portal for matrix
 
   # --------------------------------
   # BOOT OPTIONS
@@ -349,17 +308,6 @@
 
   boot.loader = {
     systemd-boot.enable = true;
-    #  grub = {
-    #    enable = true;
-    #    device = "nodev";
-    #    efiSupport = true;
-    #    useOSProber = true;
-    #    default = "saved";
-    #    splashImage = lib.mkForce null;
-    #    theme = lib.mkForce null;
-    #    fontSize = lib.mkForce 60;
-    #    extraConfig = lib.mkForce ''GRUB_CMDLINE_LINUX_DEFAULT="loglevel=1"'';
-    #  };
     efi.canTouchEfiVariables = true;
   };
 
@@ -387,5 +335,4 @@
       "${base0C}" # cyan
       "${base06}" # base06
     ];
-  stylix.targets.grub.enable = false;
 }

@@ -1,15 +1,15 @@
-{ ... }: {
+{...}: {
   imports = [
     ./git.nix
     ./jrnl.nix
-    ./rtorrent.nix
+    # ./rtorrent.nix
     ./gowall.nix
     ./gtk.nix
     ./fzf.nix
     ./stylix.nix
     # ./joplin.nix
     ./GIMP.nix
-    ./nomacs.nix
+    # ./nomacs.nix
     # ./chess/cli-chess.nix
     ./xdg.nix
     ./unison.nix
