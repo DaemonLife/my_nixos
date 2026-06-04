@@ -160,11 +160,9 @@
   };
 
   programs = {
-    # hyprland = {
-    #   enable = true;
-    # };
+    hyprland.enable = true;
     # niri.enable = true;
-    sway.enable = true;
+    # sway.enable = true;
 
     appimage = {
       enable = true;

@@ -29,9 +29,11 @@
     configType = lib.mkForce "lua";
 
     settings = with config.lib.stylix.colors; {
-      mod = {
-        _var = "SUPER";
-      };
+      mod._var = "SUPER";
+      terminal._var = "foot";
+      browser._var = "librewolf";
+      filemanager._var = "nautilus";
+      menu._var = ''foot "fsel"'';
 
       startupcommands = {
         _var = [
@@ -145,21 +147,20 @@
       ];
 
       bind = [
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + return"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd("foot")'')];}
+        # windows control
         {_args = [(lib.generators.mkLuaInline ''mod .. " + q"'') (lib.generators.mkLuaInline "hl.dsp.window.close()")];}
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + t"'') (lib.generators.mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + t"'') (lib.generators.mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + f"'') (lib.generators.mkLuaInline "hl.dsp.window.fullscreen()")];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + mouse:272"'') (lib.generators.mkLuaInline "hl.dsp.window.drag()") {mouse = true;}];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + mouse:273"'') (lib.generators.mkLuaInline "hl.dsp.window.resize()") {mouse = true;}];}
-      ];
 
-      # bindm = [
-      #   # Window mouse control
-      #   "$mod, mouse:272, movewindow"
-      #   "$mod, mouse:273, resizewindow"
-      #   "$mod, ALT_L, resizewindow"
-      #   # "$mod ALT, mouse:272, resizewindow"
-      # ];
+        # run programs
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + return"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(terminal)'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + a"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(menu)'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + n"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(filemanager)'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(browser)'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd('proxychains4 ' .. browser)'')];}
+      ];
 
       # bindl = [
       #   ", switch:Lid Switch, exec, swaylock && hyprctl keyword input:kb_layout us,ru"
@@ -193,59 +194,6 @@
       # for one press
       # bind =
       #   [
-      #     # Run programs
-      #     "$mod, RETURN, exec, $terminal"
-      #     "$mod, RETURN, exec, hyprctl keyword input:kb_layout us,ru"
-      #     "$mod, A, exec, hyprctl keyword input:kb_layout us,ru && $menu"
-      #     "$mod, N, exec, $filemanager"
-      #     "$mod, y, exec, $terminal --hold $HOME/nix/scripts/y.sh"
-      #     "$mod, B, exec, $browser"
-      #     "$mod SHIFT, B, exec, proxychains4 $browser"
-      #     # "$mod SHIFT, B, exec, proxychains4 $browser --set window.title_format [VPN]\\ {perc}{current_title}{title_sep}qutebrowser"
-      #     "$mod, T, exec, bash -c 'AyuGram || Telegram || flatpak run org.telegram.desktop'"
-      #     # "$mod, O, exit"
-      #
-      #     # Windows control
-      #     "$mod, q, killactive"
-      #     "$mod, v, togglefloating"
-      #     # "$mod, P, pseudo"
-      #     # "$mod, s, togglesplit"
-      #     # "$mod, g, togglegroup"
-      #     # "$mod, tab, changegroupactive"
-      #     "$mod, f, fullscreen"
-      #     "$mod, Tab, cyclenext"
-      #     "$mod, Tab, bringactivetotop"
-      #
-      #     # Move focus
-      #     "$mod, left, movefocus, l"
-      #     "$mod, right, movefocus, r"
-      #     "$mod, up, movefocus, u"
-      #     "$mod, down, movefocus, d"
-      #     "$mod, h, movefocus, l"
-      #     "$mod, l, movefocus, r"
-      #     "$mod, k, movefocus, u"
-      #     "$mod, j, movefocus, d"
-      #
-      #     # Move window
-      #     "$mod Control_L, left, movewindow, l"
-      #     "$mod Control_L, right, movewindow, r"
-      #     "$mod Control_L, up, movewindow, u"
-      #     "$mod Control_L, down, movewindow, d"
-      #     "$mod Control_L, h, movewindow, l"
-      #     "$mod Control_L, l, movewindow, r"
-      #     "$mod Control_L, k, movewindow, u"
-      #     "$mod Control_L, j, movewindow, d"
-      #
-      #     # Workspace
-      #     "SHIFT Alt_L, RIGHT, workspace, +1"
-      #     "SHIFT Alt_L, LEFT, workspace, -1"
-      #     "SHIFT Alt_L, l, workspace, +1"
-      #     "SHIFT Alt_L, h, workspace, -1"
-      #     "SHIFT Alt_L, j, workspace, +1"
-      #     "SHIFT Alt_L, k, workspace, -1"
-      #     "SHIFT Alt_L, mouse_up, workspace, +1"
-      #     "SHIFT Alt_L, mouse_down, workspace, -1"
-      #
       #     # Lock screen
       #     ", F10, exec, hyprctl keyword input:kb_layout us,ru && swaylock"
       #
@@ -253,27 +201,57 @@
       #     "SUPER_SHIFT, s, exec, grimblast copysave area"
       #     " , PRINT, exec, grimblast copysave output"
       #   ]
-      # ++ (
-      #   # workspaces
-      #   # binds $mod + [shift +] {1..10} to [move to] workspace {1..10}
-      #   builtins.concatLists (
-      #     builtins.genList
-      #     (
-      #       x: let
-      #         ws = let
-      #           c = (x + 1) / 10;
-      #         in
-      #           builtins.toString (x + 1 - (c * 10));
-      #       in [
-      #         "$mod, ${ws}, workspace, ${toString (x + 1)}"
-      #         "$mod Control_L, ${ws}, movetoworkspacesilent, ${toString (x + 1)}"
-      #       ]
-      #     )
-      #     10
-      #   )
-      # );
     };
 
+    extraConfig = ''
+      local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+
+      -- Window focus move
+      hl.bind(mainMod .. " + h",  hl.dsp.focus({ direction = "left" }))
+      hl.bind(mainMod .. " + l", hl.dsp.focus({ direction = "right" }))
+      hl.bind(mainMod .. " + k",    hl.dsp.focus({ direction = "up" }))
+      hl.bind(mainMod .. " + j",  hl.dsp.focus({ direction = "down" }))
+
+      hl.bind(mainMod .. " + SHIFT + h",  hl.dsp.window.move({ direction = "left" }))
+      hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "right" }))
+      hl.bind(mainMod .. " + SHIFT + k",    hl.dsp.window.move({ direction = "up" }))
+      hl.bind(mainMod .. " + SHIFT + j",  hl.dsp.window.move({ direction = "down" }))
+
+      -- Window move
+      for i = 1, 10 do
+          local key = i % 10 -- 10 maps to key 0
+          hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
+          hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
+      end
+
+      -- Special workspace (scratchpad)
+      hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))
+      hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
+
+      -- Scroll through existing workspaces
+      hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
+      hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+      hl.bind(mainMod .. " + CTRL + j", hl.dsp.focus({ workspace = "e+1" }))
+      hl.bind(mainMod .. " + CTRL + k",   hl.dsp.focus({ workspace = "e-1" }))
+
+      -- Split toggle
+      hl.bind(mainMod .. " + t", hl.dsp.layout("togglesplit"))    -- dwindle only
+
+      -- Laptop multimedia keys for volume and LCD brightness
+      hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+      hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+      hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
+      hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
+      hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
+      hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+
+      -- Requires playerctl
+      hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
+      hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+      hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
+      hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+
+    '';
     # HYPRLAND VARIABLES
 
     # export QT_QPA_PLATFORM=wayland;xcb # color error with wayland
