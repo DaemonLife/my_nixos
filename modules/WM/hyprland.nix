@@ -26,6 +26,8 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
+    package = null;
+    portalPackage = null;
     configType = lib.mkForce "lua";
 
     settings = with config.lib.stylix.colors; {
@@ -33,17 +35,17 @@
       terminal._var = "foot";
       browser._var = "librewolf";
       filemanager._var = "nautilus";
-      menu._var = ''foot "fsel"'';
+      menu._var = ''foot bash -c "fsel -d"'';
 
       startupcommands = {
         _var = [
-          "pactl set-source-mute @DEFAULT_SOURCE@ on" # mic off
-          "swaybg -i $HOME/Picture/gowall/bg.png"
-          "waybar"
-          "mako"
-          "udiskie -a"
-          "wl-clip-persist --clipboard regular"
-          "swayidle -w timeout 540 'hyprctl dispatch dpms off' timeout 600 'hyprctl keyword input:kb_layout us,ru && swaylock' resume 'sleep 1 && hyprctl dispatch dpms on'"
+          "exec pactl set-source-mute @DEFAULT_SOURCE@ on" # mic off
+          "exec swaybg -i $HOME/Picture/gowall/bg.png"
+          "exec waybar"
+          "exec mako"
+          "exec udiskie -a"
+          "exec wl-clip-persist --clipboard regular"
+          "exec swayidle -w timeout 540 'hyprctl dispatch dpms off' timeout 600 'hyprctl keyword input:kb_layout us,ru && swaylock' resume 'sleep 1 && hyprctl dispatch dpms on'"
         ];
       };
 
@@ -52,7 +54,7 @@
           output = "eDP-1";
           mode = "highres";
           position = "auto";
-          scale = 1;
+          scale = 1.46;
         }
         {
           output = "desc:Acer Technologies Acer A231H LQT0W0084320";
@@ -84,6 +86,7 @@
           shadow.enabled = false;
           blur.enabled = false;
         };
+        animations.enabled = false;
 
         xwayland.force_zero_scaling = true;
 
@@ -97,25 +100,24 @@
           kb_layout = "us,ru";
           kb_options = "grp:win_space_toggle";
           repeat_rate = 45; # in one second
-          repeat_delay = 190;
+          repeat_delay = 250;
 
           # mouse or hamster
           accel_profile = "adaptive";
           force_no_accel = false;
           follow_mouse = 1; # window focus follow cursor
           natural_scroll = false; # natural mean idiotic
-          sensitivity = -0.2; # from -1.0 to 1.0
-          scroll_factor = "0.5";
+          sensitivity = 0; # from -1.0 to 1.0
+          scroll_factor = "0.8";
 
-          # touchpad = {
-          # disable_while_typing = true;
-          # tap-and-drag = false;
-          # drag_lock = false;
-          # natural_scroll = true; # natural mean idiotic??????
-          # };
+          touchpad = {
+            disable_while_typing = true;
+            tap_and_drag = false;
+            drag_lock = 0; # fuck this shit
+            natural_scroll = true; # TRUE FOR LENOVO TOUCHPAD!!!
+            scroll_factor = 1.0;
+          };
         };
-
-        animations.enabled = false;
 
         dwindle = {
           preserve_split = true; # you probably want this

@@ -152,12 +152,12 @@
   # SYSTEM PROGRAMS
   # --------------------------------
 
-  xdg.portal = lib.mkDefault {
-    enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    wlr.enable = true;
-    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
-  };
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  #   wlr.enable = true;
+  #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+  # };
 
   programs = {
     hyprland.enable = true;
@@ -169,6 +169,7 @@
       binfmt = true;
     };
 
+    # vpn
     proxychains = {
       enable = true;
       proxyDNS = true;
@@ -249,7 +250,9 @@
       autologinOnce = true;
     };
 
+    # vpn
     v2raya.enable = true;
+
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
@@ -257,15 +260,6 @@
   };
 
   systemd = {
-    # - 25.11 branch -
-    # sleep.extraConfig = ''
-    #   AllowSuspend=yes
-    #   AllowHibernation=yes
-    #   AllowHybridSleep=yes
-    #   AllowSuspendThenHibernate=yes
-    #   HibernateDelaySec=3600
-    # '';
-
     sleep.settings.Sleep = {
       AllowSuspend = "yes";
       AllowHibernation = "yes";

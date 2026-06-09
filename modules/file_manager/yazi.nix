@@ -21,6 +21,7 @@
   programs.yazi = with config.lib.stylix.colors; {
     enable = true;
     enableZshIntegration = true;
+    shellWrapperName = "y";
 
     ###########################
     # INIT LUA
@@ -72,8 +73,6 @@
     ###########################
 
     settings = {
-      # floating_window_scaling_factor = 0.5;
-
       tasks = {
         image_alloc = 1073741824; # = 1024*1024*1024 = 1024MB
         image_bound = [0 0];
@@ -195,6 +194,49 @@
       };
 
       ###########################
+      # OPENER FILES
+      ###########################
+
+      open.prepend_rules = [
+        {
+          url = "*/";
+          use = ["notify-send" "another-opener"];
+        }
+        # {
+        #   name = "*.{ARW,NEF}";
+        #   use = ["image-raw"];
+        # }
+        {
+          mime = "image/*";
+          use = ["image"];
+        }
+        {
+          mime = "video/*";
+          use = ["video"];
+        }
+        # {
+        #   name = "*.torrent";
+        #   use = ["qbittorrent" "rtorrent"];
+        # }
+        {
+          mime = "text/html";
+          use = ["qutebrowser" "librewolf" "edit"];
+        }
+        {
+          mime = "text/plain";
+          use = ["edit"];
+        }
+        {
+          mime = "application/{octet-stream,java-applet,json}";
+          use = ["edit"];
+        }
+        {
+          mime = "*";
+          use = ["edit"];
+        }
+      ];
+
+      ###########################
       # OPENER RULES
       ###########################
 
@@ -260,51 +302,6 @@
             run = ''cp "$@" $HOME/Downloads/rtorrent/watch && kitty --hold sh -c "rtorrent"'';
             desc = "Open in rtorrent";
             orphan = true;
-          }
-        ];
-      };
-
-      ###########################
-      # OPENER FILES
-      ###########################
-
-      open = {
-        prepend_rules = [
-          {
-            url = "*/";
-            use = ["notify-send" "another-opener"];
-          }
-          {
-            name = "*.{ARW,NEF}";
-            use = ["image-raw"];
-          }
-          {
-            mime = "image/*";
-            use = ["image"];
-          }
-          {
-            mime = "video/*";
-            use = ["video"];
-          }
-          {
-            name = "*.torrent";
-            use = ["qbittorrent" "rtorrent"];
-          }
-          {
-            mime = "text/html";
-            use = ["qutebrowser" "librewolf" "edit"];
-          }
-          {
-            mime = "text/plain";
-            use = ["edit"];
-          }
-          {
-            mime = "application/{octet-stream,java-applet,json}";
-            use = ["edit"];
-          }
-          {
-            mime = "*";
-            use = ["edit"];
           }
         ];
       };
@@ -417,7 +414,6 @@
         files = [];
         exts = [];
         conds = [];
-        # prepend_dirs = [{ name = "nix"; text = "*"; }];
       };
     };
 

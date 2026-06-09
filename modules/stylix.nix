@@ -14,11 +14,8 @@ in {
     image = image_bg;
 
     fonts = let
-      # package = pkgs.cozette;
       package = pkgs.nerd-fonts.iosevka-term;
       name = "IosevkaTerm Nerd Font Mono";
-      # name = "CozetteVector";
-      # name = "UnifontExMono"; # my local font
     in {
       monospace = {
         package = package;
@@ -38,10 +35,10 @@ in {
       };
 
       sizes = {
-        applications = 26;
-        terminal = 26;
+        applications = 22;
+        terminal = 22;
         # Window titles, status bars, and other general elements of the desktop.
-        desktop = 22;
+        desktop = 18;
         popups = config.stylix.fonts.sizes.desktop;
       };
     };
