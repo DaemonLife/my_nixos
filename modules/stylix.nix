@@ -35,10 +35,10 @@ in {
       };
 
       sizes = {
-        applications = 22;
-        terminal = 22;
+        applications = 18;
+        terminal = 18;
         # Window titles, status bars, and other general elements of the desktop.
-        desktop = 18;
+        desktop = 16;
         popups = config.stylix.fonts.sizes.desktop;
       };
     };
@@ -46,7 +46,7 @@ in {
     cursor = {
       package = pkgs.bibata-cursors;
       name = "Bibata-Modern-Ice";
-      size = config.stylix.fonts.sizes.terminal + 4;
+      size = config.stylix.fonts.sizes.terminal + 2;
     };
 
     opacity = {

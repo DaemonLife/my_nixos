@@ -12,12 +12,12 @@
     ./mako.nix
     ./swaylock.nix
     ./swayidle.nix
-    ./sworkstyle.nix
   ];
 
   home.packages = with pkgs; [
     brightnessctl
-    grimblast # screenshot tool
+    grim # screenshot
+    slurp # area for screenshot
     swaybg
     fsel
     wl-clipboard # wayland clipboard
@@ -37,29 +37,29 @@
       filemanager._var = "nautilus";
       menu._var = ''foot bash -c "fsel -d"'';
 
-      startupcommands = {
-        _var = [
-          "exec pactl set-source-mute @DEFAULT_SOURCE@ on" # mic off
-          "exec swaybg -i $HOME/Picture/gowall/bg.png"
-          "exec waybar"
-          "exec mako"
-          "exec udiskie -a"
-          "exec wl-clip-persist --clipboard regular"
-          "exec swayidle -w timeout 540 'hyprctl dispatch dpms off' timeout 600 'hyprctl keyword input:kb_layout us,ru && swaylock' resume 'sleep 1 && hyprctl dispatch dpms on'"
-        ];
-      };
-
+      # hyprctl monitors all
       monitor = [
         {
-          output = "eDP-1";
+          output = "desc:Lenovo Group Limited 0x9121";
           mode = "highres";
           position = "auto";
-          scale = 1.46;
+          scale = 1.75;
+          icc = "/home/user/nix/devices/screens/lenovo_slow.icc";
+        }
+        {
+          output = "desc:Shenzhen KTC Technology Group H27S17 0x00000001";
+          mode = "highres";
+          position = "auto-left";
+          scale = 1.33;
+          bitdepth = 10; # 8 (default) or 10
+          vrr = 0; # 0 (default) or 1
+          supports_hdr = 0; # -1, 0 (auto, default), 1
+          icc = "/home/user/nix/devices/screens/msk_fast.icc";
         }
         {
           output = "desc:Acer Technologies Acer A231H LQT0W0084320";
-          position = "auto-right";
           mode = "highres";
+          position = "auto-right";
           scale = 1;
         }
       ];
@@ -99,23 +99,23 @@
           # keyboard
           kb_layout = "us,ru";
           kb_options = "grp:win_space_toggle";
-          repeat_rate = 45; # in one second
-          repeat_delay = 250;
+          repeat_rate = 30; # in one second
+          repeat_delay = 215;
 
           # mouse or hamster
           accel_profile = "adaptive";
           force_no_accel = false;
           follow_mouse = 1; # window focus follow cursor
           natural_scroll = false; # natural mean idiotic
-          sensitivity = 0; # from -1.0 to 1.0
-          scroll_factor = "0.8";
+          sensitivity = 0.0; # from -1.0 to 1.0
+          scroll_factor = 1.2; # lenovo
 
           touchpad = {
             disable_while_typing = true;
             tap_and_drag = false;
             drag_lock = 0; # fuck this shit
             natural_scroll = true; # TRUE FOR LENOVO TOUCHPAD!!!
-            scroll_factor = 1.0;
+            scroll_factor = 0.5; # lenovo
           };
         };
 
@@ -205,8 +205,25 @@
       #   ]
     };
 
+    #     "exec wl-clip-persist --clipboard regular"
     extraConfig = ''
+      -- AUTOSTART
+
+      hl.on("hyprland.start", function ()
+        hl.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ on")
+        hl.exec_cmd("swaybg -i $HOME/Picture/gowall/bg.png")
+        hl.exec_cmd("waybar")
+        hl.exec_cmd("mako")
+        hl.exec_cmd("udiskie -a")
+        hl.exec_cmd("swayidle -w timeout 540 'hyprctl dispatch dpms off' timeout 600 'hyprctl keyword input:kb_layout us,ru && swaylock' resume 'sleep 1 && hyprctl dispatch dpms on'")
+      end)
+
+      -- KEYS
+
       local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+
+      hl.bind(mainMod .. " + SHIFT + s", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy && wl-paste > $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png'))
+      hl.bind(mainMod .. " + s", hl.dsp.exec_cmd('grim - | wl-copy && wl-paste > $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png'))
 
       -- Window focus move
       hl.bind(mainMod .. " + h",  hl.dsp.focus({ direction = "left" }))
@@ -222,13 +239,9 @@
       -- Window move
       for i = 1, 10 do
           local key = i % 10 -- 10 maps to key 0
-          hl.bind(mainMod .. " + " .. key,             hl.dsp.focus({ workspace = i}))
-          hl.bind(mainMod .. " + SHIFT + " .. key,     hl.dsp.window.move({ workspace = i }))
+          hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i}))
+          hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
       end
-
-      -- Special workspace (scratchpad)
-      hl.bind(mainMod .. " + S",         hl.dsp.workspace.toggle_special("magic"))
-      hl.bind(mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" }))
 
       -- Scroll through existing workspaces
       hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))

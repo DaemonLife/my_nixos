@@ -111,7 +111,7 @@
       }
 
       :root {
-        --tab-min-height: 60px !important;
+        --tab-min-height: 35px !important;
       }
 
       .tabbrowser-tab .tab-background {

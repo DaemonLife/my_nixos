@@ -21,11 +21,6 @@
     # --------------------------------
 
     packages = with pkgs; [
-      # pipx bug fix
-      # (pipx.overrideAttrs (old: {
-      #   doCheck = false;
-      # }))
-
       # - Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
@@ -36,7 +31,6 @@
       vivaldi
 
       # - Media
-      # helvum # A GTK patchbay for pipewire (old)
       crosspipe # A GTK patchbay for pipewire
       pavucontrol # audio gui control
       flacon # gui split music cue
@@ -51,6 +45,7 @@
       freefilesync
       # ascii-draw
       video-downloader
+      losslesscut-bin # ffmpeg gui for lossless cut videos
 
       # - Theming
       vimix-icon-theme # cursor icon
@@ -109,6 +104,56 @@
     ripgrep.enable = true;
     fastfetch.enable = true;
     yt-dlp.enable = true;
+
+    # ashell = {
+    #   enable = true;
+    #   systemd.enable = true;
+    #   settings = {
+    #     animations.enable = false;
+    #     position = "Top";
+    #     modules = {
+    #       left = [
+    #         "Workspaces"
+    #         "MediaPlayer"
+    #       ];
+    #       center = ["WindowTitle"];
+    #       right = [
+    #         "KeyboardLayout"
+    #         "SystemInfo"
+    #         [
+    #           "Tray"
+    #           "Privacy"
+    #           "Settings"
+    #         ]
+    #         "Tempo"
+    #       ];
+    #     };
+    #     workspaces = {
+    #       visibility_mode = "All";
+    #       enable_workspace_filling = true;
+    #       max_workspaces = 10;
+    #     };
+    #     settings = {
+    #       battery_format = "Icon";
+    #       peripheral_battery_format = "Icon";
+    #       peripheral_indicators = {
+    #         Specific = [
+    #           "Gamepad"
+    #           "Keyboard"
+    #         ];
+    #       };
+    #     };
+    #     keyboard_layout = {
+    #       labels = {
+    #         "English (US)" = "🇺🇸";
+    #         "Russian" = "🏳️‍🌈";
+    #       };
+    #     };
+    #     appearance = {
+    #       scale_factor = 1.0;
+    #     };
+    #   };
+    # };
 
     btop = {
       enable = true;
