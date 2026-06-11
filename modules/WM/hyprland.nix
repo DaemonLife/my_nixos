@@ -10,20 +10,70 @@
       MY_DE = "hyprland";
     })
     ./mako.nix
-    ./swaylock.nix
-    ./swayidle.nix
   ];
 
   home.packages = with pkgs; [
     brightnessctl
     grim # screenshot
     slurp # area for screenshot
-    swaybg
     fsel
     wl-clipboard # wayland clipboard
     wl-clip-persist # persist wayland clipboard
   ];
 
+  # wallpaper
+  services = {
+    hyprpaper = {
+      enable = true;
+      settings.wallpaper = [
+        {
+          monitor = "";
+          path = "/home/user/Pictures/gowall/bg.png";
+        }
+      ];
+    };
+  };
+  # hypridle and lock
+  programs.hyprlock.enable = true;
+  services.hypridle.enable = true;
+  home.file.".config/hypr/hypridle.conf".text = ''
+    general {
+        lock_cmd = pidof hyprlock || hyprlock                                     # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = loginctl lock-session                                  # lock before suspend.
+        after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
+    }
+
+    listener {
+        timeout = 500                                # 2.5min.
+        on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
+        on-resume = brightnessctl -r                 # monitor backlight restore.
+    }
+
+    # turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
+    listener {
+        timeout = 500                                          # 2.5min.
+        on-timeout = brightnessctl -sd rgb:kbd_backlight set 0 # turn off keyboard backlight.
+        on-resume = brightnessctl -rd rgb:kbd_backlight        # turn on keyboard backlight.
+    }
+
+    listener {
+        timeout = 600                                 # 5min
+        on-timeout = loginctl lock-session            # lock screen when timeout has passed
+    }
+
+    listener {
+        timeout = 610                                                                                  # 5.5min
+        on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'                            # screen off when timeout has passed
+        on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r          # screen on when activity is detected after timeout has fired.
+    }
+
+    listener {
+        timeout = 1810                                # 30min
+        on-timeout = systemctl hibernate                # suspend pc
+    }
+  '';
+
+  # hyprland
   wayland.windowManager.hyprland = {
     enable = true;
     package = null;
@@ -211,11 +261,9 @@
 
       hl.on("hyprland.start", function ()
         hl.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ on")
-        hl.exec_cmd("swaybg -i $HOME/Picture/gowall/bg.png")
         hl.exec_cmd("waybar")
         hl.exec_cmd("mako")
         hl.exec_cmd("udiskie -a")
-        hl.exec_cmd("swayidle -w timeout 540 'hyprctl dispatch dpms off' timeout 600 'hyprctl keyword input:kb_layout us,ru && swaylock' resume 'sleep 1 && hyprctl dispatch dpms on'")
       end)
 
       -- KEYS

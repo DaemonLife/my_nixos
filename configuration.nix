@@ -30,7 +30,6 @@
       ];
     };
   };
-
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = false;
@@ -152,12 +151,12 @@
   # SYSTEM PROGRAMS
   # --------------------------------
 
-  # xdg.portal = {
-  #   enable = true;
-  #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  #   wlr.enable = true;
-  #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
-  # };
+  xdg.portal = {
+    enable = true;
+    #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    #   wlr.enable = true;
+    #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+  };
 
   programs = {
     hyprland.enable = true;
