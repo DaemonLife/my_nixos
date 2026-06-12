@@ -98,13 +98,14 @@
             format = "{}";
             format-en = "us";
             format-ru = "ru";
+            on-click = "exec gnome-calendar";
             tooltip = false;
           };
 
           "clock" = {
-            format = "{:%b-%d-%H:%M}";
+            format = "{:%b-%d %H:%M}";
             on-click = "exec gnome-calendar";
-            "tooltip-format" = "<span size='${toString (config.stylix.fonts.sizes.desktop - 3)}pt' font='${config.stylix.fonts.monospace.name}'>{calendar}</span>";
+            "tooltip-format" = "<span size='${toString (config.stylix.fonts.sizes.popups - 2)}pt' font='${config.stylix.fonts.monospace.name}'>{calendar}</span>";
             "calendar" = {
               "mode" = "year";
               "mode-mon-col" = 3;
@@ -112,10 +113,10 @@
               "on-scroll" = 1;
               "on-click-right" = "mode";
               "format" = {
-                "months" = "<span color='#${base0A}'>{}</span>";
-                "days" = "<span color='#${base03}'>{}</span>";
+                "months" = "<span color='#${base05}'><b>{}</b></span>";
+                "weekdays" = "<span color='#${base04}'>{}</span>";
                 "weeks" = "<span color='#${base0C}'>W{}</span>";
-                "weekdays" = "<span color='#${base0B}'>{}</span>";
+                "days" = "<span color='#${base03}'>{}</span>";
                 "today" = "<span color='#${base08}'><b>{}</b></span>";
               };
             };
@@ -140,6 +141,7 @@
             format-plugged = "bat-{capacity}";
             format-charging = "bat-{capacity}+";
             on-click = "gnome-power-statistics";
+            tooltip = false;
           };
 
           network = {
@@ -162,14 +164,14 @@
             format-source = " mic";
             format-source-muted = "";
             format-icons = {
-              hands-free = "head";
-              headset = "head";
-              headphone = "head";
+              headset = "aux";
+              headphone = "aux";
+              hands-free = "aux";
               phone = "phone";
               portable = "port";
-              car = "vol-go-for-a-walk-man-or-buy-a-bicycle";
-              speaker = "vol";
-              default = "ext";
+              car = "vol-buy-a-bicycle";
+              default = "vol";
+              speaker = "spk";
               hdmi = "hdmi";
             };
             max-volume = 100;
@@ -179,6 +181,7 @@
             on-click-middle = "crosspipe";
             scroll-step = 5;
             reverse-scrolling = true;
+            tooltip = false;
           };
         };
       };
@@ -281,15 +284,16 @@
             }
             #window { padding: 0px 10px 0px 6px; }
 
-            /* calendar look */
             tooltip {
-              font-size: ${toString (config.stylix.fonts.sizes.terminal)}px;
+              font-size: ${toString (config.stylix.fonts.sizes.popups)}pt;
+              color: @white;
               background-color: @dark;
               border: 4px;
               border-style: solid;
               border-color: @accent;
               font-weight: normal;
-              margin: 0px 4px 0px 4px;
+              padding: 0px 0px 0px 0px;
+              margin: 0px 0px 0px 0px;
             }
 
             /* on but not connect */

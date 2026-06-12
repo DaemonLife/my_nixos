@@ -159,7 +159,6 @@
         # run programs
         {_args = [(lib.generators.mkLuaInline ''mod .. " + return"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(terminal)'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + a"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(menu)'')];}
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + n"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(filemanager)'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(browser)'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd('proxychains4 ' .. browser)'')];}
       ];
@@ -169,33 +168,12 @@
       #   # ",switch:off:Lid Switch, exec, hyprctl keyword input:kb_layout us,ru && swaylock && sleep 1 && hyprctl dispatch dpms off"
       #   # ",switch:on:Lid Switch, exec, sleep 1 && hyprctl dispatch dpms on"
       # ];
-
-      # for long pressed
-      # binde = [
-      #   # window resize
-      #   "$mod SHIFT, l, resizeactive, 10 0"
-      #   "$mod SHIFT, h, resizeactive, -10 0"
-      #   "$mod SHIFT, k, resizeactive, 0 -10"
-      #   "$mod SHIFT, j, resizeactive, 0 10"
-      #
-      #   # Brightness
-      #   ", XF86MonBrightnessUp, exec, brightnessctl set 5%+"
-      #   ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
-      #   "Control_L, h, exec, brightnessctl set 5%-"
-      #   "Control_L, l, exec, brightnessctl set 5%+"
-      #
-      #   # Audio control
-      #   ", XF86AudioRaiseVolume, exec, amixer sset 'Master' 5%+"
-      #   ", XF86AudioLowerVolume, exec, amixer sset 'Master' 5%-"
-      #   "Control_L, j, exec, amixer sset 'Master' 5%+"
-      #   "Control_L, k, exec, amixer sset 'Master' 5%-"
-      #   ", XF86AudioMute, exec, amixer set Master toggle"
-      #   ", XF86AudioMicMute, exec, amixer sset Capture toggle"
-      # ];
     };
 
     extraConfig = ''
+      -- -------------
       -- AUTOSTART
+      -- -------------
 
       hl.on("hyprland.start", function ()
         hl.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ on")
@@ -204,7 +182,9 @@
         hl.exec_cmd("udiskie -a")
       end)
 
+      -- -------------
       -- KEYS
+      -- -------------
 
       local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
@@ -218,23 +198,28 @@
       hl.bind(mainMod .. " + k",    hl.dsp.focus({ direction = "up" }))
       hl.bind(mainMod .. " + j",  hl.dsp.focus({ direction = "down" }))
 
+      -- Window move
       hl.bind(mainMod .. " + SHIFT + h",  hl.dsp.window.move({ direction = "left" }))
       hl.bind(mainMod .. " + SHIFT + l", hl.dsp.window.move({ direction = "right" }))
       hl.bind(mainMod .. " + SHIFT + k",    hl.dsp.window.move({ direction = "up" }))
       hl.bind(mainMod .. " + SHIFT + j",  hl.dsp.window.move({ direction = "down" }))
-
-      -- Window move
       for i = 1, 10 do
           local key = i % 10 -- 10 maps to key 0
           hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i}))
           hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
       end
 
+      -- Window resize
+      hl.bind(mainMod .. " + CTRL + l", hl.dsp.window.resize({ x = 25, y = 0, relative = true }), { repeating = true }, { description = "Increase window width with keyboard" })
+      hl.bind(mainMod .. " + CTRL + h", hl.dsp.window.resize({ x = -25, y = 0, relative = true }), { repeating = true }, { description = "Reduce window width with keyboard" })
+      hl.bind(mainMod .. " + CTRL + j", hl.dsp.window.resize({ x = 0, y = 25, relative = true }), { repeating = true }, { description = "Increase window height with keyboard" })
+      hl.bind(mainMod .. " + CTRL + k", hl.dsp.window.resize({ x = 0, y = -25, relative = true }), { repeating = true }, { description = "Reduce window height with keyboard" })
+
       -- Scroll through existing workspaces
-      hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-      hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
-      hl.bind(mainMod .. " + CTRL + j", hl.dsp.focus({ workspace = "e+1" }))
-      hl.bind(mainMod .. " + CTRL + k",   hl.dsp.focus({ workspace = "e-1" }))
+      hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e+1" }))
+      hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e-1" }))
+      hl.bind(mainMod .. " + n", hl.dsp.focus({ workspace = "e+1" }))
+      hl.bind(mainMod .. " + SHIFT + n",   hl.dsp.focus({ workspace = "e-1" }))
 
       -- Split toggle
       hl.bind(mainMod .. " + e", hl.dsp.layout("togglesplit"))    -- dwindle only
@@ -256,7 +241,15 @@
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
       -- Lock
-      hl.bind("F10",  hl.dsp.exec_cmd("hyprlock"))
+      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
+
+      -- Laptop closing and opening
+      -- Trigger when the switch is toggled
+      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { locked = true })
+      -- Trigger when the switch is turning on.
+      hl.bind("switch:on:Lid Switch", hl.dsp.dpms({ action = "disable" }), { locked = true })
+      -- Trigger when the switch is turning off.
+      hl.bind("switch:off:Lid Switch", hl.dsp.dpms({ action = "enable" }), { locked = true })
 
     '';
     # HYPRLAND VARIABLES
@@ -314,22 +307,22 @@
     enable = true;
     extraConfig = with config.lib.stylix.colors; ''
       general {
-        # no_fade_in = true
-        # no_fade_out = true
+        no_fade_in = true
+        no_fade_out = true
         disable_loading_bar = false
         hide_cursor = true
-        # immediate_render = true
+        immediate_render = true
       }
       animations {
-        # enabled = true
+        enabled = false
       }
       background {
         monitor =
         # path = /home/user/Pictures/gowall/bg.png
         # path = screenshot
         color = rgb(${base00})
-        # blur_passes = 3
-        # blur_size = 3
+        blur_passes = 0
+        blur_size = 0
       }
       # TIME
       label {

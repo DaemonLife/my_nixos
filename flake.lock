@@ -302,11 +302,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1781267807,
-        "narHash": "sha256-DfC1xwUxnGvfXh2pdN5/ozXfbQFSWWZQ4BYgusUnkDM=",
+        "lastModified": 1781287614,
+        "narHash": "sha256-Ga/oDAxAsVO5+4ZmvgmJipQgZFnAmCZ6qvfxHZwxLoM=",
         "owner": "NotAShelf",
         "repo": "nvf",
-        "rev": "36c88a31f6bc34f9bb3afd4e0fde1296b6f813bb",
+        "rev": "69f386eca6f01556f9787a75d53980979d30c9f8",
         "type": "github"
       },
       "original": {
