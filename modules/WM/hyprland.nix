@@ -21,59 +21,9 @@
     wl-clip-persist # persist wayland clipboard
   ];
 
-  # wallpaper
-  services = {
-    hyprpaper = {
-      enable = true;
-      settings.wallpaper = [
-        {
-          monitor = "";
-          path = "/home/user/Pictures/gowall/bg.png";
-        }
-      ];
-    };
-  };
-  # hypridle and lock
-  programs.hyprlock.enable = true;
-  services.hypridle.enable = true;
-  home.file.".config/hypr/hypridle.conf".text = ''
-    general {
-        lock_cmd = pidof hyprlock || hyprlock                                     # avoid starting multiple hyprlock instances.
-        before_sleep_cmd = loginctl lock-session                                  # lock before suspend.
-        after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
-    }
-
-    listener {
-        timeout = 500                                # 2.5min.
-        on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
-        on-resume = brightnessctl -r                 # monitor backlight restore.
-    }
-
-    # turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
-    listener {
-        timeout = 500                                          # 2.5min.
-        on-timeout = brightnessctl -sd rgb:kbd_backlight set 0 # turn off keyboard backlight.
-        on-resume = brightnessctl -rd rgb:kbd_backlight        # turn on keyboard backlight.
-    }
-
-    listener {
-        timeout = 600                                 # 5min
-        on-timeout = loginctl lock-session            # lock screen when timeout has passed
-    }
-
-    listener {
-        timeout = 610                                                                                  # 5.5min
-        on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'                            # screen off when timeout has passed
-        on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r          # screen on when activity is detected after timeout has fired.
-    }
-
-    listener {
-        timeout = 1810                                # 30min
-        on-timeout = systemctl hibernate                # suspend pc
-    }
-  '';
-
+  # ------------------------
   # hyprland
+  # ------------------------
   wayland.windowManager.hyprland = {
     enable = true;
     package = null;
@@ -116,8 +66,8 @@
 
       config = {
         general = {
-          gaps_in = 4;
-          gaps_out = 4;
+          gaps_in = 0;
+          gaps_out = 0;
           border_size = 4;
           col = {
             active_border = lib.mkForce "rgba(${base0D}ff)";
@@ -181,7 +131,7 @@
         misc = {
           force_default_wallpaper = 0;
         };
-      }; # new config
+      };
 
       env = [
         {
@@ -201,7 +151,7 @@
       bind = [
         # windows control
         {_args = [(lib.generators.mkLuaInline ''mod .. " + q"'') (lib.generators.mkLuaInline "hl.dsp.window.close()")];}
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + t"'') (lib.generators.mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'')];}
+        {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + e"'') (lib.generators.mkLuaInline ''hl.dsp.window.float({ action = "toggle" })'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + f"'') (lib.generators.mkLuaInline "hl.dsp.window.fullscreen()")];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + mouse:272"'') (lib.generators.mkLuaInline "hl.dsp.window.drag()") {mouse = true;}];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + mouse:273"'') (lib.generators.mkLuaInline "hl.dsp.window.resize()") {mouse = true;}];}
@@ -242,20 +192,8 @@
       #   ", XF86AudioMute, exec, amixer set Master toggle"
       #   ", XF86AudioMicMute, exec, amixer sset Capture toggle"
       # ];
-
-      # for one press
-      # bind =
-      #   [
-      #     # Lock screen
-      #     ", F10, exec, hyprctl keyword input:kb_layout us,ru && swaylock"
-      #
-      #     # Screenshot
-      #     "SUPER_SHIFT, s, exec, grimblast copysave area"
-      #     " , PRINT, exec, grimblast copysave output"
-      #   ]
     };
 
-    #     "exec wl-clip-persist --clipboard regular"
     extraConfig = ''
       -- AUTOSTART
 
@@ -270,6 +208,7 @@
 
       local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
+      -- Screenshot
       hl.bind(mainMod .. " + SHIFT + s", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy && wl-paste > $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png'))
       hl.bind(mainMod .. " + s", hl.dsp.exec_cmd('grim - | wl-copy && wl-paste > $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png'))
 
@@ -298,21 +237,26 @@
       hl.bind(mainMod .. " + CTRL + k",   hl.dsp.focus({ workspace = "e-1" }))
 
       -- Split toggle
-      hl.bind(mainMod .. " + t", hl.dsp.layout("togglesplit"))    -- dwindle only
+      hl.bind(mainMod .. " + e", hl.dsp.layout("togglesplit"))    -- dwindle only
 
       -- Laptop multimedia keys for volume and LCD brightness
       hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
       hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+      hl.bind(mainMod .. " + ALT + j", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+      hl.bind(mainMod .. " + ALT + k", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
       hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
       hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
       hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
       hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
-
-      -- Requires playerctl
+      hl.bind(mainMod .. " + ALT + l",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
+      hl.bind(mainMod .. " + ALT + h",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
       hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
       hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
       hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
+
+      -- Lock
+      hl.bind("F10",  hl.dsp.exec_cmd("hyprlock"))
 
     '';
     # HYPRLAND VARIABLES
@@ -347,4 +291,90 @@
     #   export XDG_SESSION_DESKTOP=Hyprland
     # '';
   };
+
+  # ------------------------
+  # wallpaper
+  # ------------------------
+  services = {
+    hyprpaper = {
+      enable = true;
+      settings.wallpaper = [
+        {
+          monitor = "";
+          path = "/home/user/Pictures/gowall/bg.png";
+        }
+      ];
+    };
+  };
+
+  # ------------------------
+  # hypridle and lock
+  # ------------------------
+  programs.hyprlock = {
+    enable = true;
+    extraConfig = with config.lib.stylix.colors; ''
+      general {
+        # no_fade_in = true
+        # no_fade_out = true
+        disable_loading_bar = false
+        hide_cursor = true
+        # immediate_render = true
+      }
+      animations {
+        # enabled = true
+      }
+      background {
+        monitor =
+        # path = /home/user/Pictures/gowall/bg.png
+        # path = screenshot
+        color = rgb(${base00})
+        # blur_passes = 3
+        # blur_size = 3
+      }
+      # TIME
+      label {
+          monitor =
+          text = $TIME
+          color = rgb(${base05})
+          font_size = 200
+          # font_family = JetBrains Mono Nerd Font Mono ExtraBold
+          position = 0, 230
+          halign = center
+          valign = center
+      }
+    '';
+  };
+
+  services.hypridle.enable = true;
+  home.file.".config/hypr/hypridle.conf".text = ''
+    general {
+        lock_cmd = pidof hyprlock || hyprlock                                     # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = loginctl lock-session                                  # lock before suspend.
+        after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
+    }
+    listener {
+        timeout = 500                                # 2.5min.
+        on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
+        on-resume = brightnessctl -r                 # monitor backlight restore.
+    }
+    # turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
+    listener {
+        timeout = 500                                          # 2.5min.
+        on-timeout = brightnessctl -sd rgb:kbd_backlight set 0 # turn off keyboard backlight.
+        on-resume = brightnessctl -rd rgb:kbd_backlight        # turn on keyboard backlight.
+    }
+    listener {
+        timeout = 600                                 # 5min
+        on-timeout = loginctl lock-session            # lock screen when timeout has passed
+    }
+    listener {
+        timeout = 610                                                                                  # 5.5min
+        on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'                            # screen off when timeout has passed
+        on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r          # screen on when activity is detected after timeout has fired.
+    }
+    listener {
+        timeout = 1810                                # 30min
+        on-timeout = systemctl hibernate                # suspend pc
+    }
+  '';
 }
