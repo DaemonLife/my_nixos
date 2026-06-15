@@ -190,18 +190,18 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      package = pkgs.steam.override {
-        extraEnv = {
-          MANGOHUD = "1";
-          GAMEMODERUN = "1";
-        };
-      };
-      gamescopeSession.enable = true;
-      protontricks.enable = true;
-      extraCompatPackages = with pkgs; [proton-ge-bin];
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-      localNetworkGameTransfers.openFirewall = true;
+      # package = pkgs.steam.override {
+      #   extraEnv = {
+      #     MANGOHUD = "1";
+      #     GAMEMODERUN = "1";
+      #   };
+      # };
+      # gamescopeSession.enable = true;
+      # protontricks.enable = true;
+      # extraCompatPackages = with pkgs; [proton-ge-bin];
+      # remotePlay.openFirewall = true;
+      # dedicatedServer.openFirewall = true;
+      # localNetworkGameTransfers.openFirewall = true;
     };
     gamescope = {
       enable = true;

@@ -6,6 +6,9 @@
 }:
 # Rusticl start:
 # ROC_ENABLE_PRE_VEGA=1 RUSTICL_ENABLE=amdgpu,amdgpu-pro,radv,radeon,radeonsi DRI_PRIME=0 QT_QPA_PLATFORM=xcb darktable
+# or simple:
+# RUSTICL_ENABLE=amdgpu,amdgpu-pro,radv,radeon,radeonsi darktable
+# add the variable to autostart!!!
 let
   theme = ''
     /* --- My variables --- */

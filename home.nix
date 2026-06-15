@@ -46,6 +46,7 @@
       # ascii-draw
       video-downloader
       losslesscut-bin # ffmpeg gui for lossless cut videos
+      untrunc-anthwlock # fix corrupt video
 
       # - Theming
       vimix-icon-theme # cursor icon
