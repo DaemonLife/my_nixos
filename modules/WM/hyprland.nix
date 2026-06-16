@@ -157,20 +157,14 @@
         {_args = [(lib.generators.mkLuaInline ''mod .. " + mouse:273"'') (lib.generators.mkLuaInline "hl.dsp.window.resize()") {mouse = true;}];}
 
         # run programs
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + return"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(terminal)'')];}
-        {_args = [(lib.generators.mkLuaInline ''mod .. " + a"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(menu)'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd(browser)'')];}
         {_args = [(lib.generators.mkLuaInline ''mod .. " + SHIFT + b"'') (lib.generators.mkLuaInline ''hl.dsp.exec_cmd('proxychains4 ' .. browser)'')];}
       ];
-
-      # bindl = [
-      #   ", switch:Lid Switch, exec, swaylock && hyprctl keyword input:kb_layout us,ru"
-      #   # ",switch:off:Lid Switch, exec, hyprctl keyword input:kb_layout us,ru && swaylock && sleep 1 && hyprctl dispatch dpms off"
-      #   # ",switch:on:Lid Switch, exec, sleep 1 && hyprctl dispatch dpms on"
-      # ];
     };
 
     extraConfig = ''
+      local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+
       -- -------------
       -- AUTOSTART
       -- -------------
@@ -183,10 +177,15 @@
       end)
 
       -- -------------
-      -- KEYS
+      -- PROGRAMS
       -- -------------
 
-      local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+      hl.bind(mainMod .. " + return", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot'))
+      hl.bind(mainMod .. " + a", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot bash -c "fsel -d"'))
+
+      -- -------------
+      -- KEYS
+      -- -------------
 
       -- Screenshot
       hl.bind(mainMod .. " + SHIFT + s", hl.dsp.exec_cmd('grim -g "$(slurp -d)" - | wl-copy && wl-paste > $HOME/Pictures/Screenshots/$(date +%Y-%m-%d_%H:%M:%S).png'))
@@ -241,15 +240,19 @@
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
       -- Lock
-      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprlock"))
+      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0"))
 
       -- Laptop closing and opening
       -- Trigger when the switch is toggled
-      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprlock"), { locked = true })
+      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0"), { locked = true })
       -- Trigger when the switch is turning on.
       hl.bind("switch:on:Lid Switch", hl.dsp.dpms({ action = "disable" }), { locked = true })
       -- Trigger when the switch is turning off.
       hl.bind("switch:off:Lid Switch", hl.dsp.dpms({ action = "enable" }), { locked = true })
+
+      -- Other
+      hl.bind(mainMod .. " + u",  hl.dsp.exec_cmd("hyprctl switchxkblayout all 0"),   { locked = true })
+      hl.bind(mainMod .. " + r",  hl.dsp.exec_cmd("hyprctl switchxkblayout all 1"),   { locked = true })
 
     '';
     # HYPRLAND VARIABLES
@@ -341,8 +344,8 @@
   services.hypridle.enable = true;
   home.file.".config/hypr/hypridle.conf".text = ''
     general {
-        lock_cmd = pidof hyprlock || hyprlock                                     # avoid starting multiple hyprlock instances.
-        before_sleep_cmd = loginctl lock-session                                  # lock before suspend.
+        lock_cmd = pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0                                     # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = loginctl lock-session; hyprctl switchxkblayout all 0                                  # lock before suspend.
         after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
     }
     listener {
