@@ -106,56 +106,6 @@
     fastfetch.enable = true;
     yt-dlp.enable = true;
 
-    # ashell = {
-    #   enable = true;
-    #   systemd.enable = true;
-    #   settings = {
-    #     animations.enable = false;
-    #     position = "Top";
-    #     modules = {
-    #       left = [
-    #         "Workspaces"
-    #         "MediaPlayer"
-    #       ];
-    #       center = ["WindowTitle"];
-    #       right = [
-    #         "KeyboardLayout"
-    #         "SystemInfo"
-    #         [
-    #           "Tray"
-    #           "Privacy"
-    #           "Settings"
-    #         ]
-    #         "Tempo"
-    #       ];
-    #     };
-    #     workspaces = {
-    #       visibility_mode = "All";
-    #       enable_workspace_filling = true;
-    #       max_workspaces = 10;
-    #     };
-    #     settings = {
-    #       battery_format = "Icon";
-    #       peripheral_battery_format = "Icon";
-    #       peripheral_indicators = {
-    #         Specific = [
-    #           "Gamepad"
-    #           "Keyboard"
-    #         ];
-    #       };
-    #     };
-    #     keyboard_layout = {
-    #       labels = {
-    #         "English (US)" = "🇺🇸";
-    #         "Russian" = "🏳️‍🌈";
-    #       };
-    #     };
-    #     appearance = {
-    #       scale_factor = 1.0;
-    #     };
-    #   };
-    # };
-
     btop = {
       enable = true;
       settings = {

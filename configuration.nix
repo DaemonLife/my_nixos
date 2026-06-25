@@ -7,7 +7,6 @@
 }: {
   imports = [
     ./modules/stylix.nix
-    # ./modules/WM/i3_configuration.nix
   ];
 
   # --------------------------------
@@ -55,14 +54,14 @@
   services.udev.packages = [pkgs.sane-airscan]; # device manager for the Linux kernel
 
   # Sound
+  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
   services.pipewire = {
     enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true; # important for waybar
-    jack.enable = true; # If you want to use JACK applications
+    # alsa.enable = true;
+    # alsa.support32Bit = true; # waiting a bug fix https://nixpk.gs/pr-tracker.html?pr=534770
+    # pulse.enable = true; # important for waybar
+    # jack.enable = true; # If you want to use JACK applications
   };
-  security.rtkit.enable = true; # rtkit is optional but recommended for pipewire
 
   # Region
   i18n.defaultLocale = "en_US.UTF-8";
@@ -87,7 +86,7 @@
     description = "my user";
     shell = pkgs.zsh;
     useDefaultShell = true;
-    packages = with pkgs; [flatpak];
+    # packages = with pkgs; [flatpak];
     extraGroups = ["networkmanager" "wheel" "video" "input" "scanner" "lp"];
   };
 
@@ -109,21 +108,26 @@
   };
 
   # --------------------------------
-  # NIX SETTING
+  # SYSTEM PACKAGES
   # --------------------------------
 
   nixpkgs.config.allowUnfree = true;
   nix = {
     settings.experimental-features = ["nix-command" "flakes"];
     settings.auto-optimise-store = true;
-    # ability to specify additional binary caches (devenv)
     settings.trusted-users = ["user"];
     optimise.automatic = true;
   };
 
-  # --------------------------------
-  # SYSTEM PACKAGES
-  # --------------------------------
+  # waitign for a bug fix https://nixpk.gs/pr-tracker.html?pr=534770
+  nixpkgs.overlays = [
+    (final: prev: {
+      openblas =
+        if prev.stdenv.hostPlatform.system == "i686-linux"
+        then prev.openblas.overrideAttrs (_: {doCheck = false;})
+        else prev.openblas;
+    })
+  ];
 
   environment.systemPackages = with pkgs; [
     gparted
@@ -140,7 +144,7 @@
     iotop
     wget
     nmap # scan network map: nmap -sn 192.168.1.0/24
-    ncdu # folder size tree
+    ncdu # nice files size tree
     mangohud # Steam performance GUI
     zip
     unzip
@@ -190,18 +194,18 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      # package = pkgs.steam.override {
-      #   extraEnv = {
-      #     MANGOHUD = "1";
-      #     GAMEMODERUN = "1";
-      #   };
-      # };
-      # gamescopeSession.enable = true;
-      # protontricks.enable = true;
-      # extraCompatPackages = with pkgs; [proton-ge-bin];
-      # remotePlay.openFirewall = true;
+      package = pkgs.steam.override {
+        extraEnv = {
+          MANGOHUD = "1";
+          GAMEMODERUN = "1";
+        };
+      };
+      gamescopeSession.enable = true;
+      protontricks.enable = true;
+      extraCompatPackages = with pkgs; [proton-ge-bin];
+      remotePlay.openFirewall = true;
       # dedicatedServer.openFirewall = true;
-      # localNetworkGameTransfers.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
     };
     gamescope = {
       enable = true;
@@ -209,7 +213,7 @@
     };
     gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
-    # nix-ld.enable = true; # run bin files
+    nix-ld.enable = true; # run bin files
     dconf.enable = true;
     htop.enable = true;
     git.enable = true;
@@ -249,13 +253,10 @@
       autologinOnce = true;
     };
 
-    # vpn
-    v2raya.enable = true;
-
+    v2raya.enable = true; # vpn
     openssh.enable = true;
     flatpak.enable = true;
     gvfs.enable = true; # Mount, trash, and other functionalities
-    colord.enable = true; # color manager
   };
 
   systemd = {
@@ -289,7 +290,7 @@
 
   security = {
     polkit.enable = true; # authentication support (backed)
-    pam.services.swaylock = {}; # screen lock
+    # pam.services.swaylock = {}; # screen lock
   };
   # services.gnome.gnome-keyring.enable = true; # secret portal for matrix
 

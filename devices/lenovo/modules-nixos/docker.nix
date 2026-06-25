@@ -5,7 +5,7 @@
   ...
 }: {
   environment.systemPackages = with pkgs; [
-    xhost
+    # xhost # x11 support?
   ];
   virtualisation.docker.enable = true;
   # virtualisation.docker.storageDriver = "btrfs";

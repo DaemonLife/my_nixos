@@ -108,7 +108,7 @@
           follow_mouse = 1; # window focus follow cursor
           natural_scroll = false; # natural mean idiotic
           sensitivity = 0.0; # from -1.0 to 1.0
-          scroll_factor = 1.2; # lenovo
+          # scroll_factor = 1.2; # lenovo
 
           touchpad = {
             disable_while_typing = true;
@@ -182,6 +182,7 @@
 
       hl.bind(mainMod .. " + return", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot'))
       hl.bind(mainMod .. " + a", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot bash -c "fsel -d"'))
+      hl.bind(mainMod .. " + d", hl.dsp.exec_cmd('bash $HOME/nix/scripts/run_darktable.sh'))
 
       -- -------------
       -- KEYS
@@ -240,11 +241,11 @@
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
       -- Lock
-      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0"))
+      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock"))
 
       -- Laptop closing and opening
       -- Trigger when the switch is toggled
-      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0"), { locked = true })
+      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock"), { locked = true })
       -- Trigger when the switch is turning on.
       hl.bind("switch:on:Lid Switch", hl.dsp.dpms({ action = "disable" }), { locked = true })
       -- Trigger when the switch is turning off.
@@ -344,20 +345,14 @@
   services.hypridle.enable = true;
   home.file.".config/hypr/hypridle.conf".text = ''
     general {
-        lock_cmd = pidof hyprlock || hyprlock; hyprctl switchxkblayout all 0                                     # avoid starting multiple hyprlock instances.
-        before_sleep_cmd = loginctl lock-session; hyprctl switchxkblayout all 0                                  # lock before suspend.
+        lock_cmd = pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock                                     # avoid starting multiple hyprlock instances.
+        before_sleep_cmd = hyprctl switchxkblayout all 0; loginctl lock-session                                  # lock before suspend.
         after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
     }
     listener {
         timeout = 500                                # 2.5min.
         on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
         on-resume = brightnessctl -r                 # monitor backlight restore.
-    }
-    # turn off keyboard backlight, comment out this section if you dont have a keyboard backlight.
-    listener {
-        timeout = 500                                          # 2.5min.
-        on-timeout = brightnessctl -sd rgb:kbd_backlight set 0 # turn off keyboard backlight.
-        on-resume = brightnessctl -rd rgb:kbd_backlight        # turn on keyboard backlight.
     }
     listener {
         timeout = 600                                 # 5min
@@ -369,8 +364,8 @@
         on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r          # screen on when activity is detected after timeout has fired.
     }
     listener {
-        timeout = 1810                                # 30min
-        on-timeout = systemctl hibernate                # suspend pc
+        timeout = 1810
+        on-timeout = systemctl hibernate
     }
   '';
 }
