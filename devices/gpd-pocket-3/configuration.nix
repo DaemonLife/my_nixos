@@ -1,20 +1,26 @@
-{ config, pkgs, ... }: {
-  imports = [ ./hardware-configuration.nix ];
+{
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [./hardware-configuration.nix];
 
   # --------------------------------
   # HIBERNATION
   # --------------------------------
 
-  swapDevices = [{
-    device = "/var/lib/swapfile";
-    size = 16 * 1024; # 16GB
-  }];
-  boot.initrd.systemd.enable = true;
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024; # 16GB
+    }
+  ];
 
-  # Specifies what to do when the laptop lid is closed
-  services.logind.settings = {
-    Login.HandleLidSwitch = "suspend-then-hibernate";
-  };
+  # https://wiki.nixos.org/wiki/Power_Management
+  # Disabling wakeup triggers for all PCIe devices
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
+  '';
 
   # --------------------------------
   # OTHER

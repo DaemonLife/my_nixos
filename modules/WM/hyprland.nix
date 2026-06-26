@@ -62,6 +62,14 @@
           position = "auto-right";
           scale = 1;
         }
+        # gpd 3
+        {
+          output = "DSI-1";
+          mode = "preferred";
+          position = "auto-left";
+          scale = 1.87500;
+          transform = 3;
+        }
       ];
 
       config = {
