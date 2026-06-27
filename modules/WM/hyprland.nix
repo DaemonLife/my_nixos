@@ -190,7 +190,8 @@
 
       hl.bind(mainMod .. " + return", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot'))
       hl.bind(mainMod .. " + a", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot bash -c "fsel -d"'))
-      hl.bind(mainMod .. " + d", hl.dsp.exec_cmd('bash $HOME/nix/scripts/run_darktable.sh'))
+      hl.bind(mainMod .. " + d", hl.dsp.exec_cmd('hyprctl switchxkblayout all 0; foot bash -c "nnn -C"'))
+      hl.bind(mainMod .. " + D", hl.dsp.exec_cmd('bash $HOME/nix/scripts/run_darktable.sh'))
 
       -- -------------
       -- KEYS

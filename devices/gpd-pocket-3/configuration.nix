@@ -1,9 +1,12 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   imports = [./hardware-configuration.nix];
+
+  boot.loader.systemd-boot.configurationLimit = lib.mkForce 3; # bc no space in /boot
 
   # --------------------------------
   # HIBERNATION
