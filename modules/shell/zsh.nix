@@ -30,6 +30,12 @@
       eval "$(ssh-agent -s)" > /dev/null
       ssh-add ~/.ssh/github 2> /dev/null
       ssh-add ~/.ssh/termux 2> /dev/null
+
+      export NNN_TRASH=1 # nnn trash-cli support
+
+      if [ -f /home/user/tmp ]; then
+        source /home/user/tmp
+      fi
     '';
 
     loginExtra = ''
