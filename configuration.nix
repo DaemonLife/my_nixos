@@ -113,9 +113,12 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
-    settings.experimental-features = ["nix-command" "flakes"];
-    settings.auto-optimise-store = true;
-    settings.trusted-users = ["user"];
+    settings = {
+      experimental-features = ["nix-command" "flakes"];
+      auto-optimise-store = true;
+      trusted-users = ["user"];
+      max-jobs = 8;
+    };
     optimise.automatic = true;
   };
 
@@ -263,9 +266,9 @@
     sleep.settings.Sleep = {
       AllowSuspend = "yes";
       AllowHibernation = "yes";
-      AllowHybridSleep = "yes";
+      # AllowHybridSleep = "yes"; # bug?
       AllowSuspendThenHibernate = "yes";
-      HibernateDelaySec = 3600;
+      HibernateDelaySec = 1800; # 30m
     };
   };
 

@@ -7,12 +7,12 @@
     ./gtk.nix
     ./fzf.nix
     ./stylix.nix
-    # ./joplin.nix
+    ./joplin.nix
     ./GIMP.nix
     # ./nomacs.nix
     # ./chess/cli-chess.nix
     ./xdg.nix
-    ./unison.nix
+    # ./unison.nix
 
     ./shell/_import.nix
     ./terminal/_import.nix

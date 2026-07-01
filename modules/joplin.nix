@@ -1,7 +1,7 @@
-{ pkgs, ... }: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     joplin-cli
-    joplin-desktop
+    # joplin-desktop
   ];
 
   # evil keymap for joplin-cli
@@ -31,6 +31,6 @@
     ]
   '';
 }
-
 # how to sync in joplin-cli with dropbox:
 # sync --target 7
+
