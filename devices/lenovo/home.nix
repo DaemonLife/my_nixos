@@ -3,7 +3,7 @@
 
   home.packages = with pkgs; [
     digikam
-    darktable
+    # darktable
     kdePackages.kdenlive
     hugin
     siril

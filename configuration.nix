@@ -12,6 +12,7 @@
   # --------------------------------
   # NET AND HARDWARE SETTINGS
   # --------------------------------
+  powerManagement.enable = true;
 
   networking = {
     networkmanager.enable = true;
@@ -228,26 +229,44 @@
   # --------------------------------
 
   services = {
+    logind.settings.Login = {
+      HandleLidSwitch = "hibernate"; # default
+      HandleLidSwitchExternalPower = "lock"; # powered
+      HandleLidSwitchDocked = "ignore"; # with another screen
+    };
+
     # battery
-    tlp = {
-      enable = true;
-      settings = {
-        CPU_ENERGY_PERF_POLICY_ON_AC = "performance"; # super performance
-        CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # super save power
-
-        PLATFORM_PROFILE_ON_BAT = "low-power"; # super save power
-
-        CPU_MIN_PERF_ON_AC = 0;
-        CPU_MAX_PERF_ON_AC = 100;
-        CPU_MIN_PERF_ON_BAT = 0;
-        CPU_MAX_PERF_ON_BAT = 80;
-
-        START_CHARGE_THRESH_BAT0 = 0;
-        STOP_CHARGE_THRESH_BAT0 = 1;
-
-        DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth";
+    auto-cpufreq.enable = true;
+    auto-cpufreq.settings = {
+      battery = {
+        governor = "powersave";
+        turbo = "never";
+      };
+      charger = {
+        governor = "performance";
+        turbo = "auto";
       };
     };
+
+    # tlp = {
+    #   enable = false;
+    #   settings = {
+    #     CPU_ENERGY_PERF_POLICY_ON_AC = "performance"; # super performance
+    #     CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # super save power
+    #
+    #     PLATFORM_PROFILE_ON_BAT = "low-power"; # super save power
+    #
+    #     CPU_MIN_PERF_ON_AC = 0;
+    #     CPU_MAX_PERF_ON_AC = 100;
+    #     CPU_MIN_PERF_ON_BAT = 0;
+    #     CPU_MAX_PERF_ON_BAT = 80;
+    #
+    #     START_CHARGE_THRESH_BAT0 = 0;
+    #     STOP_CHARGE_THRESH_BAT0 = 1;
+    #
+    #     DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth";
+    #   };
+    # };
 
     # auto username in tty
     getty = {
@@ -262,15 +281,21 @@
     gvfs.enable = true; # Mount, trash, and other functionalities
   };
 
-  systemd = {
-    sleep.settings.Sleep = {
-      AllowSuspend = "yes";
-      AllowHibernation = "yes";
-      # AllowHybridSleep = "yes"; # bug?
-      AllowSuspendThenHibernate = "yes";
-      HibernateDelaySec = 1800; # 30m
-    };
+  systemd.sleep.settings.Sleep = {
+    # HibernateDelaySec = "1h";
+    AllowHibernation = "yes";
+    HibernateDelaySec = "15m";
   };
+
+  # systemd = {
+  #   sleep.settings.Sleep = {
+  #     # AllowSuspend = "yes";
+  #     AllowHibernation = "yes";
+  #     # AllowHybridSleep = "yes"; # bug?
+  #     # AllowSuspendThenHibernate = "yes";
+  #     HibernateDelaySec = 1800; # 30m
+  #   };
+  # };
 
   # --------------------------------
   # SECURITY

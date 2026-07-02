@@ -250,11 +250,11 @@
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
       -- Lock
-      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock"))
+      hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || (hyprctl switchxkblayout all 0; hyprlock)"))
 
       -- Laptop closing and opening
       -- Trigger when the switch is toggled
-      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock"), { locked = true })
+      hl.bind("switch:Lid Switch", hl.dsp.exec_cmd("pidof hyprlock || (hyprctl switchxkblayout all 0; hyprlock)"), { locked = true })
       -- Trigger when the switch is turning on.
       hl.bind("switch:on:Lid Switch", hl.dsp.dpms({ action = "disable" }), { locked = true })
       -- Trigger when the switch is turning off.
@@ -354,26 +354,26 @@
   services.hypridle.enable = true;
   home.file.".config/hypr/hypridle.conf".text = ''
     general {
-        lock_cmd = pidof hyprlock || hyprctl switchxkblayout all 0; hyprlock                                     # avoid starting multiple hyprlock instances.
-        before_sleep_cmd = hyprctl switchxkblayout all 0; loginctl lock-session                                  # lock before suspend.
-        after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'  # to avoid having to press a key twice to turn on the display.
+        lock_cmd = pidof hyprlock || (hyprctl switchxkblayout all 0; hyprlock)
+        before_sleep_cmd = hyprctl switchxkblayout all 0; loginctl lock-session
+        after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })'
     }
     listener {
-        timeout = 500                                # 2.5min.
-        on-timeout = brightnessctl -s set 10         # set monitor backlight to minimum, avoid 0 on OLED monitor.
-        on-resume = brightnessctl -r                 # monitor backlight restore.
+        timeout = 500
+        on-timeout = brightnessctl -s set 10
+        on-resume = brightnessctl -r
     }
     listener {
-        timeout = 600                                 # 5min
-        on-timeout = loginctl lock-session            # lock screen when timeout has passed
+        timeout = 600
+        on-timeout = loginctl lock-session
     }
     listener {
-        timeout = 610                                                                                  # 5.5min
-        on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'                            # screen off when timeout has passed
-        on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r          # screen on when activity is detected after timeout has fired.
+        timeout = 610
+        on-timeout = hyprctl dispatch 'hl.dsp.dpms({ action = "disable" })'
+        on-resume = hyprctl dispatch 'hl.dsp.dpms({ action = "enable" })' && brightnessctl -r
     }
     listener {
-        timeout = 1810
+        timeout = 1800
         on-timeout = systemctl hibernate
     }
   '';

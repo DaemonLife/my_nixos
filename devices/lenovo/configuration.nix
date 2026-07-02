@@ -16,10 +16,10 @@
   hardware = {
     graphics = {
       enable = true;
-      # enable32Bit = true;
-      # extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
+      enable32Bit = true;
+      extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
     };
-    amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
+    # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
   };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel (bug with darktable on both channels)
@@ -46,8 +46,11 @@
 
   # https://wiki.nixos.org/wiki/Power_Management
   # Disabling wakeup triggers for all PCIe devices
+  # services.udev.extraRules = ''
+  #   ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
+  # '';
   services.udev.extraRules = ''
-    ACTION=="add", SUBSYSTEM=="pci", DRIVER=="pcieport", ATTR{power/wakeup}="disabled"
+    ACTION=="add" SUBSYSTEM=="pci" ATTR{vendor}=="0x1022" ATTR{device}=="0x1483" ATTR{power/wakeup}="disabled"
   '';
 
   # --------------------------------
