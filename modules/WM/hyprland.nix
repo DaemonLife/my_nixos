@@ -249,8 +249,11 @@
       hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
       hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
-      -- Lock
+      -- Lock, shutdown, hibernate
       hl.bind("F10",  hl.dsp.exec_cmd("pidof hyprlock || (hyprctl switchxkblayout all 0; hyprlock)"))
+      hl.bind(mainMod .. " + CTRL + ALT + l",  hl.dsp.exec_cmd("pidof hyprlock || (hyprctl switchxkblayout all 0; hyprlock)"))
+      hl.bind(mainMod .. " + CTRL + ALT + p", hl.dsp.exec_cmd("shutdown now"), { locked = true })
+      hl.bind(mainMod .. " + CTRL + ALT + h", hl.dsp.exec_cmd("systemctl hibernate"), { locked = true })
 
       -- Laptop closing and opening
       -- Trigger when the switch is toggled

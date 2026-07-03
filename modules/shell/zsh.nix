@@ -1,9 +1,4 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
-}: {
+{config, ...}: {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -23,7 +18,12 @@
       path = "${config.xdg.dataHome}/zsh/history";
     };
 
-    initContent = ''
+    envExtra = let
+      # lol
+      var1 = "\${NNNLVL:-0}";
+      var2 = "$\{XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd";
+    in ''
+      # some options
       bash $HOME/nix/scripts/print_art.sh
       export PATH="$HOME/.cargo/bin:$PATH"
       export PROXYCHAINS_SOCKS5_PORT=20170
@@ -31,11 +31,20 @@
       ssh-add ~/.ssh/github 2> /dev/null
       ssh-add ~/.ssh/termux 2> /dev/null
 
-      export NNN_TRASH=1 # nnn trash-cli support
-
-      if [ -f /home/user/tmp ]; then
-        source /home/user/tmp
-      fi
+      # nnn function (n alias)
+      n (){
+        export NNN_TRASH=1 # nnn trash-cli support
+        [ "${var1}" -eq 0 ] || {
+          echo "nnn is already running"
+          return
+        }
+        export NNN_TMPFILE="${var2}"
+        command nnn -C "$@" # -C mean 8 bit color
+        [ ! -f "$NNN_TMPFILE" ] || {
+          . "$NNN_TMPFILE"
+          rm -f -- "$NNN_TMPFILE" > /dev/null
+        }
+      }
     '';
 
     loginExtra = ''
@@ -46,25 +55,15 @@
       fi
     '';
 
-    shellGlobalAliases = {};
     shellAliases = let
       myphone_port = "8022";
       myphone_username = "u0_a231";
     in {
-      # --- Rebuild ---
-      # "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo'';
-      # "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo'';
-
       # --upgrade --offline
       "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo -v'';
       "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo -v'';
       "ost" = ''sudo nixos-rebuild test --flake $HOME/nix/.\#lenovo -v'';
       "osc" = ''sudo nix-collect-garbage --delete-older-than 3d'';
-      # os = "$HOME/nix/scripts/nix_rebuild.sh"; # os help - for help
-
-      # --- Tlp ---
-      tlp-set-full-bat = "sudo tlp fullcharge bat1";
-      tlp-set-conserv-bat = "sudo tlp setcharge bat1";
 
       # --- Net ---
       # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases
@@ -77,7 +76,7 @@
       tt = "tt --notheme --highlight1 --blockcursor";
       cdwin = "bash $HOME/nix/scripts/mount_windows.sh '/dev/nvme0n1p3' 'user' && cd /mnt/windows/Users/user";
       ffmpeg-video-compress = "bash $HOME/nix/scripts/ffmpeg-video-compress.sh";
-      n = "nnn -C"; # 8 colors
+      # n = "nnn -C"; # 8 colors
     };
 
     siteFunctions = {

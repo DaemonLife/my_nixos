@@ -82,13 +82,15 @@
           };
 
           bluetooth = {
-            format = "{icon}";
-            format-alt = "{icon}";
+            format = "bt";
+            format-alt = "bt";
+            format-disabled = "bt";
+            format-connected = "bt {status}";
             # interval = 5;
-            format-icons = {
-              enabled = "bt";
-              disabled = "bt";
-            };
+            # format-icons = {
+            #   enabled = "bt";
+            #   disabled = "bt";
+            # };
             on-click = "bluetooth on";
             on-click-right = "bluetooth off";
             tooltip = false;
@@ -304,8 +306,11 @@
             #idle_inhibitor.activated { color: @green; }
             #idle_inhibitor.deactivated { color: @gray; }
 
-            #bluetooth { color: @green; }
+            #bluetooth { color: @yellow; }
             #bluetooth.disabled { color: @gray; }
+            #bluetooth.on { color: @yellow; }
+            #bluetooth.off { color: @gray; }
+            #bluetooth.connected { color: @green; }
 
             #pulseaudio.muted { color: @gray; }
 
