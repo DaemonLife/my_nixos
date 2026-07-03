@@ -1,8 +1,8 @@
-{config, ...}: {
-  programs.nnn = with config.lib.stylix.colors; {
+{...}: {
+  programs.nnn = {
     enable = true;
     enableZshIntegration = true;
-    # quitcd = true;
+    # quitcd = true; # bug
     # options = {};
   };
 }

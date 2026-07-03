@@ -1,7 +1,7 @@
 {...}: {
   imports = [
     ./nnn.nix
-    ./yazi.nix
+    # ./yazi.nix
     # ./ranger.nix
     # lf/lf.nix
   ];

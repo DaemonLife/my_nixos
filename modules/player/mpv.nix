@@ -1,9 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
-  programs.mpv = with config.lib.stylix.colors; {
+{pkgs, ...}: {
+  programs.mpv = {
     enable = true;
 
     bindings = {
