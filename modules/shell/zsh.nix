@@ -47,6 +47,11 @@
       }
     '';
 
+    # shell indicator for nnn
+    initContent = ''
+      [ -n "$NNNLVL" ] && PS1="N$NNNLVL $PS1"
+    '';
+
     loginExtra = ''
       if [[ -z $DISPLAY ]]; then
         if [[ $(tty) == "/dev/tty1" ]]; then
