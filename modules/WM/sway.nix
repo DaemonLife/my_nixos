@@ -30,10 +30,10 @@
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
     enable = true;
-    # package = pkgs.unstable.sway;
     checkConfig = false; # false because bug with icc profile
     xwayland = true;
     wrapperFeatures.gtk = true; # gtk apps support
+    systemd.variables = ["--all"]; # fix user env error
 
     extraConfig = ''
       popup_during_fullscreen smart
@@ -52,15 +52,18 @@
       modifier = "Mod4";
       terminal = "${pkgs.foot}/bin/foot";
       menu = "${pkgs.fuzzel}/bin/fuzzel -l 16";
-      bars = [{command = "waybar";}];
+      bars = [{command = "systemctl --user restart waybar";}];
       workspaceAutoBackAndForth = true;
 
+      # no 'exec' here
       startup = [
-        {command = "${pkgs.swaybg}/bin/swaybg -i /home/user/Pictures/gowall/bg.png";}
         {command = "pactl set-source-mute @DEFAULT_SOURCE@ on";}
         {command = "${pkgs.mako}/bin/mako";}
         {command = "wl-paste -t text --watch clipman store --no-persist";}
-        {command = "${pkgs.udiskie}/bin/udiskie -a";}
+        {command = "${pkgs.udiskie}/bin/udiskie -a";} # the service can be a better option...
+
+        # user env fix
+        {command = "dbus-update-activation-environment --all";}
       ];
 
       output = {
@@ -188,19 +191,8 @@
         '';
         "${modifier}+a" = ''exec swaymsg input "type:keyboard" xkb_switch_layout 0 && exec ${menu}'';
         # "${modifier}+n" = "exec nautilus";
-        "${modifier}+b" = "exec $BROWSER";
-        "${modifier}+t" = "exec AyuGram || exec Telegram || exec org.telegram.desktop";
-
-        "F10" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
-        "${modifier}+Alt+Ctrl+l" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
-
-        # ---------------
-        # cmus control
-        # ---------------
-
-        # "F1" = "exec cmus-remote -r"; # play pRev
-        # "F2" = "exec cmus-remote -u"; # pause/play
-        # "F3" = "exec cmus-remote -n"; # play next
+        "${modifier}+b" = "exec librewolf";
+        "${modifier}+t" = "exec AyuGram || exec Telegram || exec flatpak run org.telegram.desktop";
 
         # ---------------
         # Window control
@@ -209,46 +201,21 @@
         "${modifier}+q" = "kill";
         "${modifier}+f" = "fullscreen";
         "${modifier}+shift+f" = "floating toggle";
+        "${modifier}+Alt+f" = "focus mode_toggle"; # floating and tiled layers
         "${modifier}+r" = "mode resize";
         "${modifier}+e" = "splitt";
         "${modifier}+shift+e" = "layout toggle tabbed stacking split";
 
-        # ---------------
-        # System control
-        # ---------------
-
-        "${modifier}+Shift+r" = "reload"; # config reload
-
-        # Brightness control
-        "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
-        "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-        "${modifier}+Alt+l" = "exec brightnessctl set +5%";
-        "${modifier}+Alt+h" = "exec brightnessctl set 5%-";
-
-        # Audio
-        "XF86AudioRaiseVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
-        "XF86AudioLowerVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
-        "${modifier}+Alt+j" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
-        "${modifier}+Alt+k" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
-        "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-        "XF86AudioMicMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
-
-        # Screenshot
-        "${modifier}+Shift+s" = "exec bash $HOME/nix/scripts/screenshot.sh region";
-        "PRINT" = "exec bash $HOME/nix/scripts/screenshot.sh output";
+        "${modifier}+Shift+h" = "move left";
+        "${modifier}+Shift+l" = "move right";
+        "${modifier}+Shift+k" = "move up";
+        "${modifier}+Shift+j" = "move down";
 
         # Moving around:
         "${modifier}+h" = "focus left";
         "${modifier}+l" = "focus right";
         "${modifier}+k" = "focus up";
         "${modifier}+j" = "focus down";
-
-        "${modifier}+Alt+f" = "focus mode_toggle"; # floating and tiled layers
-
-        "${modifier}+Shift+h" = "move left";
-        "${modifier}+Shift+l" = "move right";
-        "${modifier}+Shift+k" = "move up";
-        "${modifier}+Shift+j" = "move down";
 
         # Switch to workspace
         "${modifier}+1" = "workspace number 1";
@@ -275,6 +242,41 @@
         "${modifier}+Shift+8" = "move container to workspace number 8";
         "${modifier}+Shift+9" = "move container to workspace number 9";
         "${modifier}+Shift+0" = "move container to workspace number 10";
+
+        # ---------------
+        # System control
+        # ---------------
+
+        # lock, hibernate and shutdown
+        "F10" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
+        "${modifier}+Alt+Ctrl+l" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
+        "${modifier}+Alt+Ctrl+p" = "shutdown now";
+        "${modifier}+Alt+Ctrl+h" = "systemctl hibernate";
+
+        "${modifier}+Shift+r" = "reload"; # config reload
+
+        # Brightness control
+        "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
+        "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
+        "${modifier}+Alt+l" = "exec brightnessctl set +5%";
+        "${modifier}+Alt+h" = "exec brightnessctl set 5%-";
+
+        # Audio control
+        "XF86AudioRaiseVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
+        "XF86AudioLowerVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
+        "${modifier}+Alt+j" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
+        "${modifier}+Alt+k" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
+        "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+        "XF86AudioMicMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+
+        # cmus
+        "${modifier}+c" = "exec cmus-remote -n"; # play next
+        "${modifier}+Shift+c" = "exec cmus-remote -r"; # play pRev
+        "${modifier}+Alt+c" = "exec cmus-remote -u"; # pause/play
+
+        # Screenshot
+        "${modifier}+Shift+s" = "exec bash $HOME/nix/scripts/screenshot.sh region";
+        "PRINT" = "exec bash $HOME/nix/scripts/screenshot.sh output";
       };
 
       modes = {

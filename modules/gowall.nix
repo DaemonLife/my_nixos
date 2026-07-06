@@ -26,7 +26,7 @@
           - "#${base0F}"
   '';
 
-  home.activation.bg_color_change = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    ${pkgs.gowall}/bin/gowall convert -t global $HOME/nix/images/current_bg/bg.png
-  '';
+  # home.activation.bg_color_change = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  # ${pkgs.gowall}/bin/gowall convert -t global $HOME/nix/images/current_bg/bg.png
+  # '';
 }

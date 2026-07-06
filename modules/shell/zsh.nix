@@ -24,7 +24,7 @@
       var2 = "$\{XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd";
     in ''
       # some options
-      bash $HOME/nix/scripts/print_art.sh
+      # bash $HOME/nix/scripts/print_art.sh
       export PATH="$HOME/.cargo/bin:$PATH"
       export PROXYCHAINS_SOCKS5_PORT=20170
       eval "$(ssh-agent -s)" > /dev/null

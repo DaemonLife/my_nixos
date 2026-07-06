@@ -95,7 +95,7 @@
     description = "my user";
     shell = pkgs.zsh;
     useDefaultShell = true;
-    # packages = with pkgs; [flatpak];
+    packages = with pkgs; [flatpak];
     extraGroups = ["networkmanager" "wheel" "video" "input" "scanner" "lp"];
   };
 
@@ -169,9 +169,9 @@
 
   xdg.portal = {
     enable = true;
-    #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    #   wlr.enable = true;
-    #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    wlr.enable = true;
+    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
   };
 
   programs = {
@@ -270,20 +270,9 @@
   };
 
   systemd.sleep.settings.Sleep = {
-    # HibernateDelaySec = "1h";
+    HibernateDelaySec = "1h";
     AllowHibernation = "yes";
-    HibernateDelaySec = "15m";
   };
-
-  # systemd = {
-  #   sleep.settings.Sleep = {
-  #     # AllowSuspend = "yes";
-  #     AllowHibernation = "yes";
-  #     # AllowHybridSleep = "yes"; # bug?
-  #     # AllowSuspendThenHibernate = "yes";
-  #     HibernateDelaySec = 1800; # 30m
-  #   };
-  # };
 
   # --------------------------------
   # SECURITY
@@ -304,11 +293,22 @@
   #   };
   # };
 
-  security = {
-    polkit.enable = true; # authentication support (backed)
-    # pam.services.swaylock = {}; # screen lock
+  security.polkit.enable = true; # authentication support (backed)
+  security.pam.services = {
+    # open gnome keyring by swaylock
+    swaylock.enableGnomeKeyring = true;
   };
-  # services.gnome.gnome-keyring.enable = true; # secret portal for matrix
+  services.gnome.gnome-keyring.enable = true; # secret portal for matrix
+
+  # fix performance issues for sway maybe
+  security.pam.loginLimits = [
+    {
+      domain = "@users";
+      item = "rtprio";
+      type = "-";
+      value = 1;
+    }
+  ];
 
   # --------------------------------
   # BOOT OPTIONS

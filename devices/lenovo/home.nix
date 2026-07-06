@@ -3,14 +3,14 @@
 
   home.packages = with pkgs; [
     digikam
-    # unstable.darktable
-    # kdePackages.kdenlive
+    # unstable.darktable # flatpak is faster
+    # kdePackages.kdenlive # flatpak
     hugin
     siril
 
     # games
-    # bottles
-    lutris
+    # bottles # flatpak is better for sundbox
+    # lutris # flatpak?
   ];
 
   dconf.settings = {
