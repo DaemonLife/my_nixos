@@ -55,7 +55,9 @@
     loginExtra = ''
       if [[ -z $DISPLAY ]]; then
         if [[ $(tty) == "/dev/tty1" ]]; then
-          exec start-hyprland
+          # exec start-hyprland
+          # export WLR_RENDERER=vulkan && exec sway
+          exec sway
         fi
       fi
     '';

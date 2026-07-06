@@ -1,5 +1,9 @@
-{ config, lib, ... }: with config.lib.stylix.colors; {
-
+{
+  config,
+  lib,
+  ...
+}:
+with config.lib.stylix.colors; {
   programs.swaylock = {
     enable = true;
     settings = {
@@ -30,9 +34,10 @@
       text-ver-color = lib.mkForce "${base0B}";
       text-wrong-color = lib.mkForce "${base08}";
 
-      font-size = 42;
+      font-size = 38;
 
-      indicator-idle-visible = false;
+      # indicator-idle-visible = false;
+      indicator-idle-visible = true;
       indicator-radius = 110;
       indicator-thickness = 14;
       line-uses-ring = true;
@@ -47,7 +52,5 @@
 
       image = lib.mkForce "$HOME/nix/scripts/maze/maze.png";
     };
-
   };
-
 }

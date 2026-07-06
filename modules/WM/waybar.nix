@@ -28,14 +28,20 @@
           ];
 
           "${MY_DE}/workspaces" = {
+            persistent-workspaces = {
+              "*" = [2 3 4 5 6];
+              "Acer Technologies Acer A231H LQT0W0084320" = [2 3 4 5 6];
+              "eDP-1" = [1]; # laptop
+            };
             format = " {name}:[{windows}] ";
-            format-window-separator = " ";
+            format-window-separator = "-";
             on-click = "activate";
             window-rewrite-default = "?";
             window-rewrite = {
               "foot" = "$";
               "librewolf" = "librewolf";
               "mpv" = "mpv";
+              "nautilus" = "files";
               "Upscayl" = "upscayl";
               "darktable" = "darktable";
               "Mindustry" = "mindustry";

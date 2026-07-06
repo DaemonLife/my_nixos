@@ -13,27 +13,27 @@
     ./fuzzel.nix
     ./swaylock.nix
     ./swayidle.nix
-    ./sworkstyle.nix
   ];
 
   home.packages = with pkgs; [
-    autotiling-rs
+    # autotiling-rs
     brightnessctl
     swaybg
     grim # screenshot functionality
     slurp # screenshot functionality
     wl-clipboard # wl-copy and wl-paste
+    wl-clip-persist # persist wayland clipboard
     jq # json parser for some scripts
-    nodejs # for run javascript
-    vulkan-validation-layers
+    # nodejs # for run javascript
+    # vulkan-validation-layers
   ];
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
     enable = true;
-    package = pkgs.unstable.sway;
-    # checkConfig = false; # false because bug with icc profile
+    # package = pkgs.unstable.sway;
+    checkConfig = false; # false because bug with icc profile
     xwayland = true;
-    # wrapperFeatures.gtk = true; # gtk apps support
+    wrapperFeatures.gtk = true; # gtk apps support
 
     extraConfig = ''
       popup_during_fullscreen smart
@@ -56,16 +56,28 @@
       workspaceAutoBackAndForth = true;
 
       startup = [
-        {command = "bluetooth off";}
+        {command = "${pkgs.swaybg}/bin/swaybg -i /home/user/Pictures/gowall/bg.png";}
+        {command = "pactl set-source-mute @DEFAULT_SOURCE@ on";}
         {command = "${pkgs.mako}/bin/mako";}
-        {command = "${pkgs.udiskie}/bin/udiskie -a";}
         {command = "wl-paste -t text --watch clipman store --no-persist";}
-        {command = "exec bash $HOME/nix/scripts/swayidle.sh";}
-        {
-          command = "${pkgs.swayest-workstyle}/bin/sworkstyle -d";
-          always = true;
-        }
+        {command = "${pkgs.udiskie}/bin/udiskie -a";}
       ];
+
+      output = {
+        "Lenovo Group Limited 0x9121 Unknown" = {
+          mode = "2240x1400@60.002Hz";
+          scale = "1.75";
+          adaptive_sync = "true";
+          render_bit_depth = "8"; # 6, 8, 10
+          position = "0,0";
+          color_profile = "icc /home/user/nix/devices/screens/lenovo_slow.icc";
+        };
+
+        "Acer Technologies Acer A231H LQT0W0084320" = {
+          mode = "1920x1080@60.000Hz";
+          scale = "1";
+        };
+      };
 
       gaps = {
         outer = 0;
@@ -78,10 +90,6 @@
         border = lib.mkForce 4;
         titlebar = false;
         commands = [
-          {
-            criteria.app_id = "kitty";
-            command = "title_format \"kitty: %title\"";
-          }
           # {
           #   criteria.app_id = "org.telegram.desktop";
           #   command = "move container to workspace number 1";
@@ -109,7 +117,6 @@
         {app_id = "rg.pulseaudio.pavucontrol";}
         {app_id = "org.kde.kdeconnect.sms";}
         # {title = "pulsemixer";} # tailing bug
-        {app_id = "floating_yazi";}
         # {app_id = "floating_nmtui";} # too small window
       ];
 
@@ -161,8 +168,8 @@
         "type:keyboard" = {
           xkb_layout = "us,ru";
           xkb_options = "grp:win_space_toggle";
-          repeat_delay = "250";
-          repeat_rate = "45";
+          repeat_rate = "30";
+          repeat_delay = "215";
         };
         "type:touchpad" = {
           tap = "enabled";
@@ -176,32 +183,24 @@
         # Start programs
         # ---------------
 
-        # terminal
         "${modifier}+Return" = ''
           exec swaymsg input "type:keyboard" xkb_switch_layout 0 && exec ${terminal}
         '';
-
-        # menu
         "${modifier}+a" = ''exec swaymsg input "type:keyboard" xkb_switch_layout 0 && exec ${menu}'';
+        # "${modifier}+n" = "exec nautilus";
+        "${modifier}+b" = "exec $BROWSER";
+        "${modifier}+t" = "exec AyuGram || exec Telegram || exec org.telegram.desktop";
 
-        # file manager
-        "${modifier}+n" = "exec nautilus";
-        "${modifier}+y" = "exec ${terminal} --hold $HOME/nix/scripts/y.fish";
-
-        # broswer
-        # export QT_QPA_PLATFORM=xcb for color fix
-        "${modifier}+b" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec $BROWSER";
-        "${modifier}+Shift+B" = "exec export QT_WAYLAND_DISABLE_WINDOWDECORATION=0 && exec proxychains4 qutebrowser --desktop-file-name vpn_qutebrowser --set window.title_format \"[VPN] {perc}{current_title}{title_sep}qutebrowser\"";
-
-        "${modifier}+t" = "exec AyuGram || exec Telegram"; # telegram
         "F10" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
+        "${modifier}+Alt+Ctrl+l" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
 
         # ---------------
         # cmus control
         # ---------------
-        "F1" = "exec cmus-remote -r"; # play pRev
-        "F2" = "exec cmus-remote -u"; # pause/play
-        "F3" = "exec cmus-remote -n"; # play next
+
+        # "F1" = "exec cmus-remote -r"; # play pRev
+        # "F2" = "exec cmus-remote -u"; # pause/play
+        # "F3" = "exec cmus-remote -n"; # play next
 
         # ---------------
         # Window control
@@ -209,7 +208,7 @@
 
         "${modifier}+q" = "kill";
         "${modifier}+f" = "fullscreen";
-        "${modifier}+shift+ctrl+e" = "floating toggle";
+        "${modifier}+shift+f" = "floating toggle";
         "${modifier}+r" = "mode resize";
         "${modifier}+e" = "splitt";
         "${modifier}+shift+e" = "layout toggle tabbed stacking split";
@@ -223,14 +222,14 @@
         # Brightness control
         "XF86MonBrightnessUp" = "exec brightnessctl set +5%";
         "XF86MonBrightnessDown" = "exec brightnessctl set 5%-";
-        "Ctrl+l" = "exec brightnessctl set +5%";
-        "Ctrl+h" = "exec brightnessctl set 5%-";
+        "${modifier}+Alt+l" = "exec brightnessctl set +5%";
+        "${modifier}+Alt+h" = "exec brightnessctl set 5%-";
 
         # Audio
         "XF86AudioRaiseVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
         "XF86AudioLowerVolume" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
-        "Ctrl+j" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
-        "Ctrl+k" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
+        "${modifier}+Alt+j" = "exec bash $HOME/nix/scripts/volume.sh 5%+";
+        "${modifier}+Alt+k" = "exec bash $HOME/nix/scripts/volume.sh 5%-";
         "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
         "XF86AudioMicMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
 
@@ -239,11 +238,6 @@
         "PRINT" = "exec bash $HOME/nix/scripts/screenshot.sh output";
 
         # Moving around:
-        "${modifier}+Left" = "focus left";
-        "${modifier}+Right" = "focus right";
-        "${modifier}+Up" = "focus up";
-        "${modifier}+Down" = "focus down";
-
         "${modifier}+h" = "focus left";
         "${modifier}+l" = "focus right";
         "${modifier}+k" = "focus up";
@@ -251,10 +245,10 @@
 
         "${modifier}+Alt+f" = "focus mode_toggle"; # floating and tiled layers
 
-        "${modifier}+Ctrl+h" = "move left";
-        "${modifier}+Ctrl+l" = "move right";
-        "${modifier}+Ctrl+k" = "move up";
-        "${modifier}+Ctrl+j" = "move down";
+        "${modifier}+Shift+h" = "move left";
+        "${modifier}+Shift+l" = "move right";
+        "${modifier}+Shift+k" = "move up";
+        "${modifier}+Shift+j" = "move down";
 
         # Switch to workspace
         "${modifier}+1" = "workspace number 1";
@@ -267,22 +261,20 @@
         "${modifier}+8" = "workspace number 8";
         "${modifier}+9" = "workspace number 9";
         "${modifier}+0" = "workspace number 10";
-        "${modifier}+Shift+j" = "workspace next";
-        "${modifier}+Shift+k" = "workspace prev";
-        # "${modifier}+Shift+j" = "exec bash $HOME/nix/scripts/sway_workspace.sh next";
-        # "${modifier}+Shift+k" = "exec bash $HOME/nix/scripts/sway_workspace.sh prev";
+        "${modifier}+n" = "workspace next";
+        "${modifier}+Shift+n" = "workspace prev";
 
         # Move focused container to workspace
-        "${modifier}+Ctrl+1" = "move container to workspace number 1";
-        "${modifier}+Ctrl+2" = "move container to workspace number 2";
-        "${modifier}+Ctrl+3" = "move container to workspace number 3";
-        "${modifier}+Ctrl+4" = "move container to workspace number 4";
-        "${modifier}+Ctrl+5" = "move container to workspace number 5";
-        "${modifier}+Ctrl+6" = "move container to workspace number 6";
-        "${modifier}+Ctrl+7" = "move container to workspace number 7";
-        "${modifier}+Ctrl+8" = "move container to workspace number 8";
-        "${modifier}+Ctrl+9" = "move container to workspace number 9";
-        "${modifier}+Ctrl+0" = "move container to workspace number 10";
+        "${modifier}+Shift+1" = "move container to workspace number 1";
+        "${modifier}+Shift+2" = "move container to workspace number 2";
+        "${modifier}+Shift+3" = "move container to workspace number 3";
+        "${modifier}+Shift+4" = "move container to workspace number 4";
+        "${modifier}+Shift+5" = "move container to workspace number 5";
+        "${modifier}+Shift+6" = "move container to workspace number 6";
+        "${modifier}+Shift+7" = "move container to workspace number 7";
+        "${modifier}+Shift+8" = "move container to workspace number 8";
+        "${modifier}+Shift+9" = "move container to workspace number 9";
+        "${modifier}+Shift+0" = "move container to workspace number 10";
       };
 
       modes = {
@@ -312,6 +304,7 @@
       export SDL_VIDEODRIVER=wayland
       export MOZ_ENABLE_WAYLAND=1
       export EDITOR=vi
+      export BROSWER=librewolf
       export TERMINAL=foot
       export XDG_SESSION_TYPE=wayland
       export XDG_CURRENT_DESKTOP=sway

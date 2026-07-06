@@ -46,6 +46,7 @@
       # ascii-draw
       video-downloader
       losslesscut-bin # ffmpeg gui for lossless cut videos
+      ffmpeg
       untrunc-anthwlock # fix corrupt video
 
       # - Theming
@@ -100,6 +101,28 @@
   # --------------------------------
   # HOME PROGRAMS
   # --------------------------------
+
+  services = {
+    # devices sync
+    syncthing = {
+      enable = true;
+      guiAddress = "0.0.0.0:8384"; # Tcp port. By default syncthing only listens to localhost
+      guiCredentials.passwordFile = "/home/user/.local/share/syncthing-gui-password";
+      guiCredentials.username = "admin";
+      overrideDevices = false;
+      overrideFolders = false;
+      # settings = {
+      #   devices = {};
+      #   folders = {
+      #     "Music" = {
+      #       path = "/home/user/Music/local";
+      #       # devices = ["*"];
+      #       ignorePerms = false; # Enable file permission syncing
+      #     };
+      #   };
+      # };
+    };
+  };
 
   programs = {
     ripgrep.enable = true;

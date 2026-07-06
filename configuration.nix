@@ -12,7 +12,6 @@
   # --------------------------------
   # NET AND HARDWARE SETTINGS
   # --------------------------------
-  powerManagement.enable = true;
 
   networking = {
     networkmanager.enable = true;
@@ -62,6 +61,15 @@
     # alsa.support32Bit = true; # waiting a bug fix https://nixpk.gs/pr-tracker.html?pr=534770
     # pulse.enable = true; # important for waybar
     # jack.enable = true; # If you want to use JACK applications
+  };
+
+  # battery
+  powerManagement.enable = true;
+
+  # video
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
   };
 
   # Region
@@ -167,9 +175,9 @@
   };
 
   programs = {
-    hyprland.enable = true;
+    # hyprland.enable = true;
     # niri.enable = true;
-    # sway.enable = true;
+    sway.enable = true;
 
     appimage = {
       enable = true;
@@ -247,26 +255,6 @@
         turbo = "auto";
       };
     };
-
-    # tlp = {
-    #   enable = false;
-    #   settings = {
-    #     CPU_ENERGY_PERF_POLICY_ON_AC = "performance"; # super performance
-    #     CPU_ENERGY_PERF_POLICY_ON_BAT = "power"; # super save power
-    #
-    #     PLATFORM_PROFILE_ON_BAT = "low-power"; # super save power
-    #
-    #     CPU_MIN_PERF_ON_AC = 0;
-    #     CPU_MAX_PERF_ON_AC = 100;
-    #     CPU_MIN_PERF_ON_BAT = 0;
-    #     CPU_MAX_PERF_ON_BAT = 80;
-    #
-    #     START_CHARGE_THRESH_BAT0 = 0;
-    #     STOP_CHARGE_THRESH_BAT0 = 1;
-    #
-    #     DEVICES_TO_DISABLE_ON_STARTUP = "bluetooth";
-    #   };
-    # };
 
     # auto username in tty
     getty = {

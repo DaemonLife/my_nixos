@@ -3,8 +3,8 @@
 
   home.packages = with pkgs; [
     digikam
-    # darktable
-    kdePackages.kdenlive
+    # unstable.darktable
+    # kdePackages.kdenlive
     hugin
     siril
 
