@@ -250,8 +250,8 @@
         # lock, hibernate and shutdown
         "F10" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
         "${modifier}+Alt+Ctrl+l" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
-        "${modifier}+Alt+Ctrl+p" = "shutdown now";
-        "${modifier}+Alt+Ctrl+h" = "systemctl hibernate";
+        "${modifier}+Alt+Ctrl+p" = "exec shutdown now";
+        "${modifier}+Alt+Ctrl+h" = "exec systemctl hibernate";
 
         "${modifier}+Shift+r" = "reload"; # config reload
 
