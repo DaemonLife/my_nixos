@@ -1,5 +1,10 @@
-{ pkgs, config, ... }: {
-
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
+  home.packages = with pkgs; [file chafa];
   xdg.configFile."lf/icons".source = ./icons;
 
   programs.lf = {
@@ -8,7 +13,7 @@
     settings = {
       preview = true;
       hidden = false;
-      drawbox = true;
+      drawbox = false;
       icons = false;
       ignorecase = true;
     };
@@ -49,10 +54,10 @@
           # put items into array that we can count them
           files=()
           while read -r line; do files+=("$line"); done <<< "$fx"
-          
+
           # count how many items there are
           len=''${#files[@]}
-          
+
           # confirm trashing
           if [[ $len == 1 ]]; then
             echo -n "trash '$fx' ?"
@@ -60,14 +65,14 @@
             echo -n "trash $len items?"
           fi
           echo -n " [y/N] "
-          
+
           # read answer
           read -n 1 ans
           # make it lowercase
-          ans="''${ans,,}" 
-          
+          ans="''${ans,,}"
+
           echo
-          
+
           # nuke
           if [[ $ans == y ]]; then
             ${pkgs.trash-cli}/bin/trash-put $fx
@@ -84,31 +89,13 @@
       '';
     };
 
-    extraConfig =
-      let
-        previewer =
-          pkgs.writeShellScriptBin "pv.sh" ''
-            file=$1
-            w=$2
-            h=$3
-            x=$4
-            y=$5
-
-            if [[ "$( ${pkgs.file}/bin/file -Lb --mime-type "$file")" =~ ^image ]]; then
-                ${pkgs.kitty}/bin/kitty +kitten icat --silent --stdin no --transfer-mode file --place "''${w}x''${h}@''${x}x''${y}" "$file" < /dev/null > /dev/tty
-                exit 1
-            fi
-
-            ${pkgs.pistol}/bin/pistol "$file"
-          '';
-        cleaner = pkgs.writeShellScriptBin "clean.sh" ''
-          ${pkgs.kitty}/bin/kitty +kitten icat --clear --stdin no --silent --transfer-mode file < /dev/null > /dev/tty
-        '';
-      in
-      ''
-        set cleaner ${cleaner}/bin/clean.sh
-        set previewer ${previewer}/bin/pv.sh
-      '';
-
+    extraConfig = ''
+      set previewer ~/.config/lf/scope-lf-wrapper.sh
+      map i $LESSOPEN='| ~/.config/lf/scope-lf-wrapper.sh %s' less -R $f
+    '';
   };
+
+  home.activation.lf_init_scipts = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    cp $HOME/nix/modules/file_manager/lf/*.sh $HOME/.config/lf/. --update
+  '';
 }

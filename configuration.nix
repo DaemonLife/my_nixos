@@ -154,6 +154,7 @@
     net-tools # for netstat
     sysstat # for iostat
     iotop
+    file # file type
     wget
     nmap # scan network map: nmap -sn 192.168.1.0/24
     ncdu # nice files size tree

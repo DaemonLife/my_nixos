@@ -16,7 +16,7 @@
   ];
 
   home.packages = with pkgs; [
-    # autotiling-rs
+    autotiling-rs
     brightnessctl
     swaybg
     grim # screenshot functionality
@@ -59,6 +59,7 @@
       startup = [
         {command = "pactl set-source-mute @DEFAULT_SOURCE@ on";}
         {command = "${pkgs.mako}/bin/mako";}
+        {command = "${pkgs.autotiling-rs}/bin/autotiling-rs";}
         {command = "wl-paste -t text --watch clipman store --no-persist";}
         {command = "${pkgs.udiskie}/bin/udiskie -a";} # the service can be a better option...
 
@@ -83,8 +84,8 @@
       };
 
       gaps = {
-        outer = 0;
-        inner = 0;
+        outer = 4;
+        inner = 4;
         smartGaps = false;
         smartBorders = "on";
       };
@@ -124,9 +125,9 @@
       ];
 
       colors = let
-        default_color = "#${base01}"; # no focus
+        default_color = "#${base01}"; # not focused
         focused_color = "#${base0D}";
-        indicator_color = "#${base09}";
+        indicator_color = "#${base09}"; # next window position
         attenction_color = "#${base0D}";
       in
         lib.mkForce {
@@ -135,14 +136,15 @@
             background = attenction_color; # tab header on creation
             border = attenction_color; # tab header on creation
             childBorder = focused_color; # own border color
-            indicator = indicator_color; # next window position indicator
+            # indicator = indicator_color; # next window position indicator
+            indicator = focused_color; # next window position indicator
           };
           focusedInactive = {
             text = "#${base00}"; # selected tab header
             background = focused_color; # selected tab header
             border = focused_color; # selected tab header
             childBorder = default_color; # default border
-            indicator = indicator_color; # default border
+            indicator = default_color; # next window position indicator
           };
           unfocused = {
             text = "#${base05}"; # unselected tab header
