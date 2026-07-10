@@ -84,8 +84,8 @@
       };
 
       gaps = {
-        outer = 4;
-        inner = 4;
+        outer = 0;
+        inner = 0;
         smartGaps = false;
         smartBorders = "on";
       };
@@ -193,8 +193,9 @@
         '';
         "${modifier}+a" = ''exec swaymsg input "type:keyboard" xkb_switch_layout 0 && exec ${menu}'';
         # "${modifier}+n" = "exec nautilus";
+        "${modifier}+d" = ''exec foot --hold sh -c 'cd "$(lf -print-last-dir)"; zsh' '';
         "${modifier}+b" = "exec librewolf";
-        "${modifier}+t" = "exec AyuGram || exec Telegram || exec flatpak run org.telegram.desktop";
+        "${modifier}+t" = "exec AyuGram || exec Telegram || exec org.telegram.desktop";
 
         # ---------------
         # Window control

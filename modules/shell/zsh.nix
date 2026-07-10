@@ -62,28 +62,18 @@
       fi
     '';
 
-    shellAliases = let
-      myphone_port = "8022";
-      myphone_username = "u0_a231";
-    in {
+    shellAliases = {
       # --upgrade --offline
       "oss" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild switch --flake $HOME/nix/.\#lenovo -v'';
       "osb" = ''nix flake update --flake $HOME/nix/. && sudo nixos-rebuild boot --flake $HOME/nix/.\#lenovo -v'';
       "ost" = ''sudo nixos-rebuild test --flake $HOME/nix/.\#lenovo -v'';
       "osc" = ''sudo nix-collect-garbage --delete-older-than 3d'';
 
-      # --- Net ---
-      # Openwrt static IP and hostname: Network → DHCP and DNS → Static Leases
-      myphone-cmus = "bash $HOME/nix/scripts/myphone-cmus.sh ${myphone_username} ${myphone_port}";
-      myphone-ssh = "ssh -p ${myphone_port} ${myphone_username}@myphone";
-      # "-ignorelocks" for termux because https://github.com/omeyenburg/unison-for-termux
-      myphone-sync = "bash $HOME/nix/scripts/myphone-sync.sh ${myphone_username} ${myphone_port}";
-
       # --- Other ---
       tt = "tt --notheme --highlight1 --blockcursor";
-      cdwin = "bash $HOME/nix/scripts/mount_windows.sh '/dev/nvme0n1p3' 'user' && cd /mnt/windows/Users/user";
       ffmpeg-video-compress = "bash $HOME/nix/scripts/ffmpeg-video-compress.sh";
       # n = "nnn -C"; # 8 colors
+      lf = ''cd "`bash -c "lf -print-last-dir"`"'';
     };
 
     siteFunctions = {
