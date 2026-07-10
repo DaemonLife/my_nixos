@@ -29,15 +29,26 @@
 
           "${MY_DE}/workspaces" = {
             persistent-workspaces = {
-              "*" = [2 3 4 5 6];
-              "Acer Technologies Acer A231H LQT0W0084320" = [2 3 4 5 6];
-              "eDP-1" = [1]; # laptop
+              "1" = ["eDP-1"];
+              "2" = ["eDP-1"];
+              "3" = ["eDP-1"];
+              "4" = ["eDP-1"];
+              "5" = ["eDP-1"];
+              # "6" = ["eDP-1"];
+              # "7" = ["eDP-1"];
+              # "8" = ["eDP-1"];
+              # "9" = ["eDP-1"];
+              # "10" = ["eDP-1"];
             };
             format = " {name}:[{windows}] ";
             format-window-separator = "-";
             on-click = "activate";
+            expand = false;
             window-rewrite-default = "?";
             window-rewrite = {
+              "vi" = "vi";
+              "Nvim" = "vi";
+              "nvim" = "vi";
               "foot" = "$";
               "librewolf" = "librewolf";
               "mpv" = "mpv";
@@ -48,22 +59,19 @@
               "org.kde.kdenlive" = "kdenlive";
               "siril" = "siril";
               "gimp" = "gimp";
-              "/^.* - cmus$/" = "cmus";
-              "/^man .*$/" = "man";
-              "/^btop .*$/" = "btop";
-              "/^htop .*$/" = "htop";
+              "^.* - cmus$" = "cmus";
+              "man *" = "man";
+              "btop .*" = "btop";
+              "htop .*" = "htop";
               "org.telegram.desktop" = "tg";
               "com.ayugram.desktop" = "tg";
               "org.qutebrowser.qutebrowser" = "qb";
               "org.qbittorrent.qBittorrent" = "torrent";
-              "/^.*[Ss]team.*$/" = "steam";
-              "/^vi.*$/" = "vi";
-              "/^.*Nvim$/" = "vi";
-              "/^nvim$/" = "vi";
-              "/^y .*$/" = "y";
-              "/^rtorrent.*$/" = "rtorrent";
-              "/^.*Firefox$/" = "firefox";
-              "/^AmneziaVPN$/" = "vpn";
+              "^.*[Ss]team.*$" = "steam";
+              "^y .*$" = "y";
+              "^rtorrent.*$" = "rtorrent";
+              "^.*Firefox$" = "firefox";
+              "^AmneziaVPN$" = "vpn";
             };
           };
 
@@ -145,7 +153,7 @@
               critical = 20;
             };
             # interval = 30;
-            format = "bat-{capacity}-";
+            format = "bat-{capacity}";
             format-plugged = "bat-{capacity}";
             format-charging = "bat-{capacity}+";
             on-click = "gnome-power-statistics";

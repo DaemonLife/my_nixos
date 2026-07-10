@@ -52,11 +52,15 @@
       modifier = "Mod4";
       terminal = "${pkgs.foot}/bin/foot";
       menu = "${pkgs.fuzzel}/bin/fuzzel -l 16";
-      bars = [{command = "systemctl --user restart waybar";}];
+      bars = [];
       workspaceAutoBackAndForth = true;
 
       # no 'exec' here
       startup = [
+        {
+          command = "exec systemctl --user restart waybar";
+          always = true;
+        }
         {command = "pactl set-source-mute @DEFAULT_SOURCE@ on";}
         {command = "${pkgs.mako}/bin/mako";}
         {command = "${pkgs.autotiling-rs}/bin/autotiling-rs";}
@@ -237,8 +241,8 @@
         "${modifier}+8" = "workspace number 8";
         "${modifier}+9" = "workspace number 9";
         "${modifier}+0" = "workspace number 10";
-        "${modifier}+n" = "workspace next";
-        "${modifier}+Shift+n" = "workspace prev";
+        "${modifier}+n" = "exec bash $HOME/nix/scripts/sway_workspace_moving.sh next";
+        "${modifier}+Shift+n" = "exec bash $HOME/nix/scripts/sway_workspace_moving.sh prev";
 
         # Move focused container to workspace
         "${modifier}+Shift+1" = "move container to workspace number 1";
