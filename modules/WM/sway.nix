@@ -179,6 +179,12 @@
         "type:touchpad" = {
           tap = "enabled";
           click_method = "button_areas";
+          pointer_accel = "0";
+          scroll_factor = "1";
+          natural_scroll = "true"; # true for lenovo
+          drag = "disabled";
+          drag_lock = "disabled";
+          dwt = "enabled"; # disable-while-typing
         };
       };
 
