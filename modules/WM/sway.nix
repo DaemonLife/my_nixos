@@ -25,7 +25,7 @@
     wl-clip-persist # persist wayland clipboard
     jq # json parser for some scripts
     # nodejs # for run javascript
-    # vulkan-validation-layers
+    vulkan-validation-layers
   ];
 
   wayland.windowManager.sway = with config.lib.stylix.colors; {
@@ -42,43 +42,48 @@
     '';
 
     config = rec {
-      # focus = {
-      #   followMouse = "yes";
-      #   mouseWarping = true;
-      #   wrapping = "yes";
-      #   newWindow = "urgent"; # no autofocus on new windows
-      # };
-
       modifier = "Mod4";
       terminal = "${pkgs.foot}/bin/foot";
       menu = "${pkgs.fuzzel}/bin/fuzzel -l 16";
-      bars = [];
+      bars = [{command = "pkill -9 -f waybar; sleep 2; ${pkgs.waybar}/bin/waybar";}];
       workspaceAutoBackAndForth = true;
 
       # no 'exec' here
       startup = [
-        {
-          command = "exec systemctl --user restart waybar";
-          always = true;
-        }
         {command = "pactl set-source-mute @DEFAULT_SOURCE@ on";}
         {command = "${pkgs.mako}/bin/mako";}
         {command = "${pkgs.autotiling-rs}/bin/autotiling-rs";}
         {command = "wl-paste -t text --watch clipman store --no-persist";}
-        {command = "${pkgs.udiskie}/bin/udiskie -a";} # the service can be a better option...
+        # {command = "${pkgs.udiskie}/bin/udiskie -a";} # the service can be a better option...
 
         # user env fix
         {command = "dbus-update-activation-environment --all";}
+
+        # {
+        #   command = "pkill -9 -f waybar; waybar";
+        #   always = true;
+        # }
       ];
 
       output = {
         "Lenovo Group Limited 0x9121 Unknown" = {
           mode = "2240x1400@60.002Hz";
           scale = "1.75";
-          adaptive_sync = "true";
+          # adaptive_sync = "true";
           render_bit_depth = "8"; # 6, 8, 10
-          position = "0,0";
+          position = "1992,200";
           color_profile = "icc /home/user/nix/devices/screens/lenovo_slow.icc";
+          hdr = "off";
+        };
+
+        "Shenzhen KTC Technology Group H27S17 0x00000001" = {
+          mode = "2560x1440@164.998Hz";
+          scale = "1.33";
+          # adaptive_sync = "false";
+          render_bit_depth = "10"; # 6, 8, 10
+          position = "0,0";
+          color_profile = "icc /home/user/nix/devices/screens/msk_fast.icc";
+          hdr = "off";
         };
 
         "Acer Technologies Acer A231H LQT0W0084320" = {
@@ -264,7 +269,7 @@
         "F10" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
         "${modifier}+Alt+Ctrl+l" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0 && exec swaylock"; # screen locker
         "${modifier}+Alt+Ctrl+p" = "exec shutdown now";
-        "${modifier}+Alt+Ctrl+h" = "exec systemctl hibernate";
+        "${modifier}+Alt+Ctrl+h" = "exec swaymsg input 'type:keyboard' xkb_switch_layout 0; exec systemctl hibernate";
 
         "${modifier}+Shift+r" = "reload"; # config reload
 

@@ -30,7 +30,7 @@
       }
       {
         timeout = 3600; # 1h
-        command = "${pkgs.systemd}/bin/systemctl hibernate";
+        command = "swaymsg input 'type:keyboard' xkb_switch_layout 0; ${pkgs.systemd}/bin/systemctl hibernate";
       }
     ];
   };

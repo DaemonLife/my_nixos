@@ -19,6 +19,7 @@
     fsel
     wl-clipboard # wayland clipboard
     wl-clip-persist # persist wayland clipboard
+    xrandr # for setting x11 primary monitor
   ];
 
   # ------------------------
@@ -26,8 +27,10 @@
   # ------------------------
   wayland.windowManager.hyprland = {
     enable = true;
-    package = null;
-    portalPackage = null;
+    # # set the Hyprland and XDPH packages to null to use the ones from the NixOS module
+    # package = null;
+    # portalPackage = null;
+
     configType = lib.mkForce "lua";
 
     settings = with config.lib.stylix.colors; {
@@ -171,17 +174,34 @@
     };
 
     extraConfig = ''
-      local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+
+      -- -------------
+      -- VARIABLES
+      -- -------------
+
+      hl.env("GDK_BACKEND", "wayland,x11,*")
+      hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+      hl.env("SDL_VIDEODRIVER", "wayland")
+      hl.env("CLUTTER_BACKEND", "wayland")
+      hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+      hl.env("XDG_SESSION_TYPE", "wayland")
+      hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+      hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+      hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+      hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
 
       -- -------------
       -- AUTOSTART
       -- -------------
+
+      local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
       hl.on("hyprland.start", function ()
         hl.exec_cmd("pactl set-source-mute @DEFAULT_SOURCE@ on")
         hl.exec_cmd("waybar")
         hl.exec_cmd("mako")
         hl.exec_cmd("udiskie -a")
+        hl.exec_cmd("xrandr --output DP-1 --primary")
       end)
 
       -- -------------

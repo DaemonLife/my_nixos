@@ -55,9 +55,9 @@
     loginExtra = ''
       if [[ -z $DISPLAY ]]; then
         if [[ $(tty) == "/dev/tty1" ]]; then
-          # exec start-hyprland
-          # export WLR_RENDERER=vulkan && exec sway
-          exec sway
+          start-hyprland
+          # WLR_RENDERER=vulkan sway
+          # exec sway
         fi
       fi
     '';
@@ -72,8 +72,10 @@
       # --- Other ---
       tt = "tt --notheme --highlight1 --blockcursor";
       ffmpeg-video-compress = "bash $HOME/nix/scripts/ffmpeg-video-compress.sh";
-      # n = "nnn -C"; # 8 colors
       lf = ''cd "`bash -c "lf -print-last-dir"`"'';
+
+      wifi-off = "nmcli r all off && nmcli r";
+      wifi-on = "nmcli r all off && nmcli r";
     };
 
     siteFunctions = {

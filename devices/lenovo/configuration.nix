@@ -13,14 +13,14 @@
   # iGPU, pkgs, kernel
   # --------------------------------
 
-  # hardware = {
-  # graphics = {
-  #     enable = true;
-  #     enable32Bit = true;
-  # extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
-  # };
-  # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
-  # };
+  hardware = {
+    graphics = {
+      enable = true;
+      enable32Bit = true;
+      extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
+    };
+    # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
+  };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel (bug with darktable on both channels)
 
@@ -29,8 +29,8 @@
     # amdgpu_top # Tool to display AMDGPU usage
     nvtopPackages.amd # nvtop - (h)top like task monitor for gpu
     clinfo # Print information about available OpenCL platforms and devices
-    # displaycal
-    # argyllcms # for displaycal
+    displaycal
+    argyllcms # for displaycal
     # android-tools # adb, fastboot support
   ];
 

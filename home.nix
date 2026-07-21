@@ -122,6 +122,14 @@
       #   };
       # };
     };
+
+    # disk auto mount
+    udiskie = {
+      enable = true;
+      tray = "never";
+      # automount = true;
+      # notify = true;
+    };
   };
 
   programs = {

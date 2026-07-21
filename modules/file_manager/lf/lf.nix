@@ -30,10 +30,10 @@
       go = "dragon-out";
       bo = "cd ~/.local/share/Trash/files";
       be = "trash-empty";
-      d = "trash";
-      x = "cut";
-      p = "paste";
-      y = "copy";
+      D = "trash";
+      # x = "cut";
+      # p = "paste";
+      # y = "copy";
     };
 
     commands = {

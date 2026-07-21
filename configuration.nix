@@ -35,7 +35,7 @@
   };
   time = {
     timeZone = "Europe/Moscow";
-    hardwareClockInLocalTime = true;
+    # hardwareClockInLocalTime = true; # cuz windows was delete
   };
 
   # Printers
@@ -149,7 +149,7 @@
     jdk # java
     iwd # wifi cli, don't delete!
     bluez # official Linux Bluetooth protocol stack
-    udiskie # auto disks mount
+    # udiskie # auto disks mount
     nautilus
     net-tools # for netstat
     sysstat # for iostat
@@ -168,17 +168,19 @@
   # SYSTEM PROGRAMS
   # --------------------------------
 
-  xdg.portal = {
-    enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    wlr.enable = true;
-    config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
-  };
+  # xdg.portal = {
+  #   enable = true;
+  #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
+  #   wlr.enable = true;
+  #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
+  # };
 
   programs = {
-    # hyprland.enable = true;
+    hyprland = {
+      enable = true;
+    };
     # niri.enable = true;
-    sway.enable = true;
+    # sway.enable = true;
 
     appimage = {
       enable = true;
@@ -207,23 +209,23 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      package = pkgs.steam.override {
-        extraEnv = {
-          MANGOHUD = "1";
-          GAMEMODERUN = "1";
-        };
-      };
-      gamescopeSession.enable = true;
-      protontricks.enable = true;
-      extraCompatPackages = with pkgs; [proton-ge-bin];
+      # package = pkgs.steam.override {
+      #   extraEnv = {
+      #     MANGOHUD = "1";
+      #     GAMEMODERUN = "1";
+      #   };
+      # };
+      # gamescopeSession.enable = true;
+      # protontricks.enable = true;
+      # extraCompatPackages = with pkgs; [proton-ge-bin];
       remotePlay.openFirewall = true;
       # dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
     };
-    gamescope = {
-      enable = true;
-      capSysNice = true;
-    };
+    # gamescope = {
+    #   enable = true;
+    #   capSysNice = true;
+    # };
     gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
     nix-ld.enable = true; # run bin files
@@ -267,7 +269,8 @@
     v2raya.enable = true; # vpn
     openssh.enable = true;
     flatpak.enable = true;
-    gvfs.enable = true; # Mount, trash, and other functionalities
+    udisks2.enable = true; # udiskie home manager support
+    # gvfs.enable = true; # Mount, trash, and other functionalities
   };
 
   systemd.sleep.settings.Sleep = {
@@ -294,22 +297,23 @@
   #   };
   # };
 
-  security.polkit.enable = true; # authentication support (backed)
-  security.pam.services = {
-    # open gnome keyring by swaylock
-    swaylock.enableGnomeKeyring = true;
-  };
-  services.gnome.gnome-keyring.enable = true; # secret portal for matrix
+  # security.polkit.enable = true; # authentication support (backed)
+
+  # security.pam.services = {
+  # open gnome keyring by swaylock
+  # swaylock.enableGnomeKeyring = true;
+  # };
+  # services.gnome.gnome-keyring.enable = true; # secret portal for matrix
 
   # fix performance issues for sway maybe
-  security.pam.loginLimits = [
-    {
-      domain = "@users";
-      item = "rtprio";
-      type = "-";
-      value = 1;
-    }
-  ];
+  # security.pam.loginLimits = [
+  #   {
+  #     domain = "@users";
+  #     item = "rtprio";
+  #     type = "-";
+  #     value = 1;
+  #   }
+  # ];
 
   # --------------------------------
   # BOOT OPTIONS
