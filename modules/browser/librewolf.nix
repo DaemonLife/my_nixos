@@ -111,7 +111,10 @@
       }
 
       :root {
-        --tab-min-height: 35px !important;
+        --tab-min-height: 25px !important;
+        --tab-block-margin: 0px !important;
+        --tab-overflow-clip-margin: 0px !important;
+        --tab-selected-textcolor: #${base00} !important;
       }
 
       .tabbrowser-tab .tab-background {
@@ -122,6 +125,7 @@
       /* selected tab */
       .tabbrowser-tab[selected="true"] .tab-background {
         background-color: #${base0D} !important;
+        color: #${base00} !important;
       }
       .tabbrowser-tab[selected="true"] {
         border: 1px !important;
@@ -132,7 +136,7 @@
       /* not selected tab */
       .tabbrowser-tab:not([selected="true"]) .tab-background {
         background-color: unset;
-        color: #${base03} !important;
+        color: #${base02} !important;
       }
 
       /* hovered tab */
