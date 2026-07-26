@@ -1,5 +1,9 @@
-{ pkgs, lib, config, ... }:
-let
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}: let
   conf = ''
     colors:
       body: none
@@ -14,7 +18,7 @@ let
     indent_character: '|'
     journals:
       default:
-        journal: $HOME/Documents/jrnl/journal.txt
+        journal: $HOME/Sync/jrnl/journal.txt
       main:
         journal: /mnt/temp/jrnl/jrnl.txt
     linewrap: 79
@@ -22,9 +26,7 @@ let
     template: false
     timeformat: '%Y-%m-%d %H:%M'
     version: v${pkgs.jrnl.version}''; # no empty line at the end!
-in
-{
-
+in {
   programs.jrnl = {
     enable = true;
     # settings = {
@@ -52,9 +54,9 @@ in
     # };
   };
 
-  home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p $HOME/.config/jrnl 
-    cd $HOME/.config/jrnl 
+  home.activation.jrnl_config_deploy = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p $HOME/.config/jrnl
+    cd $HOME/.config/jrnl
     echo "${conf}" > jrnl.yaml;
   '';
 }
