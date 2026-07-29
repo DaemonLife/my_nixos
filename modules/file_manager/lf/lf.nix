@@ -96,6 +96,7 @@
   };
 
   home.activation.lf_init_scipts = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p $HOME/.config/lf
     cp $HOME/nix/modules/file_manager/lf/*.sh $HOME/.config/lf/. --update
   '';
 }

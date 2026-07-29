@@ -1,4 +1,8 @@
-{config, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   gtk_colors = with config.colorScheme.palette; # css
   
     ''
@@ -94,6 +98,7 @@ in {
   # gtk.gtk4.theme = null; # for unstable branch
   dconf.settings = {
     # hide gnome window close button
-    "org/gnome/desktop/wm/preferences" = {button-layout = "";};
+    "org/gnome/desktop/wm/preferences" = lib.mkForce {button-layout = "";};
+    "org/gnome/desktop/interface" = lib.mkForce {enable-animations = "false";};
   };
 }

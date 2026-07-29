@@ -61,7 +61,7 @@
 
       # - Utils
       cool-retro-term
-      veracrypt
+      # veracrypt
       cmatrix # matrix in terminal
       nwg-displays # gui for display setup
       sc-im # vim spreadsheet program for terminal

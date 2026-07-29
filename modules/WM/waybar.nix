@@ -162,10 +162,11 @@
           };
 
           network = {
-            format-disabled = "net";
-            format-wifi = "net";
-            format-ethernet = "net_{ipaddr}/{cidr}";
-            format-linked = "net_(No IP)";
+            format-disabled = "wifi";
+            format-wifi = "wifi";
+            # format-ethernet = "net_{ipaddr}/{cidr}";
+            format-ethernet = "net";
+            format-linked = "net";
             format-disconnected = "net";
             on-click = ''wifi on && $TERMINAL -a "floating_nmtui" sh -c "nmcli dev wifi rescan && nmtui"'';
             on-click-right = "wifi off";
