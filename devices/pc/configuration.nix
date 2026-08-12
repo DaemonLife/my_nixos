@@ -1,6 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
-# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 {
   config,
   lib,
@@ -13,15 +10,16 @@
     ./modules-nixos/_import.nix
   ];
 
+  networking.hostName = lib.mkForce "pc";
+
   hardware = {
     graphics = {
       enable = true;
       enable32Bit = true;
-      # extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
     };
-    amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
-
-    bluetooth.enable = lib.mkForce true;
+    amdgpu.opencl.enable = true; # ROCM runtime
+    amdgpu.initrd.enable = true; # init hd monitor, sets boot.initrd.kernelModules = ["amdgpu"];
+    bluetooth.enable = lib.mkForce false;
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -36,6 +34,17 @@
     displaycal
     argyllcms # for displaycal
     # android-tools # adb, fastboot support
+  ];
+
+  # --------------------------------
+  # HIBERNATION
+  # --------------------------------
+
+  swapDevices = [
+    {
+      device = "/var/lib/swapfile";
+      size = 16 * 1024; # 16GB
+    }
   ];
 
   system.stateVersion = "26.05";

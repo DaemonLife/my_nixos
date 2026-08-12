@@ -19,10 +19,7 @@
       enable32Bit = true;
       extraPackages = with pkgs; [mesa.opencl]; # OpenCL support using rusticl
     };
-    # amdgpu.opencl.enable = true; # OpenCL support using ROCM (bug with darktable)
   };
-
-  # boot.kernelPackages = pkgs.linuxPackages_latest; # latest default kernel (bug with darktable on both channels)
 
   environment.systemPackages = with pkgs; [
     qemu # vm: quickget windows 10; quickemu --vm windows-10.conf

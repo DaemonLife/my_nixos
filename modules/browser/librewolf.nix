@@ -6,10 +6,10 @@
 }: {
   stylix.targets.librewolf = {
     enable = true;
-    profileNames = ["user"];
+    # profileNames = ["user"];
 
     # bug with sidebar color bg and popup rounders
-    firefoxGnomeTheme.enable = true;
+    # firefoxGnomeTheme.enable = true;
   };
 
   programs.librewolf = with config.lib.stylix.colors; {
@@ -151,13 +151,13 @@
     # '';
 
     # NEW PAGE STYLE
-    # profiles.user.userContent = ''
-    #   @-moz-document url("about:home"), url(about:preferences), url("about:blank"), url("about:newtab"), url("about:privatebrowsing") {
-    #     body {
-    #       background-color:#${base00} !important;
-    #       --newtab-search-icon: transparent !important;
-    #     }
-    #   }
-    # '';
+    profiles.user.userContent = ''
+      @-moz-document url("about:home"), url(about:preferences), url("about:blank"), url("about:newtab"), url("about:privatebrowsing") {
+        body {
+          background-color:#${base00} !important;
+          --newtab-search-icon: transparent !important;
+        }
+      }
+    '';
   };
 }

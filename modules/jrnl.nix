@@ -4,6 +4,7 @@
   config,
   ...
 }: let
+  EDITOR = config.home.sessionVariables.EDITOR;
   conf = ''
     colors:
       body: none
@@ -12,7 +13,7 @@
       title: none
     default_hour: 9
     default_minute: 0
-    editor: ${config.home.sessionVariables.EDITOR}
+    editor: ${EDITOR}
     encrypt: false
     highlight: true
     indent_character: '|'

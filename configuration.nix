@@ -151,6 +151,7 @@
     bluez # official Linux Bluetooth protocol stack
     # udiskie # auto disks mount
     nautilus
+    kdePackages.dolphin
     net-tools # for netstat
     sysstat # for iostat
     iotop
@@ -168,17 +169,15 @@
   # SYSTEM PROGRAMS
   # --------------------------------
 
-  # xdg.portal = {
-  #   enable = true;
-  #   extraPortals = [pkgs.xdg-desktop-portal-gtk];
-  #   wlr.enable = true;
-  #   config.common.default = "wlr"; # 'wlr' for wayland wm, 'gnome' for gnome
-  # };
+  xdg.portal = {
+    enable = true;
+    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    wlr.enable = true;
+    config.common.default = "gnome"; # 'wlr' for wayland wm, 'gnome' for gnome
+  };
 
   programs = {
-    hyprland = {
-      enable = true;
-    };
+    hyprland.enable = true;
     # niri.enable = true;
     # sway.enable = true;
 
@@ -209,15 +208,6 @@
     # ------ Steam ------
     steam = {
       enable = true;
-      # package = pkgs.steam.override {
-      #   extraEnv = {
-      #     MANGOHUD = "1";
-      #     GAMEMODERUN = "1";
-      #   };
-      # };
-      # gamescopeSession.enable = true;
-      # protontricks.enable = true;
-      # extraCompatPackages = with pkgs; [proton-ge-bin];
       remotePlay.openFirewall = true;
       # dedicatedServer.openFirewall = true;
       localNetworkGameTransfers.openFirewall = true;
@@ -229,7 +219,7 @@
     gamemode.enable = true; # Set run game parameters in Steam: gamemoderun %command%
 
     nix-ld.enable = true; # run bin files
-    dconf.enable = true;
+    # dconf.enable = true;
     htop.enable = true;
     git.enable = true;
     zsh.enable = true;

@@ -29,6 +29,7 @@
       # deltachat-desktop
       # fractal # matrix clietn
       vivaldi
+      telegram-desktop
 
       # - Media
       crosspipe # A GTK patchbay for pipewire
@@ -61,16 +62,17 @@
 
       # - Utils
       cool-retro-term
-      # veracrypt
       cmatrix # matrix in terminal
       nwg-displays # gui for display setup
       sc-im # vim spreadsheet program for terminal
-      exiftool
+      exiftool # files meta
       fzy
       translate-shell
       bc # gnu calculator
       wego # weather api
       jq # json parser
+      gocryptfs # crypt
+      keepassxc # passwords
       # https://github.com/ChrisBuilds/terminaltexteffects
 
       # - Docs
