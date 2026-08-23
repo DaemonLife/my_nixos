@@ -7,8 +7,6 @@
 }: {
   imports = [
     ./modules/stylix.nix
-    # ./modules-system-wide/net-redirect.nix
-    # ./modules-system-wide/mihomo.nix
   ];
 
   # --------------------------------
