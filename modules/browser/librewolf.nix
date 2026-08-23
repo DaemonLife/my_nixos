@@ -6,7 +6,7 @@
 }: {
   stylix.targets.librewolf = {
     enable = true;
-    # profileNames = ["user"];
+    profileNames = ["user"];
 
     # bug with sidebar color bg and popup rounders
     # firefoxGnomeTheme.enable = true;
@@ -14,7 +14,7 @@
 
   programs.librewolf = with config.lib.stylix.colors; {
     enable = true;
-    # profiles = {"user" = {id = 0;};};
+    profiles = {"user" = {id = 0;};};
     settings = {
       "identity.fxaccounts.enabled" = true; # firefox sync
       "privacy.clearOnShutdown.history" = true;

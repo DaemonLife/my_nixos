@@ -7,6 +7,7 @@
     # kdePackages.kdenlive # flatpak
     hugin
     siril
+    unstable.rapidraw
 
     # games
     # bottles # flatpak is better for sundbox

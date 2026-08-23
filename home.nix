@@ -24,8 +24,8 @@
       # - Network
       overskride # bluetooth gui
       bluetui # bluetooth tui
+      impala # wifi tui
       qbittorrent # torrent client
-      tor-browser
       # deltachat-desktop
       # fractal # matrix clietn
       vivaldi
@@ -33,14 +33,14 @@
 
       # - Media
       crosspipe # A GTK patchbay for pipewire
-      pavucontrol # audio gui control
+      # pavucontrol # audio gui control
       flacon # gui split music cue
       alsa-utils # audio volume control (?)
       pulsemixer # cli pulse adudio control
       easyeffects # microphone effects
       # nomacs-qt6 # fast image viewer for RAW (no icc support)
-      kdePackages.gwenview # imave viewer with icc support
-      kdePackages.kimageformats # jxl and raw rendering
+      imv
+      swayimg
       obs-studio
       upscayl
       freefilesync
@@ -48,12 +48,12 @@
       video-downloader
       losslesscut-bin # ffmpeg gui for lossless cut videos
       ffmpeg
-      untrunc-anthwlock # fix corrupt video
+      kew
 
       # - Theming
       vimix-icon-theme # cursor icon
       gowall # Tool to convert a Wallpaper's color scheme
-      grc
+      # grc
       dconf-editor
       wev # key events in wayland
       gucharmap # character map
@@ -62,18 +62,20 @@
 
       # - Utils
       cool-retro-term
-      cmatrix # matrix in terminal
+      cmatrix # matrix animation in terminal
       nwg-displays # gui for display setup
-      sc-im # vim spreadsheet program for terminal
       exiftool # files meta
-      fzy
+      # fzy
       translate-shell
       bc # gnu calculator
       wego # weather api
       jq # json parser
       gocryptfs # crypt
+      age # crypt
       keepassxc # passwords
       # https://github.com/ChrisBuilds/terminaltexteffects
+      unstable.qman # better man
+      jolt-tui # battery tui monitor
 
       # - Docs
       simple-scan # gnome gui scanner
@@ -86,7 +88,6 @@
       russ # rss tui reader
 
       # -- Office
-      # onlyoffice-desktopeditors
       libreoffice
       hunspell # spellcheck for LO
       hunspellDicts.ru-ru # spell check for LO

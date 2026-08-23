@@ -56,7 +56,7 @@
           scale = 1.33;
           bitdepth = 10; # 8 (default) or 10
           vrr = 0; # 0 (default) or 1
-          supports_hdr = 0; # -1, 0 (auto, default), 1
+          # supports_hdr = 0; # -1, 0 (auto, default), 1
           icc = "/home/user/nix/devices/screens/msk_fast.icc";
         }
         {

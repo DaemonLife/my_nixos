@@ -73,6 +73,7 @@
       tt = "tt --notheme --highlight1 --blockcursor";
       ffmpeg-video-compress = "bash $HOME/nix/scripts/ffmpeg-video-compress.sh";
       lf = ''cd "`bash -c "lf -print-last-dir"`"'';
+      ncdu = "ncdu -t8"; # use 8 cores
 
       wifi-off = "nmcli r all off && nmcli r";
       wifi-on = "nmcli r all off && nmcli r";
