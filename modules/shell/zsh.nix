@@ -39,7 +39,7 @@
           return
         }
         export NNN_TMPFILE="${var2}"
-        command nnn -C "$@" # -C mean 8 bit color
+        command nnn -C -R "$@" # 8 bit color, disable rollover
         [ ! -f "$NNN_TMPFILE" ] || {
           . "$NNN_TMPFILE"
           rm -f -- "$NNN_TMPFILE" > /dev/null

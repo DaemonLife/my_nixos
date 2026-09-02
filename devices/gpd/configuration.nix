@@ -6,6 +6,8 @@
 }: {
   imports = [./hardware-configuration.nix];
 
+  networking.hostName = lib.mkForce "gpd";
+
   boot.loader.systemd-boot.configurationLimit = lib.mkForce 3; # bc no space in /boot
 
   # --------------------------------

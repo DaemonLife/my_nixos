@@ -94,7 +94,7 @@
     nixosConfigurations = {
       pc = nixpkgs.lib.nixosSystem (mkNixosConfig "pc");
       lenovo = nixpkgs.lib.nixosSystem (mkNixosConfig "lenovo");
-      gpd-pocket-3 = nixpkgs.lib.nixosSystem (mkNixosConfig "gpd-pocket-3");
+      gpd = nixpkgs.lib.nixosSystem (mkNixosConfig "gpd");
     };
   };
 }
