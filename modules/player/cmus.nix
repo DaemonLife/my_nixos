@@ -103,7 +103,7 @@
       set format_title=%a - %l - %t (%y) - cmus
       set confirm_run=false
       set status_display_program=~/nix/modules/player/cmus_notify.sh
-      set progress_bar=color
+      set progress_bar=line
 
       # select follow played track, toggle with f key
       set follow=true
@@ -123,7 +123,9 @@
       bind -f common e run eartag
 
       # remove selected file
-      bind -f common D run sh -c 'file="$1"; dest="${config.home.homeDirectory}/.local/share/Trash/files"; [ -f "$file" ] || exit 0; ${pkgs.cmus}/bin/cmus-remote -C "win-remove" && nohup ${pkgs.coreutils}/bin/mv -- "$file" "$dest"/ >/dev/null 2>&1 &' sh {}
+      # bind -f common D run sh -c 'file="$1"; dest="${config.home.homeDirectory}/.local/share/Trash/files"; [ -f "$file" ] || exit 0; ${pkgs.cmus}/bin/cmus-remote -C "win-remove" && nohup ${pkgs.coreutils}/bin/mv -- "$file" "$dest"/ >/dev/null 2>&1 &' sh {}
+
+      bind -f common D run sh -c 'file="$1"; dest="${config.home.homeDirectory}/.local/share/Trash/files"; [ -f "$file" ] || exit 0; { ${pkgs.cmus}/bin/cmus-remote -n; ${pkgs.coreutils}/bin/mv -- "$file" "$dest"/; ${pkgs.cmus}/bin/cmus-remote -C "update-cache"; ${pkgs.cmus}/bin/cmus-remote -C "add ${config.home.homeDirectory}/Music"; } >/dev/null 2>&1 &' sh {}
 
     '';
   };
